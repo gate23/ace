@@ -1,4 +1,4 @@
-ace
+ACE TEAM
 ===
 
-The Algae Count Estimator Repository
+ Algae Count Estimator Repository
