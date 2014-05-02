@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+//this is a test
 namespace Ui {
 class MainWindow;
 }
