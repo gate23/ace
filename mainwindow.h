@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    /* Label to add to status bar */
+    QLabel *statusLabel;
 };
 
 #endif // MAINWINDOW_H
