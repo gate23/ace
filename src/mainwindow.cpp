@@ -9,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     /* Status label being added to status bar */
-    statusLabel = new QLabel(this);
-    statusLabel->setText("Status label");
-    ui->statusbar->addPermanentWidget(statusLabel);
+//    statusLabel = new QLabel(this);
+//    statusLabel->setText("Status label");
+//    ui->statusbar->addPermanentWidget(statusLabel);
+
+    ui->pushButton->setText("Test");
 }
 
 MainWindow::~MainWindow()

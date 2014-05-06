@@ -2,7 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
+#include <QPushButton>
+//#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -20,7 +21,8 @@ private:
     Ui::MainWindow *ui;
 
     /* Label to add to status bar */
-    QLabel *statusLabel;
+  //  QLabel *statusLabel;
+    QPushButton *pushButton;
 };
 
 #endif // MAINWINDOW_H
