@@ -11,21 +11,21 @@
 #define TRAINER_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QFrame>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QPushButton>
-#include <QtGui/QScrollArea>
-#include <QtGui/QStatusBar>
-#include <QtGui/QTextEdit>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QStatusBar>
+#include <QTextEdit>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 

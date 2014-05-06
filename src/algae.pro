@@ -13,10 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    trainer.cpp \
-    editor.cpp
-        trainer.cpp
+        mainwindow.cpp
 
 HEADERS  += mainwindow.h\
          trainer.h\

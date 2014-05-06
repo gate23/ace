@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->statusbar->addPermanentWidget(statusLabel);
 
     ui->pushButton->setText("Test");
+    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(showdialog()));
 }
 
 MainWindow::~MainWindow()
