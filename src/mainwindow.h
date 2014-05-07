@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include "trainer.h"
+#include "editor.h"
 //#include <QLabel>
 
 namespace Ui {
@@ -25,6 +26,7 @@ private:
   //  QLabel *statusLabel;
     QPushButton *pushButton;
     trainer t;
+    editor e;
 
 private slots:
     void button1Clicked();

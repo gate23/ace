@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ui->pushButton->setText("Test");
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(button1Clicked()));
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(button2Clicked()));
 
 }
 
@@ -32,5 +33,6 @@ void MainWindow::button1Clicked(){
 }
 
 void MainWindow::button2Clicked(){
-
+    e.show();
+    this->hide();
 }
