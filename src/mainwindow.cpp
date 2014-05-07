@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //    statusLabel->setText("Status label");
 //    ui->statusbar->addPermanentWidget(statusLabel);
 
-    //ui->pushButton->setText("Test");
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(button1Clicked()));
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(button2Clicked()));
 
 }
 
@@ -28,9 +28,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::button1Clicked(){
     t.show();
-    this->hide();
+    this->close();
 }
 
 void MainWindow::button2Clicked(){
-
+    e.show();
+    this->close();
 }

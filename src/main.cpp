@@ -1,9 +1,11 @@
-#include "mainwindow.h"
+
+
 //#include "ui_editor.h"
 //#include "ui_trainer.h"
-#include "editor.h"
-#include "trainer.h"
+//#include "editor.h"
+//#include "trainer.h"
 #include <QApplication>
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
