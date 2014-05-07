@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>editor</class>
+ <widget class="QMainWindow" name="editor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -234,19 +234,6 @@
           <string>Zoom level | Focus level | Algae Type</string>
          </property>
         </widget>
-        <zorder>label</zorder>
-        <zorder>scrollArea</zorder>
-        <zorder>scrollArea</zorder>
-        <zorder>pushButton_2</zorder>
-        <zorder>pushButton_3</zorder>
-        <zorder>label_4</zorder>
-        <zorder>label_5</zorder>
-        <zorder>label_6</zorder>
-        <zorder>pushButton_4</zorder>
-        <zorder>pushButton_5</zorder>
-        <zorder>label_8</zorder>
-        <zorder>listView</zorder>
-        <zorder>scrollArea_2</zorder>
        </widget>
       </item>
       <item>
@@ -314,12 +301,6 @@
            <string>Sliders and stuff!</string>
           </property>
          </widget>
-         <zorder>pushButton</zorder>
-         <zorder>algaeFrame</zorder>
-         <zorder>algaeFrame</zorder>
-         <zorder>algaeFrame</zorder>
-         <zorder>label_2</zorder>
-         <zorder>label_3</zorder>
         </widget>
        </widget>
       </item>

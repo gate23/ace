@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include "trainer.h"
 //#include <QLabel>
 
 namespace Ui {
@@ -23,6 +24,12 @@ private:
     /* Label to add to status bar */
   //  QLabel *statusLabel;
     QPushButton *pushButton;
+    trainer t;
+
+private slots:
+    void button1Clicked();
+    void button2Clicked();
 };
+
 
 #endif // MAINWINDOW_H

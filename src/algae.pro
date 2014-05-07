@@ -13,11 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    editor.cpp \
+    trainer.cpp
 
 HEADERS  += mainwindow.h\
-         trainer.h\
-         editor.h
+    editor.h \
+    trainer.h
 
 FORMS    += \
     editor.ui \
