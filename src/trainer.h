@@ -2,6 +2,7 @@
 #define TRAINER_H
 
 #include <QMainWindow>
+#include "editor.h"
 
 namespace Ui {
 class trainer;
@@ -17,6 +18,12 @@ public:
 
 private:
     Ui::trainer *ui;
+    editor e;
+
+
+private slots:
+    void mainMenuClicked();
+
 };
 
 #endif // TRAINER_H
