@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "editor.h"
 #include "trainer.h"
 #include <QApplication>
