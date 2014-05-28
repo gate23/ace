@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ACE.ui'
 #
-# Created: Tue May 27 16:36:44 2014
+# Created: Tue May 27 17:34:34 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -149,6 +149,9 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.horizontalLayout_2.addWidget(self.scrollArea)
+        self.pushButton_14000 = QtGui.QPushButton(self.Trainer)
+        self.pushButton_14000.setGeometry(QtCore.QRect(10, 10, 98, 27))
+        self.pushButton_14000.setObjectName(_fromUtf8("pushButton_14000"))
         self.stackedWidget.addWidget(self.Trainer)
         self.page = QtGui.QWidget()
         self.page.setObjectName(_fromUtf8("page"))
@@ -255,6 +258,9 @@ class Ui_MainWindow(object):
         self.textEdit_2.setObjectName(_fromUtf8("textEdit_2"))
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_3.addWidget(self.scrollArea_3)
+        self.pushButton_14001 = QtGui.QPushButton(self.page)
+        self.pushButton_14001.setGeometry(QtCore.QRect(10, 10, 98, 27))
+        self.pushButton_14001.setObjectName(_fromUtf8("pushButton_14001"))
         self.stackedWidget.addWidget(self.page)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
@@ -359,6 +365,7 @@ class Ui_MainWindow(object):
         self.pushButton_8.setText(_translate("MainWindow", "Submit", None))
         self.label_2.setText(_translate("MainWindow", "Tool adjustments", None))
         self.label_3.setText(_translate("MainWindow", "Sliders and stuff!", None))
+        self.pushButton_14000.setText(_translate("MainWindow", "Main Menu", None))
         self.label_10.setText(_translate("MainWindow", "[Super Realistic Algae Here]", None))
         self.pushButton_9.setText(_translate("MainWindow", "-", None))
         self.pushButton_10.setText(_translate("MainWindow", "+", None))
@@ -413,6 +420,7 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 (<span style=\" font-style:italic;\">1.68% off</span>)</p></body></html>", None))
+        self.pushButton_14001.setText(_translate("MainWindow", "Main Menu", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuView.setTitle(_translate("MainWindow", "View", None))
