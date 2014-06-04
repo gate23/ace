@@ -2,28 +2,30 @@ from PyQt4 import QtCore, QtGui
 from ACEUI import Ui_MainWindow
 #pyuic4 ACE.ui > ACEUI.py
 
-
-#NOTE: I couldn't get this to work using 'self'... dunno if using 'ui' like this
-#is the best idea but hey neat it works
+#Click even for main menu Trainer button
 def trainerButtonClicked():
     thisIndex = ui.stackedWidget.indexOf(ui.Trainer)
     ui.stackedWidget.setCurrentIndex(thisIndex)
     populateStatusbar()    
 
+#Click even for main menu Editor button
 def editorButtonClicked():
     thisIndex = ui.stackedWidget.indexOf(ui.Editor)
     ui.stackedWidget.setCurrentIndex(thisIndex)
     populateStatusbar()
 
+#Click even for main menu Statistics button
+def statisticsButtonClicked():
+    thisIndex = ui.stackedWidget.indexOf(ui.Statistics)
+    ui.stackedWidget.setCurrentIndex(thisIndex)
+
+#Click even for Main Menu button
 def mainMenuClicked():
     thisIndex = ui.stackedWidget.indexOf(ui.MainPage)
     ui.stackedWidget.setCurrentIndex(thisIndex)
     ui.statusbar.hide()
 
-def statisticsButtonClicked():
-    thisIndex = ui.stackedWidget.indexOf(ui.Statistics)
-    ui.stackedWidget.setCurrentIndex(thisIndex)
-
+#Connect each event to buttons
 def connectActions(ui):
     #Main menu button actions
     ui.pushButton_mm_editor.clicked.connect(editorButtonClicked)
@@ -36,6 +38,7 @@ def connectActions(ui):
     ui.pushButton_e_mm.clicked.connect(mainMenuClicked)
     ui.actionMain_Menu.triggered.connect(mainMenuClicked)    
 
+#Fill statusbar with widgets (that are currently placed in Trainer... eh)
 def populateStatusbar():
     #status bar is hidden elsewhere
     ui.statusbar.show()
@@ -67,7 +70,8 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     #connectactions events for UI
     ui.setupUi(MainWindow)
-    #ui.statusbar.setVisibility(false)
+    #hide status bar
+    ui.statusbar.hide() 
     connectActions(ui) 
     MainWindow.setGeometry(QtCore.QRect(10, 10, 1024,728))
     MainWindow.show()
