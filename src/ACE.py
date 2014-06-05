@@ -39,6 +39,10 @@ def connectActions(ui):
     ui.pushButton_s_mm.clicked.connect(mainMenuClicked)
     ui.actionMain_Menu.triggered.connect(mainMenuClicked)    
 
+def testTable():
+    ui.tableWidget_s.setRowCount(20)
+    ui.tableWidget_s.setColumnCount(6)
+
 #Fill statusbar with widgets (that are currently placed in Trainer... eh)
 def populateStatusbar():
     #status bar is hidden elsewhere
@@ -72,8 +76,12 @@ if __name__ == "__main__":
     #connectactions events for UI
     ui.setupUi(MainWindow)
     #hide status bar
-    ui.statusbar.hide() 
-    connectActions(ui) 
+    ui.statusbar.hide()
+    connectActions(ui)
+
+    #This will be moved elsewhere later
+    testTable()
+
     MainWindow.setGeometry(QtCore.QRect(10, 10, 1024,768))
     MainWindow.show()
     sys.exit(app.exec_())

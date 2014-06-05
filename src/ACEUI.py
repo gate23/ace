@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ACE.ui'
 #
-# Created: Wed Jun  4 16:48:06 2014
+# Created: Thu Jun  5 13:49:51 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -66,12 +66,14 @@ class Ui_MainWindow(object):
         self.statFrame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.statFrame.setFrameShadow(QtGui.QFrame.Raised)
         self.statFrame.setObjectName(_fromUtf8("statFrame"))
-        self.tableView_s = QtGui.QTableView(self.statFrame)
-        self.tableView_s.setGeometry(QtCore.QRect(0, 0, 600, 690))
-        self.tableView_s.setObjectName(_fromUtf8("tableView_s"))
         self.label = QtGui.QLabel(self.statFrame)
         self.label.setGeometry(QtCore.QRect(220, 260, 191, 17))
         self.label.setObjectName(_fromUtf8("label"))
+        self.tableWidget_s = QtGui.QTableWidget(self.statFrame)
+        self.tableWidget_s.setGeometry(QtCore.QRect(0, 0, 601, 691))
+        self.tableWidget_s.setObjectName(_fromUtf8("tableWidget_s"))
+        self.tableWidget_s.setColumnCount(0)
+        self.tableWidget_s.setRowCount(0)
         self.horizontalLayout_s.addWidget(self.statFrame)
         self.scrollArea_s = QtGui.QScrollArea(self.layoutWidget_17)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
@@ -264,6 +266,7 @@ class Ui_MainWindow(object):
         self.textEdit_t_output.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.textEdit_t_output.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.textEdit_t_output.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.textEdit_t_output.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.textEdit_t_output.setObjectName(_fromUtf8("textEdit_t_output"))
         self.pushButton_t_mm = QtGui.QPushButton(self.scrollAreaWidgetContents_3)
         self.pushButton_t_mm.setGeometry(QtCore.QRect(170, 650, 98, 27))

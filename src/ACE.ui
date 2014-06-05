@@ -93,16 +93,6 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <widget class="QTableView" name="tableView_s">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>600</width>
-            <height>690</height>
-           </rect>
-          </property>
-         </widget>
          <widget class="QLabel" name="label">
           <property name="geometry">
            <rect>
@@ -116,6 +106,18 @@
            <string>[Table with result data]</string>
           </property>
          </widget>
+         <widget class="QTableWidget" name="tableWidget_s">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>601</width>
+            <height>691</height>
+           </rect>
+          </property>
+         </widget>
+         <zorder>tableWidget_s</zorder>
+         <zorder>label</zorder>
         </widget>
        </item>
        <item>
@@ -685,6 +687,9 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Guessed: 643 &lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Actual: 654 &lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-11 (&lt;span style=&quot; font-style:italic;&quot;&gt;1.68% off&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
           <widget class="QPushButton" name="pushButton_t_mm">
