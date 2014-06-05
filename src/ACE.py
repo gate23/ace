@@ -36,6 +36,7 @@ def connectActions(ui):
     #Buttons / menu options that return to main menu
     ui.pushButton_t_mm.clicked.connect(mainMenuClicked)
     ui.pushButton_e_mm.clicked.connect(mainMenuClicked)
+    ui.pushButton_s_mm.clicked.connect(mainMenuClicked)
     ui.actionMain_Menu.triggered.connect(mainMenuClicked)    
 
 #Fill statusbar with widgets (that are currently placed in Trainer... eh)
@@ -73,6 +74,6 @@ if __name__ == "__main__":
     #hide status bar
     ui.statusbar.hide() 
     connectActions(ui) 
-    MainWindow.setGeometry(QtCore.QRect(10, 10, 1024,728))
+    MainWindow.setGeometry(QtCore.QRect(10, 10, 1024,768))
     MainWindow.show()
     sys.exit(app.exec_())
