@@ -3,6 +3,10 @@ from ACEUI import Ui_MainWindow
 import slidegen
 #pyuic4 ACE.ui > ACEUI.py   
 
+#TODO Global variables - shouldn't be global?
+guessNum = 1
+currentSlide = None
+
 #Click even for main menu Trainer button
 def trainerButtonClicked():
     thisIndex = ui.stackedWidget.indexOf(ui.Trainer)
@@ -28,11 +32,8 @@ def mainMenuClicked():
     ui.stackedWidget.setCurrentIndex(thisIndex)
     ui.statusbar.hide()
 
-#TODO This shouldn't be global
-guessNum = 1
-currentSlide = None
-
 def genColony():
+    #Delete all 
     if (ui.verticalLayout_t_algae.count() > 0):
         for i in range(ui.verticalLayout_t_algae.count()): 
             ui.verticalLayout_t_algae.itemAt(i).widget().setParent(None)
@@ -47,6 +48,7 @@ def genColony():
     algaeThing2 = slidegen.SlideGen()
     ui.verticalLayout_e_algae.addWidget(algaeThing2)
 
+    #Set to glboal
     global currentSlide
     currentSlide = algaeThing
 
@@ -59,11 +61,16 @@ def submitClicked(self):
     guessStr = ui.textEdit_t_guess.toPlainText()
     #check for valid guess - doesn't check for just numbers
     if str(guessStr).isdigit():
+        #calculations
+        margin = int(guessStr) - actualNum
+        errorPct = float(margin) / float(actualNum)
+
         #Add guess string to edit text
         ui.textEdit_t_guess.setText("")
         ui.textEdit_t_output.append("Slide " + str(guessNum))
         ui.textEdit_t_output.append("Guessed: " + guessStr)
-        ui.textEdit_t_output.append("Actual: " + str(actualNum) + "\n")
+        ui.textEdit_t_output.append("Actual: " + str(actualNum))
+        ui.textEdit_t_output.append(str(margin) + " (%2f" % errorPct + "%) off\n")
 
         #Change slide number
         guessNum += 1
