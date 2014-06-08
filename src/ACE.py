@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 from ACEUI import Ui_MainWindow
-#pyuic4 ACE.ui > ACEUI.py
+#pyuic4 ACE.ui > ACEUI.py   
 
 #Click even for main menu Trainer button
 def trainerButtonClicked():
@@ -25,20 +25,46 @@ def mainMenuClicked():
     ui.stackedWidget.setCurrentIndex(thisIndex)
     ui.statusbar.hide()
 
+#TODO This shouldn't be global
+guessNum = 1
+
+def submitClicked(self):
+    global guessNum
+    
+    guessStr = ui.textEdit_t_guess.toPlainText()
+    #check for valid guess - doesn't check for just numbers
+    if str(guessStr).isdigit():
+        #Add guess string to edit text
+        ui.textEdit_t_guess.setText("")
+        ui.textEdit_t_output.append("Slide " + str(guessNum))
+        ui.textEdit_t_output.append("Guessed: " + guessStr + "\n")
+
+        #Change slide number
+        guessNum += 1
+        ui.label_t_slide_num.setText("Slide " + str(guessNum) + " / 10")
+    else:
+        errorMsg = QtGui.QMessageBox.warning(ui.pushButton_t_submit,"Error","Invalid guess",QtGui.QMessageBox.Ok,QtGui.QMessageBox.NoButton)
+        #reply = QtGui.QMessageBox.question(ui.pushButton_t_submit, 'Message', "Are you sure you want to quit?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+
+
 #Connect each event to buttons
-def connectActions(ui):
+def connectActions():
     #Main menu button actions
     ui.pushButton_mm_editor.clicked.connect(editorButtonClicked)
     ui.pushButton_mm_trainer.clicked.connect(trainerButtonClicked)
     ui.pushButton_mm_statistics.clicked.connect(statisticsButtonClicked)
     ui.pushButton_mm_exit.clicked.connect(QtGui.qApp.quit)
+    ui.actionClose.triggered.connect(QtGui.qApp.quit)
 
     #Buttons / menu options that return to main menu
     ui.pushButton_t_mm.clicked.connect(mainMenuClicked)
     ui.pushButton_e_mm.clicked.connect(mainMenuClicked)
     ui.pushButton_s_mm.clicked.connect(mainMenuClicked)
-    ui.actionMain_Menu.triggered.connect(mainMenuClicked)    
+    ui.actionMain_Menu.triggered.connect(mainMenuClicked)
+    
+    ui.pushButton_t_submit.clicked.connect(submitClicked)
 
+#Basic test thing to show 20x6 table
 def testTable():
     ui.tableWidget_s.setRowCount(20)
     ui.tableWidget_s.setColumnCount(6)
@@ -77,7 +103,7 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     #hide status bar
     ui.statusbar.hide()
-    connectActions(ui)
+    connectActions()
 
     #This will be moved elsewhere later
     testTable()
