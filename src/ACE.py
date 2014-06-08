@@ -1,18 +1,21 @@
 from PyQt4 import QtCore, QtGui
 from ACEUI import Ui_MainWindow
+import slidegen
 #pyuic4 ACE.ui > ACEUI.py   
 
 #Click even for main menu Trainer button
 def trainerButtonClicked():
     thisIndex = ui.stackedWidget.indexOf(ui.Trainer)
     ui.stackedWidget.setCurrentIndex(thisIndex)
-    populateStatusbar()    
+    populateStatusbar()
+    genColony()
 
 #Click even for main menu Editor button
 def editorButtonClicked():
     thisIndex = ui.stackedWidget.indexOf(ui.Editor)
     ui.stackedWidget.setCurrentIndex(thisIndex)
     populateStatusbar()
+    genColony()
 
 #Click even for main menu Statistics button
 def statisticsButtonClicked():
@@ -27,9 +30,31 @@ def mainMenuClicked():
 
 #TODO This shouldn't be global
 guessNum = 1
+currentSlide = None
+
+def genColony():
+    if (ui.verticalLayout_t_algae.count() > 0):
+        for i in range(ui.verticalLayout_t_algae.count()): 
+            ui.verticalLayout_t_algae.itemAt(i).widget().setParent(None)
+
+    algaeThing = slidegen.SlideGen()
+    ui.verticalLayout_t_algae.addWidget(algaeThing)
+
+    #KILL THIS
+    if (ui.verticalLayout_e_algae.count() > 0):
+        for i in range(ui.verticalLayout_e_algae.count()): 
+            ui.verticalLayout_e_algae.itemAt(i).widget().setParent(None)
+    algaeThing2 = slidegen.SlideGen()
+    ui.verticalLayout_e_algae.addWidget(algaeThing2)
+
+    global currentSlide
+    currentSlide = algaeThing
 
 def submitClicked(self):
     global guessNum
+    global currentSlide
+
+    actualNum = currentSlide.cell_count
     
     guessStr = ui.textEdit_t_guess.toPlainText()
     #check for valid guess - doesn't check for just numbers
@@ -37,14 +62,18 @@ def submitClicked(self):
         #Add guess string to edit text
         ui.textEdit_t_guess.setText("")
         ui.textEdit_t_output.append("Slide " + str(guessNum))
-        ui.textEdit_t_output.append("Guessed: " + guessStr + "\n")
+        ui.textEdit_t_output.append("Guessed: " + guessStr)
+        ui.textEdit_t_output.append("Actual: " + str(actualNum) + "\n")
 
         #Change slide number
         guessNum += 1
         ui.label_t_slide_num.setText("Slide " + str(guessNum) + " / 10")
+
+        #generate new one
+        genColony()
     else:
-        errorMsg = QtGui.QMessageBox.warning(ui.pushButton_t_submit,"Error","Invalid guess",QtGui.QMessageBox.Ok,QtGui.QMessageBox.NoButton)
-        #reply = QtGui.QMessageBox.question(ui.pushButton_t_submit, 'Message', "Are you sure you want to quit?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+        errorMsg = QtGui.QMessageBox.warning(ui.pushButton_t_submit,"Error",\
+                    "Invalid guess",QtGui.QMessageBox.Ok,QtGui.QMessageBox.NoButton)
 
 
 #Connect each event to buttons

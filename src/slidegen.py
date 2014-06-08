@@ -10,22 +10,22 @@ from PyQt4 import QtCore
 
 from random import randint, uniform
 
-WIN_WIDTH, WIN_HEIGHT = 800,800
-VIEW_WIDTH,VIEW_HEIGHT = 700, 689
-WIN_X, WIN_Y = 10,10
-
-scale_size = 15
 
 class SlideGen(QtGui.QWidget):
 	MIN_COUNT = 500
 	MAX_COUNT = 5000
+
+	VIEW_WIDTH,VIEW_HEIGHT = 700, 689
+
+	scale_size = 15
 	
 	def __init__(self):
+		super(SlideGen, self).__init__()
 		#Scene:	Contains the items to be drawn
 		#
 		#Initialize scene:	first two numbers set origin for added items,
 		#					second sets size of the view
-		self.scene = QtGui.QGraphicsScene(QtCore.QRectF(0,0,VIEW_WIDTH,VIEW_HEIGHT))
+		self.scene = QtGui.QGraphicsScene(QtCore.QRectF(0,0,SlideGen.VIEW_WIDTH,SlideGen.VIEW_HEIGHT))
 		
 		#View:	Contains the scene. Is the actual graphics widget to be included
 		#
@@ -40,9 +40,9 @@ class SlideGen(QtGui.QWidget):
 		
 		#load and scale the texture for the algae cells
 		self.texture = QtGui.QPixmap('apathano1.png')
-		self.texture = self.texture.scaled( QtCore.QSize(scale_size,scale_size) )
+		self.texture = self.texture.scaled( QtCore.QSize(SlideGen.scale_size,SlideGen.scale_size) )
 		
-		self.setLayout(self.hbox)
+#		self.setLayout(self.hbox)
 
 		self.cell_count = 0
 
@@ -52,7 +52,7 @@ class SlideGen(QtGui.QWidget):
 		#self.show()
 	
 	def gen_colony(self):
-		this_count = randint(MainWindow.MIN_COUNT, MainWindow.MAX_COUNT)
+		this_count = randint(SlideGen.MIN_COUNT, SlideGen.MAX_COUNT)
 		
 		self.scene.clear()
 		
@@ -60,8 +60,8 @@ class SlideGen(QtGui.QWidget):
 			cell = QtGui.QGraphicsPixmapItem(self.texture)
 			#cell.setScale(0.7)
 
-			x_offset = uniform(0.0,VIEW_WIDTH) 
-			y_offset = uniform(0.0,VIEW_HEIGHT)
+			x_offset = uniform(0.0,SlideGen.VIEW_WIDTH) 
+			y_offset = uniform(0.0,SlideGen.VIEW_HEIGHT)
 			
 			cell.setPos( x_offset, y_offset)
 
