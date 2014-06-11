@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ACE.ui'
 #
-# Created: Sat Jun  7 13:45:31 2014
+# Created: Sat Jun  7 19:02:24 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -124,25 +124,16 @@ class Ui_MainWindow(object):
         self.label_9.setObjectName(_fromUtf8("label_9"))
         self.scrollArea_e_tool_settings.setWidget(self.scrollAreaWidgetContents_2)
         self.horizontalLayout_e.addWidget(self.scrollArea_e_tool_settings)
-        self.algaeFrame_e = QtGui.QFrame(self.layoutWidget)
-        self.algaeFrame_e.setMinimumSize(QtCore.QSize(700, 0))
-        self.algaeFrame_e.setFrameShape(QtGui.QFrame.StyledPanel)
-        self.algaeFrame_e.setFrameShadow(QtGui.QFrame.Raised)
-        self.algaeFrame_e.setObjectName(_fromUtf8("algaeFrame_e"))
-        self.label_e_algaetext = QtGui.QLabel(self.algaeFrame_e)
-        self.label_e_algaetext.setGeometry(QtCore.QRect(200, 220, 271, 81))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.label_e_algaetext.setFont(font)
-        self.label_e_algaetext.setObjectName(_fromUtf8("label_e_algaetext"))
-        self.horizontalLayout_e.addWidget(self.algaeFrame_e)
+        self.verticalLayout_e_algae = QtGui.QVBoxLayout()
+        self.verticalLayout_e_algae.setObjectName(_fromUtf8("verticalLayout_e_algae"))
+        self.horizontalLayout_e.addLayout(self.verticalLayout_e_algae)
         self.scrollArea_e_tools = QtGui.QScrollArea(self.layoutWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scrollArea_e_tools.sizePolicy().hasHeightForWidth())
         self.scrollArea_e_tools.setSizePolicy(sizePolicy)
-        self.scrollArea_e_tools.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.scrollArea_e_tools.setMaximumSize(QtCore.QSize(177, 16777215))
         self.scrollArea_e_tools.setWidgetResizable(True)
         self.scrollArea_e_tools.setObjectName(_fromUtf8("scrollArea_e_tools"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
@@ -168,69 +159,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout_t = QtGui.QHBoxLayout(self.layoutWidget_2)
         self.horizontalLayout_t.setMargin(0)
         self.horizontalLayout_t.setObjectName(_fromUtf8("horizontalLayout_t"))
-        self.algaeFrame_t = QtGui.QFrame(self.layoutWidget_2)
-        self.algaeFrame_t.setMinimumSize(QtCore.QSize(700, 0))
-        self.algaeFrame_t.setFrameShape(QtGui.QFrame.StyledPanel)
-        self.algaeFrame_t.setFrameShadow(QtGui.QFrame.Raised)
-        self.algaeFrame_t.setObjectName(_fromUtf8("algaeFrame_t"))
-        self.label_10 = QtGui.QLabel(self.algaeFrame_t)
-        self.label_10.setGeometry(QtCore.QRect(220, 220, 271, 81))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.label_10.setFont(font)
-        self.label_10.setObjectName(_fromUtf8("label_10"))
-        self.pushButton_t_zoom_minus = QtGui.QPushButton(self.algaeFrame_t)
-        self.pushButton_t_zoom_minus.setGeometry(QtCore.QRect(640, 560, 16, 16))
-        self.pushButton_t_zoom_minus.setObjectName(_fromUtf8("pushButton_t_zoom_minus"))
-        self.pushButton_t_zoom_plus = QtGui.QPushButton(self.algaeFrame_t)
-        self.pushButton_t_zoom_plus.setGeometry(QtCore.QRect(660, 560, 16, 16))
-        self.pushButton_t_zoom_plus.setObjectName(_fromUtf8("pushButton_t_zoom_plus"))
-        self.label_t_zoom = QtGui.QLabel(self.algaeFrame_t)
-        self.label_t_zoom.setGeometry(QtCore.QRect(595, 553, 51, 31))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label_t_zoom.setFont(font)
-        self.label_t_zoom.setObjectName(_fromUtf8("label_t_zoom"))
-        self.label_t_focus = QtGui.QLabel(self.algaeFrame_t)
-        self.label_t_focus.setGeometry(QtCore.QRect(495, 553, 51, 31))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label_t_focus.setFont(font)
-        self.label_t_focus.setObjectName(_fromUtf8("label_t_focus"))
-        self.pushButton_t_focus_minus = QtGui.QPushButton(self.algaeFrame_t)
-        self.pushButton_t_focus_minus.setGeometry(QtCore.QRect(540, 560, 16, 16))
-        self.pushButton_t_focus_minus.setObjectName(_fromUtf8("pushButton_t_focus_minus"))
-        self.pushButton_t_focus_plus = QtGui.QPushButton(self.algaeFrame_t)
-        self.pushButton_t_focus_plus.setGeometry(QtCore.QRect(560, 560, 16, 16))
-        self.pushButton_t_focus_plus.setObjectName(_fromUtf8("pushButton_t_focus_plus"))
-        self.label_t_status = QtGui.QLabel(self.algaeFrame_t)
-        self.label_t_status.setGeometry(QtCore.QRect(0, 560, 321, 21))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label_t_status.setFont(font)
-        self.label_t_status.setObjectName(_fromUtf8("label_t_status"))
-        self.line_t_1 = QtGui.QFrame(self.algaeFrame_t)
-        self.line_t_1.setGeometry(QtCore.QRect(230, 530, 3, 61))
-        self.line_t_1.setFrameShape(QtGui.QFrame.VLine)
-        self.line_t_1.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_t_1.setObjectName(_fromUtf8("line_t_1"))
-        self.line_t_2 = QtGui.QFrame(self.algaeFrame_t)
-        self.line_t_2.setGeometry(QtCore.QRect(580, 530, 3, 61))
-        self.line_t_2.setFrameShape(QtGui.QFrame.VLine)
-        self.line_t_2.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_t_2.setObjectName(_fromUtf8("line_t_2"))
-        self.horizontalLayout_t.addWidget(self.algaeFrame_t)
+        self.verticalLayout_t_algae = QtGui.QVBoxLayout()
+        self.verticalLayout_t_algae.setObjectName(_fromUtf8("verticalLayout_t_algae"))
+        self.horizontalLayout_t.addLayout(self.verticalLayout_t_algae)
         self.scrollArea_t = QtGui.QScrollArea(self.layoutWidget_2)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scrollArea_t.sizePolicy().hasHeightForWidth())
         self.scrollArea_t.setSizePolicy(sizePolicy)
+        self.scrollArea_t.setMinimumSize(QtCore.QSize(280, 0))
         self.scrollArea_t.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.scrollArea_t.setWidgetResizable(True)
         self.scrollArea_t.setObjectName(_fromUtf8("scrollArea_t"))
         self.scrollAreaWidgetContents_3 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 281, 687))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 278, 687))
         self.scrollAreaWidgetContents_3.setObjectName(_fromUtf8("scrollAreaWidgetContents_3"))
         self.label_15 = QtGui.QLabel(self.scrollAreaWidgetContents_3)
         self.label_15.setGeometry(QtCore.QRect(10, 40, 141, 17))
@@ -245,14 +188,14 @@ class Ui_MainWindow(object):
         self.textEdit_t_guess.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.textEdit_t_guess.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.textEdit_t_guess.setObjectName(_fromUtf8("textEdit_t_guess"))
-        self.label_16 = QtGui.QLabel(self.scrollAreaWidgetContents_3)
-        self.label_16.setGeometry(QtCore.QRect(10, 10, 171, 17))
+        self.label_t_slide_num = QtGui.QLabel(self.scrollAreaWidgetContents_3)
+        self.label_t_slide_num.setGeometry(QtCore.QRect(10, 10, 171, 17))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
-        self.label_16.setFont(font)
-        self.label_16.setObjectName(_fromUtf8("label_16"))
+        self.label_t_slide_num.setFont(font)
+        self.label_t_slide_num.setObjectName(_fromUtf8("label_t_slide_num"))
         self.pushButton_t_submit = QtGui.QPushButton(self.scrollAreaWidgetContents_3)
         self.pushButton_t_submit.setGeometry(QtCore.QRect(190, 60, 71, 21))
         self.pushButton_t_submit.setObjectName(_fromUtf8("pushButton_t_submit"))
@@ -273,6 +216,46 @@ class Ui_MainWindow(object):
         self.pushButton_t_mm.setObjectName(_fromUtf8("pushButton_t_mm"))
         self.scrollArea_t.setWidget(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_t.addWidget(self.scrollArea_t)
+        self.line_t_2 = QtGui.QFrame(self.Trainer)
+        self.line_t_2.setGeometry(QtCore.QRect(920, 650, 3, 61))
+        self.line_t_2.setFrameShape(QtGui.QFrame.VLine)
+        self.line_t_2.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line_t_2.setObjectName(_fromUtf8("line_t_2"))
+        self.line_t_1 = QtGui.QFrame(self.Trainer)
+        self.line_t_1.setGeometry(QtCore.QRect(570, 650, 3, 61))
+        self.line_t_1.setFrameShape(QtGui.QFrame.VLine)
+        self.line_t_1.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line_t_1.setObjectName(_fromUtf8("line_t_1"))
+        self.label_t_zoom = QtGui.QLabel(self.Trainer)
+        self.label_t_zoom.setGeometry(QtCore.QRect(935, 673, 51, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_t_zoom.setFont(font)
+        self.label_t_zoom.setObjectName(_fromUtf8("label_t_zoom"))
+        self.pushButton_t_zoom_plus = QtGui.QPushButton(self.Trainer)
+        self.pushButton_t_zoom_plus.setGeometry(QtCore.QRect(1000, 680, 16, 16))
+        self.pushButton_t_zoom_plus.setObjectName(_fromUtf8("pushButton_t_zoom_plus"))
+        self.pushButton_t_focus_plus = QtGui.QPushButton(self.Trainer)
+        self.pushButton_t_focus_plus.setGeometry(QtCore.QRect(900, 680, 16, 16))
+        self.pushButton_t_focus_plus.setObjectName(_fromUtf8("pushButton_t_focus_plus"))
+        self.label_t_focus = QtGui.QLabel(self.Trainer)
+        self.label_t_focus.setGeometry(QtCore.QRect(835, 673, 51, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_t_focus.setFont(font)
+        self.label_t_focus.setObjectName(_fromUtf8("label_t_focus"))
+        self.label_t_status = QtGui.QLabel(self.Trainer)
+        self.label_t_status.setGeometry(QtCore.QRect(340, 680, 321, 21))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_t_status.setFont(font)
+        self.label_t_status.setObjectName(_fromUtf8("label_t_status"))
+        self.pushButton_t_zoom_minus = QtGui.QPushButton(self.Trainer)
+        self.pushButton_t_zoom_minus.setGeometry(QtCore.QRect(980, 680, 16, 16))
+        self.pushButton_t_zoom_minus.setObjectName(_fromUtf8("pushButton_t_zoom_minus"))
+        self.pushButton_t_focus_minus = QtGui.QPushButton(self.Trainer)
+        self.pushButton_t_focus_minus.setGeometry(QtCore.QRect(880, 680, 16, 16))
+        self.pushButton_t_focus_minus.setObjectName(_fromUtf8("pushButton_t_focus_minus"))
         self.stackedWidget.addWidget(self.Trainer)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
@@ -369,64 +352,25 @@ class Ui_MainWindow(object):
         self.label_51.setText(_translate("MainWindow", "[Overall results, averages, charts]", None))
         self.label_7.setText(_translate("MainWindow", "Tool List", None))
         self.label_9.setText(_translate("MainWindow", "Buttons!", None))
-        self.label_e_algaetext.setText(_translate("MainWindow", "[Super Realistic Algae Here]", None))
         self.label_2.setText(_translate("MainWindow", "Tool adjustments", None))
         self.label_3.setText(_translate("MainWindow", "Sliders and stuff!", None))
         self.pushButton_e_mm.setText(_translate("MainWindow", "Main Menu", None))
-        self.label_10.setText(_translate("MainWindow", "[Super Realistic Algae Here]", None))
-        self.pushButton_t_zoom_minus.setText(_translate("MainWindow", "-", None))
-        self.pushButton_t_zoom_plus.setText(_translate("MainWindow", "+", None))
-        self.label_t_zoom.setText(_translate("MainWindow", "Zoom", None))
-        self.label_t_focus.setText(_translate("MainWindow", "Focus", None))
-        self.pushButton_t_focus_minus.setText(_translate("MainWindow", "-", None))
-        self.pushButton_t_focus_plus.setText(_translate("MainWindow", "+", None))
-        self.label_t_status.setText(_translate("MainWindow", "Zoom level | Focus level | Algae Type", None))
         self.label_15.setText(_translate("MainWindow", "Algae Count Guess:", None))
-        self.label_16.setText(_translate("MainWindow", "Slide 9 / 10", None))
+        self.label_t_slide_num.setText(_translate("MainWindow", "Slide 1 / 10", None))
         self.pushButton_t_submit.setText(_translate("MainWindow", "Submit", None))
         self.textEdit_t_output.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 8 </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 174 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 235</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> -61 <span style=\" font-style:italic;\">(25.96% off) </span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 7 </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 <span style=\" font-style:italic;\">(1.68% off) </span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 6</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 (<span style=\" font-style:italic;\">1.68% off</span>) </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 5 </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 (<span style=\" font-style:italic;\">1.68% off</span>) <br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 4 </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 (<span style=\" font-style:italic;\">1.68% off</span>) </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 3 </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 (<span style=\" font-style:italic;\">1.68% off</span>) </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 2 </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 (<span style=\" font-style:italic;\">1.68% off</span>) </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Slide 1 </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Guessed: 643 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Actual: 654 </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-11 (<span style=\" font-style:italic;\">1.68% off</span>)</p></body></html>", None))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.pushButton_t_mm.setText(_translate("MainWindow", "Main Menu", None))
+        self.label_t_zoom.setText(_translate("MainWindow", "Zoom", None))
+        self.pushButton_t_zoom_plus.setText(_translate("MainWindow", "+", None))
+        self.pushButton_t_focus_plus.setText(_translate("MainWindow", "+", None))
+        self.label_t_focus.setText(_translate("MainWindow", "Focus", None))
+        self.label_t_status.setText(_translate("MainWindow", "Zoom level | Focus level | Algae Type", None))
+        self.pushButton_t_zoom_minus.setText(_translate("MainWindow", "-", None))
+        self.pushButton_t_focus_minus.setText(_translate("MainWindow", "-", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuView.setTitle(_translate("MainWindow", "View", None))
