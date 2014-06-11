@@ -63,14 +63,14 @@ def submitClicked(self):
     if str(guessStr).isdigit():
         #calculations
         margin = int(guessStr) - actualNum
-        errorPct = float(margin) / float(actualNum)
+        errorPct = (float(margin) / float(actualNum)) * 100
 
         #Add guess string to edit text
         ui.textEdit_t_guess.setText("")
         ui.textEdit_t_output.append("Slide " + str(guessNum))
         ui.textEdit_t_output.append("Guessed: " + guessStr)
         ui.textEdit_t_output.append("Actual: " + str(actualNum))
-        ui.textEdit_t_output.append(str(margin) + " (%2f" % errorPct + "%) off\n")
+        ui.textEdit_t_output.append(str(margin) + " (%2.2f" % errorPct + "%) off\n")
 
         #Change slide number
         guessNum += 1
