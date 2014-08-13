@@ -49,6 +49,16 @@ class GraphicsScene(QtGui.QGraphicsScene):
         
     def mousePressEvent(self, event):
         super(GraphicsScene, self).mousePressEvent(event)
+        self.addCellAtMouse(event)
+    
+    #mouseMoveEvent is triggered when the mouse button is held and moved
+    #   Allows for continous algae placing
+    #   **Currently places them way too fast, (implement a timer to slow it down)
+    def mouseMoveEvent(self, event):
+        super(GraphicsScene,self).mouseMoveEvent(event)
+        self.addCellAtMouse(event)
+        
+    def addCellAtMouse(self,event):
         cell = QtGui.QGraphicsPixmapItem(self.texture)
         position = QtCore.QPointF(event.scenePos()) - cell.boundingRect().center()
         cell.setPos(position.x(), position.y() )
