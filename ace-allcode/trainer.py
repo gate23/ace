@@ -5,6 +5,8 @@ Trainer is the class representing the trainer mode (duh)
 Makes use of SlideGen class for generating and viewing slides
 """
 
+import math
+
 from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
 
@@ -52,9 +54,20 @@ class Trainer(QtGui.QWidget):
         
     def submitEstimate(self):
         if self.estimate_entry.text().length() > 0 :
+            estimate = float(self.estimate_entry.text())
+            actual = float(self.slide_display.count())
+            
+            raw_percent_err = (math.fabs(estimate - actual) / actual) * 100.0
+            
+            #format for less precision
+            percent_err = "{:.2f}".format(raw_percent_err)
+            
+            
             self.estimate_display.append(
                     "Estimate: " + str(self.estimate_entry.text()) +
-                    " Actual Count: " + str(self.slide_display.count()) )
+                    "\nActual Count: " + str(self.slide_display.count()) +
+                    "\nPercent Error: " + percent_err + '%' 
+            )
             self.estimate_entry.clear()
             
             self.slide_display.genSlide()
