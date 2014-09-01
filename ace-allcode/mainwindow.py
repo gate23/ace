@@ -54,7 +54,7 @@ class MainWindow(QtGui.QMainWindow):
         to_menu_action.triggered.connect(lambda: self.changeMode(ModeEnum.MENU))
         
         exit_action = QtGui.QAction('Exit', self)
-        exit_action.triggered.connect(QtGui.qApp.quit )
+        exit_action.triggered.connect(self.exitProgram )
         
         file_menu.addAction(to_menu_action)
         file_menu.addAction(exit_action)
@@ -73,3 +73,13 @@ class MainWindow(QtGui.QMainWindow):
         
         self.mode_stack.setCurrentIndex(page_num)
         
+    #for closing via File->Exit
+    def exitProgram(self):
+        self.mode_stack.widget(ModeEnum.TRAINER).dumpStats()
+        QtGui.qApp.quit()
+    
+        
+    #for closing via 'X' window button
+    def closeEvent(self, event):
+        self.mode_stack.widget(ModeEnum.TRAINER).dumpStats()
+        event.accept()
