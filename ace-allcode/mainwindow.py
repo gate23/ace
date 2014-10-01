@@ -36,7 +36,8 @@ class MainWindow(QtGui.QMainWindow):
         trainer = Trainer(self)
         self.mode_stack.addWidget(trainer)
         
-        stats = Statistics(self)
+        #stats saved in trainer
+        stats = Statistics(self,trainer)
         self.mode_stack.addWidget(stats)
         
         self.editor = Editor(self)

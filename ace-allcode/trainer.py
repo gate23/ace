@@ -42,9 +42,13 @@ class Trainer(QtGui.QWidget):
         #estimate_display: shows list of previous estimates
         self.estimate_display = QtGui.QTextEdit()
         self.estimate_display.setReadOnly(1)
-        
+
+        #guess_label: shows which number guess user is making
+        self.estimate_number = 1
+        self.estimate_label = QtGui.QLabel("Estimate " +  str(self.estimate_number) + "/10")      
         
         estimate_layout = QtGui.QVBoxLayout()
+        estimate_layout.addWidget(self.estimate_label)
         estimate_layout.addWidget(self.estimate_display)
         estimate_layout.addWidget(button)
         estimate_layout.addWidget(self.estimate_entry)
@@ -54,6 +58,10 @@ class Trainer(QtGui.QWidget):
         layout.addLayout(estimate_layout)
         
         self.setLayout(layout)
+
+        #10-estimate session error/sum values to hand off to stats
+        self.session_error = 0.0
+        self.session_error_sum = 0.0
         
         #stats stuff
         try:
@@ -68,30 +76,47 @@ class Trainer(QtGui.QWidget):
         except:
             self.estimate_count = 0
             self.error_sum = 0.0
+            self.session_error_sum = 0.0
         
     def submitEstimate(self):
-        if self.estimate_entry.text().length() > 0 :            
-            estimate = float(self.estimate_entry.text())
-            actual = float(self.slide_display.count())
-                 
-            raw_percent_err = (math.fabs(estimate - actual) / actual) * 100.0
-
-            self.estimate_count += 1   
-            self.error_sum += raw_percent_err
-            print "Total Average Err: " + str(self.error_sum/self.estimate_count)           
-            
-            #format for less precision
-            percent_err = "{:.2f}".format(raw_percent_err)
-            
-
         if self.estimate_entry.text().length() > 0 :
-            self.estimate_display.append(
-                    "Estimate: " + str(self.estimate_entry.text()) +
-                    " Actual Count: " + str(self.slide_display.count()) )
-            self.estimate_entry.clear()
+            if self.estimate_number < 10:
+                #Increment guess number and change text display
+                self.estimate_number += 1
+                self.estimate_label.setText("Estimate " +  str(self.estimate_number) + "/10")
+
+                estimate = float(self.estimate_entry.text())
+                actual = float(self.slide_display.count())
+                     
+                raw_percent_err = (math.fabs(estimate - actual) / actual) * 100.0
+
+                self.estimate_count += 1
+                self.error_sum += raw_percent_err
+                self.session_error_sum += raw_percent_err
+                print "Total Average Err: " + str(self.error_sum/self.estimate_count)           
+                
+                #format for less precision
+                percent_err = "{:.2f}".format(raw_percent_err)
+                
+                self.estimate_display.append(
+                        "Estimate: " + str(self.estimate_entry.text()) +
+                        " Actual Count: " + str(self.slide_display.count()) )
+                self.estimate_entry.clear()
+                
+                self.slide_display.genSlide()
             
-            self.slide_display.genSlide()
-            
+            #there's a better way to check for the 10th guess number
+            if self.estimate_number == 10:
+                self.endMessage = QtGui.QMessageBox()
+                self.endMessage.setText("10/10 estimates complete!")
+                self.endMessage.open()
+
+                #stats for 10-estimate session
+                self.session_error = self.session_error_sum/10
+
+            #TODO: Make it so clicking msgBox button returns to main menu here?
+
+
     def dumpStats(self):
         print "dumping stats"
         
@@ -101,5 +126,3 @@ class Trainer(QtGui.QWidget):
         pickle.dump(stat_list, output)
         
         output.close()
-             
-        
