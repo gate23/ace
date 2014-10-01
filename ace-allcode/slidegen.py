@@ -68,12 +68,18 @@ class SlideGen(QtGui.QWidget):
         this_count = randint(SlideGen.MIN_COUNT, SlideGen.MAX_COUNT)
         
         cell_list = self.scene.items()
+
+        num_blobs = int(random.triangular(1, this_count, 15))
+
+        shape_ends = random.sample(range(0, this_count-1), num_blobs)
         
         
         for i in range (0, this_count-1):
             x_offset = uniform(0.0, SlideGen.VIEW_WIDTH) 
             y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
             cell_list[i].setPos( x_offset, y_offset)
+
+            
 
             deg_rotation = uniform(0.0,359.9)
             cell_list[i].setRotation( deg_rotation)
