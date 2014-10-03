@@ -73,11 +73,13 @@ class SlideGen(QtGui.QWidget):
         
         for i in range (0, this_count-1):
 
+            #chooses the center point of the blob
             if ((i == 0) or (i in shape_ends)):
                 x_offset = uniform(0.0, SlideGen.VIEW_WIDTH) 
                 y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
                 R = triangular(1, SlideGen.VIEW_HEIGHT/2, 5)
                 cell_list[i].setPos( x_offset, y_offset)
+            #plot point around the center
             else:
                 r = uniform(0, R)
                 x = uniform(-r, r)
