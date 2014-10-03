@@ -6,12 +6,13 @@ from PyQt4.QtGui import QTransform
 from PyQt4.QtGui import QPainter
 from PyQt4.QtGui import QBrush
 
-from random import randint, uniform
+from random import randint, uniform, triangular, sample
+from math import sqrt
 
 
 class SlideGen(QtGui.QWidget):
     MIN_COUNT = 500
-    MAX_COUNT = 5000
+    MAX_COUNT = 2500
 
     VIEW_WIDTH,VIEW_HEIGHT = 540, 540
 
@@ -66,20 +67,22 @@ class SlideGen(QtGui.QWidget):
     
     def genSlide(self):
         this_count = randint(SlideGen.MIN_COUNT, SlideGen.MAX_COUNT)
-        
         cell_list = self.scene.items()
-
-        num_blobs = int(random.triangular(1, this_count, 15))
-
-        shape_ends = random.sample(range(0, this_count-1), num_blobs)
-        
+        num_blobs = int(triangular(1, 20, 10))
+        shape_ends = sample(range(0, this_count-1), num_blobs-1)
         
         for i in range (0, this_count-1):
-            x_offset = uniform(0.0, SlideGen.VIEW_WIDTH) 
-            y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
-            cell_list[i].setPos( x_offset, y_offset)
 
-            
+            if ((i == 0) or (i in shape_ends)):
+                x_offset = uniform(0.0, SlideGen.VIEW_WIDTH) 
+                y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
+                R = triangular(1, SlideGen.VIEW_HEIGHT/2, 5)
+                cell_list[i].setPos( x_offset, y_offset)
+            else:
+                r = uniform(0, R)
+                x = uniform(-r, r)
+                y = sqrt(r**2 - x**2)
+                cell_list[i].setPos(x_offset + x,y_offset + y)
 
             deg_rotation = uniform(0.0,359.9)
             cell_list[i].setRotation( deg_rotation)
