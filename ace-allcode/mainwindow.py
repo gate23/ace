@@ -18,7 +18,7 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__()        
         
         self.setWindowTitle("Algae Count Estimator")
-        self.setMinimumSize(800,600)
+        self.setMinimumSize(800,630)
         
         self.initPages()
         self.initMenuBar()       
@@ -60,7 +60,14 @@ class MainWindow(QtGui.QMainWindow):
         file_menu.addAction(to_menu_action)
         file_menu.addAction(exit_action)
         
-        edit_menu = menu_bar.addMenu('&Help')
+        
+        help_menu = menu_bar.addMenu('&Help')
+        
+        about_action = QtGui.QAction('About', self)
+        #TBD: connect about_actions's trigger to something
+        
+        help_menu.addAction(about_action)
+        
         
     def changeMode(self, page_num):
         #Editor Mode uses a toolbar that must be owned by MainWindow

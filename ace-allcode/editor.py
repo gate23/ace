@@ -1,18 +1,6 @@
 """
 editor.py
-Contains all the classes for edit mode
-
-Update 8/20:
-Added continuous flow w/o needing to move mouse.
-Flow rate is adjustable.
-
-Issues:
--Moving slider right decreases flow rate, left increases.
-(should be the other way)
-
--Changing the flow rate is convoluted as fuck. The classes in
-this module need to be rearranged.
-
+Contains classes for edit mode
 """
 import time
 from random import uniform
@@ -45,7 +33,7 @@ class Editor(QtGui.QWidget):
         self.toolbar.addWidget(dropper)
         
         
-        test_action = QtGui.QAction(QtCore.QString('test'),self.toolbar)
+        test_action = QtGui.QAction(QtCore.QString('Another Tool'),self.toolbar)
         self.toolbar.addAction(test_action)
           
         self.layout = QtGui.QHBoxLayout()

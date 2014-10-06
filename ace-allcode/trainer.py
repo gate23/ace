@@ -21,10 +21,53 @@ class Trainer(QtGui.QWidget):
         
     def initUI(self):
         layout = QtGui.QHBoxLayout()
+                
+        slide_layout = self.initSlideLayout()
+        estimate_layout = self.initEstimateLayout()        
+        layout.addLayout(slide_layout)
+        layout.addLayout(estimate_layout)
         
+        self.setLayout(layout)
+
+        #10-estimate session error/sum values to hand off to stats
+        self.session_error = 0.0
+        self.session_error_sum = 0.0
+        
+        #stats stuff
+        try:
+            file = open('stats.ace')
+            opened = pickle.load(file)
+            
+            self.estimate_count = opened[0]
+            self.error_sum = opened[1]
+            
+        except:
+            self.estimate_count = 0
+            self.error_sum = 0.0
+            self.session_error_sum = 0.0
+    
+    def initSlideLayout(self):
         self.slide_display = SlideGen(self)
         self.slide_display.genSlide()
+    
+        zoom_layout = QtGui.QHBoxLayout()
+        zoom_text = QtGui.QLabel("Magnification: <Current Zoom>")
+        zoom_in_btn = QtGui.QPushButton("+")
+        zoom_out_btn = QtGui.QPushButton("-")
+        zoom_in_btn.setMaximumWidth(25)
+        zoom_out_btn.setMaximumWidth(25)
         
+        zoom_layout.addWidget(zoom_in_btn)
+        zoom_layout.addWidget(zoom_out_btn)
+        zoom_layout.addWidget(zoom_text)
+  
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(self.slide_display)
+        layout.addLayout(zoom_layout)
+        
+        return layout
+    
+    def initEstimateLayout(self):
         #estimate_entry: input line for estimate
         self.estimate_entry = QtGui.QLineEdit()
         validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
@@ -53,30 +96,7 @@ class Trainer(QtGui.QWidget):
         estimate_layout.addWidget(button)
         estimate_layout.addWidget(self.estimate_entry)
         
-        
-        layout.addWidget(self.slide_display)
-        layout.addLayout(estimate_layout)
-        
-        self.setLayout(layout)
-
-        #10-estimate session error/sum values to hand off to stats
-        self.session_error = 0.0
-        self.session_error_sum = 0.0
-        
-        #stats stuff
-        try:
-            file = open('stats.ace')
-            opened = pickle.load(file)
-            
-            self.estimate_count = opened[0]
-            self.error_sum = opened[1]
-            
-            print opened
-            
-        except:
-            self.estimate_count = 0
-            self.error_sum = 0.0
-            self.session_error_sum = 0.0
+        return estimate_layout
         
     def submitEstimate(self):
         if self.estimate_entry.text().length() > 0 :
@@ -93,7 +113,7 @@ class Trainer(QtGui.QWidget):
                 self.estimate_count += 1
                 self.error_sum += raw_percent_err
                 self.session_error_sum += raw_percent_err
-                print "Total Average Err: " + str(self.error_sum/self.estimate_count)           
+                #print "Total Average Err: " + str(self.error_sum/self.estimate_count)           
                 
                 #format for less precision
                 percent_err = "{:.2f}".format(raw_percent_err)
@@ -118,8 +138,6 @@ class Trainer(QtGui.QWidget):
 
 
     def dumpStats(self):
-        print "dumping stats"
-        
         stat_list = (self.estimate_count, self.error_sum)
         
         output = open('stats.ace','wb')
