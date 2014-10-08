@@ -1,5 +1,3 @@
-#Something within this module is causing the application to close abnormally.
-#Crashes instead of exiting cleanly
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QTransform
@@ -9,49 +7,14 @@ from PyQt4.QtGui import QBrush
 from random import randint, uniform, triangular, sample
 from math import sqrt
 
+from slide import Slide
 
-class SlideGen(QtGui.QWidget):
+class SlideGen(Slide):
     MIN_COUNT = 500
     MAX_COUNT = 2500
 
-    VIEW_WIDTH,VIEW_HEIGHT = 540, 540
-
-    scale_size = 15
-    
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
-        
-        self.scene = QtGui.QGraphicsScene(  QtCore.QRectF(
-                                                0,0,
-                                                SlideGen.VIEW_WIDTH,
-                                                SlideGen.VIEW_HEIGHT),
-                                            self)
-        
-        self.view = QtGui.QGraphicsView(self.scene)
-        self.view.setParent(self)
-        self.view.setMinimumSize(QtCore.QSize(SlideGen.VIEW_WIDTH, SlideGen.VIEW_HEIGHT))
-        self.view.setSizePolicy(    QtGui.QSizePolicy.MinimumExpanding,
-                                    QtGui.QSizePolicy.MinimumExpanding)
-        
-        
-        self.view.setRenderHints(QPainter.HighQualityAntialiasing | QPainter.SmoothPixmapTransform)
-        
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.view)
-        self.setLayout(layout)
-        
-        #Load and set view background
-        self.bg_texture = QtGui.QPixmap('background.jpg')
-        background = QBrush(self.bg_texture)
-        self.scene.setBackgroundBrush(background)
-        
-        #Load and scale the texture for the algae cells
-        self.texture = QtGui.QPixmap('aphanothece1.png')
-        self.texture = self.texture.scaled( QtCore.QSize(SlideGen.scale_size, SlideGen.scale_size) )
-        
-        self.blurred_texture = self.blurPixmap(self.texture)
-        
-        self.cell_count = 0
 
         self.initCells()
         
