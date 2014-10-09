@@ -10,6 +10,7 @@ import pickle
 
 from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
+from enum import ModeEnum
 
 MAX_ESTIMATE = 9999
 
@@ -127,14 +128,14 @@ class Trainer(QtGui.QWidget):
             
             #there's a better way to check for the 10th guess number
             if self.estimate_number == 10:
-                self.endMessage = QtGui.QMessageBox()
-                self.endMessage.setText("10/10 estimates complete!")
-                self.endMessage.open()
+                self.endMessage = QtGui.QMessageBox.question(self,'Message',
+                    "10 estimates complete! Try again?",
+                    QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
+            
+                #TODO: Make these actions restart or return to main menu
 
                 #stats for 10-estimate session
                 self.session_error = self.session_error_sum/10
-
-            #TODO: Make it so clicking msgBox button returns to main menu here?
 
 
     def dumpStats(self):
