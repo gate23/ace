@@ -18,7 +18,7 @@ class Slide(QtGui.QWidget):
                                                 0,0,
                                                 Slide.VIEW_WIDTH,
                                                 Slide.VIEW_HEIGHT),
-                                            self)
+                                                self)
 
         self.view = QtGui.QGraphicsView(self.scene)
         self.view.setParent(self)
@@ -37,6 +37,9 @@ class Slide(QtGui.QWidget):
         
         #Load and scale the texture for the algae cells
         self.texture = QtGui.QPixmap('aphanothece1.png')
-        self.texture = self.texture.scaled( QtCore.QSize(Slide.scale_size, Slide.scale_size) )
+        scaledSize = QtCore.QSize(self.scale_size, self.scale_size)
+        self.texture = self.texture.scaled( scaledSize, 
+                                            QtCore.Qt.KeepAspectRatio, 
+                                            QtCore.Qt.SmoothTransformation )
         
        
