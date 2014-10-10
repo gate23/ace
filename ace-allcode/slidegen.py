@@ -22,7 +22,11 @@ class SlideGen(Slide):
     def initCells(self):
         
         for i in range(0, SlideGen.MAX_COUNT-1):
-            cell = QtGui.QGraphicsPixmapItem(self.texture)
+            if( i%3 == 0):            
+                cell = QtGui.QGraphicsPixmapItem(self.texture)
+            else:
+                cell = QtGui.QGraphicsPixmapItem(self.texture2)
+            
             #Place the cell in non visible location
             cell.setPos(-500,-500)
             cell.setTransformationMode(QtCore.Qt.SmoothTransformation)

@@ -34,12 +34,19 @@ class Slide(QtGui.QWidget):
         self.bg_texture = QtGui.QPixmap('background.jpg')
         background = QtGui.QBrush(self.bg_texture)
         self.scene.setBackgroundBrush(background)
+
         
         #Load and scale the texture for the algae cells
-        self.texture = QtGui.QPixmap('cell-test.png')
         scaledSize = QtCore.QSize(self.scale_size, self.scale_size)
+
+        self.texture = QtGui.QPixmap('cell-test.png')
         self.texture = self.texture.scaled( scaledSize, 
                                             QtCore.Qt.KeepAspectRatio, 
                                             QtCore.Qt.SmoothTransformation )
         
+        self.texture2 = QtGui.QPixmap('cell-test2.png')
+        self.texture2 = self.texture2.scaled( scaledSize, 
+                                            QtCore.Qt.KeepAspectRatio, 
+                                            QtCore.Qt.SmoothTransformation )
+       
        
