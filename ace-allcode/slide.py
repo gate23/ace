@@ -9,7 +9,7 @@ from PyQt4 import QtGui, QtCore
 class Slide(QtGui.QWidget):
     VIEW_WIDTH,VIEW_HEIGHT = 540,540
     
-    scale_size = 15
+    scale_size = 24
 
     def __init__(self,parent):
         super(Slide, self).__init__(parent)
@@ -36,7 +36,7 @@ class Slide(QtGui.QWidget):
         self.scene.setBackgroundBrush(background)
         
         #Load and scale the texture for the algae cells
-        self.texture = QtGui.QPixmap('aphanothece1.png')
+        self.texture = QtGui.QPixmap('cell-test.png')
         scaledSize = QtCore.QSize(self.scale_size, self.scale_size)
         self.texture = self.texture.scaled( scaledSize, 
                                             QtCore.Qt.KeepAspectRatio, 

@@ -1,5 +1,5 @@
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, Qt
 from PyQt4.QtGui import QTransform
 from PyQt4.QtGui import QPainter
 from PyQt4.QtGui import QBrush
@@ -25,6 +25,7 @@ class SlideGen(Slide):
             cell = QtGui.QGraphicsPixmapItem(self.texture)
             #Place the cell in non visible location
             cell.setPos(-500,-500)
+            cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
 
             self.scene.addItem(cell)
     
