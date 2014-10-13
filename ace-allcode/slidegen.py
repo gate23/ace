@@ -1,17 +1,17 @@
 
-from PyQt4 import QtGui, QtCore, Qt
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QTransform
 from PyQt4.QtGui import QPainter
 from PyQt4.QtGui import QBrush
-
-from random import randint, uniform, triangular, sample
+from random import randint, uniform, triangular, sample, shuffle
 from math import sqrt
-
 from slide import Slide
+from sprites import CellType, Depth
+
 
 class SlideGen(Slide):
-    MIN_COUNT = 500
-    MAX_COUNT = 2500
+    MIN_COUNT = 250
+    MAX_COUNT = 750
 
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
@@ -20,22 +20,23 @@ class SlideGen(Slide):
         
         
     def initCells(self):
-        
         for i in range(0, SlideGen.MAX_COUNT-1):
-            if( i%3 == 0):            
-                cell = QtGui.QGraphicsPixmapItem(self.texture)
-            else:
+            if (i < self.MAX_COUNT / 3):            
+                cell = QtGui.QGraphicsPixmapItem(self.texture1)
+            elif (i >= self.MAX_COUNT / 3 and i < self.MAX_COUNT * 3 / 4):
                 cell = QtGui.QGraphicsPixmapItem(self.texture2)
-            
+            else:
+                cell = QtGui.QGraphicsPixmapItem(self.texture3)
+
             #Place the cell in non visible location
             cell.setPos(-500,-500)
             cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
-
             self.scene.addItem(cell)
     
     def genSlide(self):
         this_count = randint(SlideGen.MIN_COUNT, SlideGen.MAX_COUNT)
         cell_list = self.scene.items()
+        shuffle(cell_list)
         num_blobs = int(triangular(1, 20, 10))
         shape_ends = sample(range(0, this_count-1), num_blobs-1)
         
@@ -56,11 +57,12 @@ class SlideGen(Slide):
 
             deg_rotation = uniform(0.0,359.9)
             cell_list[i].setRotation( deg_rotation)
+            #print str(cell_list[i].zValue)
         
         #hide the rest
         for i in range (this_count, SlideGen.MAX_COUNT-1):
             cell_list[i].setPos(-500,-500)
-        
+            #print str(cell_list[i].zValue)
             
         self.cell_count = this_count
     
