@@ -6,8 +6,6 @@ from PyQt4.QtGui import QBrush
 from random import randint, uniform, triangular, sample, shuffle
 from math import sqrt
 from slide import Slide
-from sprites import CellType, Depth
-
 
 class SlideGen(Slide):
     MIN_COUNT = 250
@@ -15,9 +13,7 @@ class SlideGen(Slide):
 
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
-
         self.initCells()
-        
         
     def initCells(self):
         for i in range(0, SlideGen.MAX_COUNT-1):
@@ -48,6 +44,7 @@ class SlideGen(Slide):
                 y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
                 R = triangular(1, SlideGen.VIEW_HEIGHT/2, 5)
                 cell_list[i].setPos( x_offset, y_offset)
+
             #plot point around the center
             else:
                 r = uniform(0, R)
@@ -57,12 +54,10 @@ class SlideGen(Slide):
 
             deg_rotation = uniform(0.0,359.9)
             cell_list[i].setRotation( deg_rotation)
-            #print str(cell_list[i].zValue)
         
         #hide the rest
         for i in range (this_count, SlideGen.MAX_COUNT-1):
             cell_list[i].setPos(-500,-500)
-            #print str(cell_list[i].zValue)
             
         self.cell_count = this_count
     
@@ -79,4 +74,3 @@ class SlideGen(Slide):
         
     def count(self):
         return self.cell_count
-        
