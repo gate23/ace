@@ -21,6 +21,7 @@ class SpriteDepth:
     
 class SpriteType:
     APHANOTHECE_OUTLINE = "0"
+    APHANOTHECE_RENDER1 = "1"
     
 class SpriteFactory:
     
