@@ -6,6 +6,7 @@ Superclass for slide display widgets
 
 from PyQt4 import QtGui, QtCore
 from sprites import SpriteFactory, SpriteType, SpriteDepth
+import sprites
 
 class Slide(QtGui.QWidget):
     VIEW_WIDTH,VIEW_HEIGHT = 540,540
@@ -39,9 +40,23 @@ class Slide(QtGui.QWidget):
 
         #Load Sprites
         self.sprites = SpriteFactory("./img/sprites/")
+        self.texture_lib = {}
+
+        cellType = SpriteType.APHANOTHECE_OUTLINE
+        
+        #Load Textures
+        for depth in range (1, 3):        
+            for degree in range(0, 360, 15):
+                filename, rotation = self.sprites.get_sprite(cellType, str(depth), degree)
+                key = "t"+str(cellType)+"d"+str(depth)+"r"+str(degree);
+                texture = QtGui.QPixmap(filename)
+                self.texture_lib[key] = texture 
+        
         
         #Load and scale the texture for the algae cells
         scaledSize = QtCore.QSize(self.scale_size, self.scale_size)
+        
+        
         filename1, rotation = self.sprites.get_sprite(
             SpriteType.APHANOTHECE_OUTLINE, SpriteDepth.FAR, 0.0)
         filename2, rotation = self.sprites.get_sprite(

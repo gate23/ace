@@ -19,10 +19,13 @@ class SlideGen(Slide):
         for i in range(0, SlideGen.MAX_COUNT-1):
             if (i < self.MAX_COUNT / 3):            
                 cell = QtGui.QGraphicsPixmapItem(self.texture1)
+                cell.setZValue(1.0)
             elif (i >= self.MAX_COUNT / 3 and i < self.MAX_COUNT * 3 / 4):
                 cell = QtGui.QGraphicsPixmapItem(self.texture2)
+                cell.setZValue(2.0)
             else:
                 cell = QtGui.QGraphicsPixmapItem(self.texture3)
+                cell.setZValue(3.0)
 
             #Place the cell in non visible location
             cell.setPos(-500,-500)
@@ -53,6 +56,10 @@ class SlideGen(Slide):
                 cell_list[i].setPos(x_offset + x,y_offset + y)
 
             deg_rotation = uniform(0.0,359.9)
+            zvalue = cell_list[i].zValue()
+            #print "zvalue=", zvalue
+            #add the fuction to slide            
+            #self.get_texture(SpriteFactory.Type, int(zvalue), rotation)
             cell_list[i].setRotation( deg_rotation)
         
         #hide the rest
