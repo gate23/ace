@@ -101,7 +101,7 @@ class Trainer(QtGui.QWidget):
         
     def submitEstimate(self):
         if self.estimate_entry.text().length() > 0 :
-            if self.estimate_number < 10:
+            if self.estimate_number < 11:
                 #Increment guess number and change text display
                 self.estimate_number += 1
                 self.estimate_label.setText("Estimate " +  str(self.estimate_number) + "/10")
@@ -127,7 +127,7 @@ class Trainer(QtGui.QWidget):
                 self.slide_display.genSlide()
             
             #there's a better way to check for the 10th guess number
-            if self.estimate_number == 10:
+            if self.estimate_number == 11:
                 self.endMessage = QtGui.QMessageBox.question(self,'Message',
                     "10 estimates complete! Try again?",
                     QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
@@ -136,6 +136,7 @@ class Trainer(QtGui.QWidget):
 
                 #stats for 10-estimate session
                 self.session_error = self.session_error_sum/10
+                print "Session Err: " + str(self.session_error)
 
 
     def dumpStats(self):
