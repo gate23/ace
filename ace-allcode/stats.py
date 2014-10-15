@@ -14,7 +14,7 @@ class Statistics(QtGui.QWidget):
         self.trainer_ref = trainer
         layout = QtGui.QHBoxLayout()
         
-        #placeholder - just displaying # of estimates and total sum right now
+        #placeholder - not showing much right now
         label_estimate = QtGui.QLabel("Total estimates: " + str(self.trainer_ref.estimate_count))
         label_sum = QtGui.QLabel("Total error sum: " + str(self.trainer_ref.error_sum))
         label_session_estimate = QtGui.QLabel("Previous session avg error: " + str(self.trainer_ref.session_error))
@@ -24,3 +24,7 @@ class Statistics(QtGui.QWidget):
         layout.addWidget(label_session_estimate)
         
         self.setLayout(layout)
+
+    #need to call update every time widget is switched to stats
+    def update(self):
+        label_session_estimate.setText("Previous session avg error: " + str(self.trainer_ref.session_error))

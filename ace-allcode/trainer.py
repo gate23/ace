@@ -29,7 +29,9 @@ class Trainer(QtGui.QWidget):
         
         self.setLayout(layout)
 
-        #10-estimate session error/sum values to hand off to stats
+        #stats per session to hand off to stats
+        self.session_actual_total = 0
+        self.session_estimate_total = 0
         self.session_error = 0.0
         self.session_error_sum = 0.0
         
@@ -88,7 +90,7 @@ class Trainer(QtGui.QWidget):
         self.estimate_display.setReadOnly(1)
 
         #guess_label: shows which number guess user is making
-        self.estimate_number = 0
+        self.estimate_number = 1
         self.estimate_label = QtGui.QLabel("Estimate " +  str(self.estimate_number) + "/10")      
         
         estimate_layout = QtGui.QVBoxLayout()
@@ -101,48 +103,72 @@ class Trainer(QtGui.QWidget):
         
     def submitEstimate(self):
         if self.estimate_entry.text().length() > 0 :
+            self.estimate_number += 1
+
+
+            estimate = float(self.estimate_entry.text())
+            actual = float(self.slide_display.count())
+                 
+            self.session_estimate_total += estimate
+            self.session_actual_total += actual
+            raw_percent_err = (math.fabs(estimate - actual) / actual) * 100.0
+
+            #TODO have estimate_number and _count, clean up
+            self.estimate_count += 1
+            self.error_sum += raw_percent_err
+            self.session_error_sum += raw_percent_err
+            #print "Total Average Err: " + str(self.error_sum/self.estimate_count)           
+            
+            #format for less precision
+            percent_err = "{:.2f}".format(raw_percent_err)
+            
+            self.estimate_display.append(
+                    "Estimate: " + str(self.estimate_entry.text()) +
+                    " Actual Count: " + str(self.slide_display.count()) )
+            self.estimate_entry.clear()
+              
+            self.slide_display.genSlide()
+            
             if self.estimate_number < 11:
                 #Increment guess number and change text display
-                self.estimate_number += 1
                 self.estimate_label.setText("Estimate " +  str(self.estimate_number) + "/10")
-
-                estimate = float(self.estimate_entry.text())
-                actual = float(self.slide_display.count())
-                     
-                raw_percent_err = (math.fabs(estimate - actual) / actual) * 100.0
-
-                self.estimate_count += 1
-                self.error_sum += raw_percent_err
-                self.session_error_sum += raw_percent_err
-                #print "Total Average Err: " + str(self.error_sum/self.estimate_count)           
-                
-                #format for less precision
-                percent_err = "{:.2f}".format(raw_percent_err)
-                
-                self.estimate_display.append(
-                        "Estimate: " + str(self.estimate_entry.text()) +
-                        " Actual Count: " + str(self.slide_display.count()) )
-                self.estimate_entry.clear()
-                
-                self.slide_display.genSlide()
-            
-            if self.estimate_number == 11:
-                self.endMessage = QtGui.QMessageBox.question(self,'Message',
-                    "10 estimates complete! Try again?",
-                    QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
-            
-                
-            #messagebox technique - find which is better
-            # if self.estimate_number == 10:
-            #     self.endMessage = QtGui.QMessageBox()
-            #     self.endMessage.setText("10/10 estimates complete!")
-            #     self.endMessage.open()
-
-                #stats for 10-estimate session
+                           
+            elif self.estimate_number == 11:
+                #display stats for 10-estimate session
                 self.session_error = self.session_error_sum/10
-                print "Session Err: " + str(self.session_error)
+                self.session_error ="{:.2f}".format(self.session_error)
+                self.estimate_display.append("\n10-slide session complete!")
+                self.estimate_display.append("Total estimate count for session: " +
+                str(self.session_estimate_total))
+                self.estimate_display.append("Total actual count for session: " +
+                str(self.session_actual_total))
+                self.estimate_display.append("Average error for this session: " + 
+                str(self.session_error) + "\n")
 
-            #TODO: Make these actions restart or return to main menu
+                #MessageBox - restart trainer or return to menu
+                self.endMessage = QtGui.QMessageBox.question(self,'Message',
+                     "10 estimates complete! Try again?",
+                     QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
+
+                if self.endMessage == QtGui.QMessageBox.Yes:
+                    self.restartSession()
+                #TODO: Fix going to main menu
+                elif self.endMessage == QtGui.QMessageBox.No:
+                    self.changeMode(ModeEnum.MENU)
+
+    #when session is complete, reset stuff
+    def restartSession(self):
+        self.session_estimate_total = 0
+        self.session_actual_total = 0
+        self.estimate_number = 0
+        self.estimate_label.setText("Estimate " +  str(self.estimate_number) + "/10")
+
+        self.estimate_display.append("Beginning new session...")
+
+        self.estimate_entry.clear()
+        self.slide_display.genSlide()
+
+
 
 
     def dumpStats(self):
