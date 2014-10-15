@@ -38,15 +38,22 @@ class SlideGen(Slide):
         cell_list = self.scene.items()
         shuffle(cell_list)
         num_blobs = int(triangular(1, 20, 10))
-        shape_ends = sample(range(0, this_count-1), num_blobs-1)
+        shape_ends = sample(range(1, this_count-1), num_blobs-1)
         
         for i in range (0, this_count-1):
 
             #chooses the center point of the blob
             if ((i == 0) or (i in shape_ends)):
+                if (i != 0):
+                    shape_ends.remove(i)
+                if (len(shape_ends) > 0):
+                    next = min(shape_ends)
+                    size = next - i
+                else:
+                    size = this_count - i
                 x_offset = uniform(0.0, SlideGen.VIEW_WIDTH) 
                 y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
-                R = triangular(1, SlideGen.VIEW_HEIGHT/2, 5)
+                R = triangular(size / 10, SlideGen.VIEW_HEIGHT/2, 5)
                 cell_list[i].setPos( x_offset, y_offset)
 
             #plot point around the center
