@@ -10,7 +10,6 @@ import pickle
 
 from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
-from enum import ModeEnum
 
 MAX_ESTIMATE = 9999
 
@@ -45,6 +44,7 @@ class Trainer(QtGui.QWidget):
         except:
             self.estimate_count = 0
             self.error_sum = 0.0
+
             self.session_error_sum = 0.0
     
     def initSlideLayout(self):
@@ -88,7 +88,7 @@ class Trainer(QtGui.QWidget):
         self.estimate_display.setReadOnly(1)
 
         #guess_label: shows which number guess user is making
-        self.estimate_number = 1
+        self.estimate_number = 0
         self.estimate_label = QtGui.QLabel("Estimate " +  str(self.estimate_number) + "/10")      
         
         estimate_layout = QtGui.QVBoxLayout()
@@ -126,17 +126,23 @@ class Trainer(QtGui.QWidget):
                 
                 self.slide_display.genSlide()
             
-            #there's a better way to check for the 10th guess number
             if self.estimate_number == 11:
                 self.endMessage = QtGui.QMessageBox.question(self,'Message',
                     "10 estimates complete! Try again?",
                     QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
             
-                #TODO: Make these actions restart or return to main menu
+                
+            #messagebox technique - find which is better
+            # if self.estimate_number == 10:
+            #     self.endMessage = QtGui.QMessageBox()
+            #     self.endMessage.setText("10/10 estimates complete!")
+            #     self.endMessage.open()
 
                 #stats for 10-estimate session
                 self.session_error = self.session_error_sum/10
                 print "Session Err: " + str(self.session_error)
+
+            #TODO: Make these actions restart or return to main menu
 
 
     def dumpStats(self):
