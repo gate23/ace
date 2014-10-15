@@ -10,6 +10,7 @@ import pickle
 
 from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
+from enum import ModeEnum
 
 MAX_ESTIMATE = 9999
 
@@ -18,6 +19,7 @@ class Trainer(QtGui.QWidget):
         super(Trainer,self).__init__(parent)
         
         self.initUI()
+        self.parent = parent
         
     def initUI(self):
         layout = QtGui.QHBoxLayout()
@@ -91,7 +93,7 @@ class Trainer(QtGui.QWidget):
 
         #guess_label: shows which number guess user is making
         self.estimate_number = 1
-        self.estimate_label = QtGui.QLabel("Estimate " +  str(self.estimate_number) + "/10")      
+        self.estimate_label = QtGui.QLabel("Slide " +  str(self.estimate_number) + "/10")      
         
         estimate_layout = QtGui.QVBoxLayout()
         estimate_layout.addWidget(self.estimate_label)
@@ -131,7 +133,7 @@ class Trainer(QtGui.QWidget):
             
             if self.estimate_number < 11:
                 #Increment guess number and change text display
-                self.estimate_label.setText("Estimate " +  str(self.estimate_number) + "/10")
+                self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
                            
             elif self.estimate_number == 11:
                 #display stats for 10-estimate session
@@ -154,14 +156,15 @@ class Trainer(QtGui.QWidget):
                     self.restartSession()
                 #TODO: Fix going to main menu
                 elif self.endMessage == QtGui.QMessageBox.No:
-                    self.changeMode(ModeEnum.MENU)
+                    self.restartSession()
+                    self.parent.changeMode(ModeEnum.MENU)
 
     #when session is complete, reset stuff
     def restartSession(self):
         self.session_estimate_total = 0
         self.session_actual_total = 0
-        self.estimate_number = 0
-        self.estimate_label.setText("Estimate " +  str(self.estimate_number) + "/10")
+        self.estimate_number = 1
+        self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
 
         self.estimate_display.append("Beginning new session...")
 
