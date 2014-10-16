@@ -34,7 +34,7 @@ class Slide(QtGui.QWidget):
         self.setLayout(layout)
 
         #Load and set view background
-        self.bg_texture = QtGui.QPixmap("./img/backgrounds/b0.png")
+        self.bg_texture = QtGui.QPixmap("./img/backgrounds/b2.png")
         background = QtGui.QBrush(self.bg_texture)
         self.scene.setBackgroundBrush(background)
 

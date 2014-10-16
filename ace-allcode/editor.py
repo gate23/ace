@@ -5,6 +5,8 @@ Contains classes for edit mode
 import time
 from random import uniform
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 
 class Editor(QtGui.QWidget):
     def __init__(self, parent):
@@ -14,7 +16,7 @@ class Editor(QtGui.QWidget):
         
         display = QtGui.QGraphicsView(self.scene)
         
-        bg_texture = QtGui.QPixmap('background.jpg')
+        bg_texture = QtGui.QPixmap("./img/backgrounds/b2.png")
         background = QtGui.QBrush(bg_texture)
         self.scene.setBackgroundBrush(background)
         
@@ -31,10 +33,15 @@ class Editor(QtGui.QWidget):
         
         dropper = Dropper(self, self.scene) 
         self.toolbar.addWidget(dropper)
+        self.toolbar.addSeparator()
         
+        depth_select = DepthSelect(self) 
+        self.toolbar.addWidget(depth_select)
+        self.toolbar.addSeparator()        
         
         test_action = QtGui.QAction(QtCore.QString('Another Tool'),self.toolbar)
         self.toolbar.addAction(test_action)
+        self.toolbar.addSeparator()
           
         self.layout = QtGui.QHBoxLayout()
         self.layout.addWidget(display)
@@ -103,14 +110,34 @@ class GraphicsScene(QtGui.QGraphicsScene):
     def setFlow(self,value):
         self.flow_rate = value
         
-class Dropper(QtGui.QWidget):
+class DepthSelect(QtGui.QGroupBox):
+    def __init__(self, parent):
+        super(DepthSelect, self).__init__(parent)
+        self.setFixedWidth(120)
+        self.setTitle("Select Depth")     
+        self.d1RadioButton = QRadioButton("Depth1")
+        self.d1RadioButton.setChecked(True)
+        self.d2RadioButton = QRadioButton("Depth2")
+        self.d3RadioButton = QRadioButton("Depth3")
+ 
+        radioLayout = QVBoxLayout()
+        self.depth_group = radioLayout
+        
+        radioLayout.addWidget(self.d1RadioButton)
+        radioLayout.addWidget(self.d2RadioButton)
+        radioLayout.addWidget(self.d3RadioButton)
+        self.setLayout(radioLayout)
+                
+        
+class Dropper(QtGui.QGroupBox):
     def __init__(self,parent,scene):
         super(Dropper, self).__init__(parent)
-        self.setFixedWidth(100)
+        self.setFixedWidth(240)
         self.scene_ref = scene
-        
-        label = QtGui.QLabel("Dropper")
-        flow_label = QtGui.QLabel("Flow Rate")
+        self.setTitle("Dropper")
+        #flow_label = QtGui.QLabel("Flow Rate")
+        high_label = QtGui.QLabel("High")
+        low_label = QtGui.QLabel("Low")
         self.flow_control = QtGui.QSlider(QtCore.Qt.Horizontal)
         #min/max delays for dropping cells (in milliseconds)
         self.flow_control.setRange(25, 200)
@@ -121,14 +148,16 @@ class Dropper(QtGui.QWidget):
                                     self.updateFlowRate
                             )
         
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(label)
-        layout.addWidget(flow_label)
+        layout = QtGui.QHBoxLayout()
+        layout.addWidget(high_label)
         layout.addWidget(self.flow_control)
+        layout.addWidget(low_label)
+        
+        #layout = QtGui.QVBoxLayout()
+        #layout.addWidget(flow_label)
+        #layout.addWidget(self.flow_control)
         
         self.setLayout(layout)
     
     def updateFlowRate(self):
         self.scene_ref.setFlow( self.flow_control.value() )
-        
-    
