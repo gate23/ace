@@ -46,7 +46,7 @@ class SpriteFactory:
     Get the sprite with the closest rotation and return the amount require to rotate
     """                
     def get_sprite(self, code, depth, rotation):
-        dirname = self.directory+"t"+str(code)+"/d"+str(depth)
+        dirname = os.path.join(self.directory,"t"+str(code),"d"+str(depth))
         filename = None
         diff = 360
 
@@ -64,4 +64,4 @@ class SpriteFactory:
                     closest = degree
             filename = "r"+str(closest%360)+".png"
             
-        return dirname+"/"+filename, diff
+        return os.path.join(dirname,filename), diff

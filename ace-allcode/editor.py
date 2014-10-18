@@ -7,6 +7,7 @@ from random import uniform
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+import os.path
 
 class Editor(QtGui.QWidget):
     def __init__(self, parent):
@@ -15,8 +16,8 @@ class Editor(QtGui.QWidget):
         self.scene = GraphicsScene(self)
         
         display = QtGui.QGraphicsView(self.scene)
-        
-        bg_texture = QtGui.QPixmap("./img/backgrounds/b2.png")
+        bgPath = os.path.normpath("./img/backgrounds/b2.png")
+        bg_texture = QtGui.QPixmap(os.path.join(os.path.curdir, bgPath))
         background = QtGui.QBrush(bg_texture)
         self.scene.setBackgroundBrush(background)
         

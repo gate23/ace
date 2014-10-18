@@ -6,6 +6,7 @@ Superclass for slide display widgets
 
 from PyQt4 import QtGui, QtCore
 from sprites import SpriteFactory, SpriteType, SpriteDepth
+import os.path
 #import sprites
 import math
 
@@ -34,12 +35,14 @@ class Slide(QtGui.QWidget):
         self.setLayout(layout)
 
         #Load and set view background
-        self.bg_texture = QtGui.QPixmap("./img/backgrounds/b2.png")
+        bgPath = os.path.normpath("./img/backgrounds/b2.png")
+        self.bg_texture = QtGui.QPixmap(os.path.join(os.path.curdir, bgPath))
         background = QtGui.QBrush(self.bg_texture)
         self.scene.setBackgroundBrush(background)
 
         #Load Sprites
-        self.sprites = SpriteFactory("./img/sprites/")
+        spritePath = os.path.normpath("./img/sprites/")
+        self.sprites = SpriteFactory(os.path.join(os.path.curdir, spritePath))
         self.texture_lib = {}
 
         cellTypes = {SpriteType.APHANOTHECE_OUTLINE,
