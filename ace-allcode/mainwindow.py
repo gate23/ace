@@ -37,8 +37,8 @@ class MainWindow(QtGui.QMainWindow):
         self.mode_stack.addWidget(trainer)
         
         #stats saved in trainer
-        stats = Statistics(self,trainer)
-        self.mode_stack.addWidget(stats)
+        self.stats = Statistics(self,trainer)
+        self.mode_stack.addWidget(self.stats)
         
         self.editor = Editor(self)
         self.editor.toolbar.toggleViewAction().trigger()
@@ -78,7 +78,10 @@ class MainWindow(QtGui.QMainWindow):
         if page_num == ModeEnum.EDITOR:
             self.editor.toolbar.toggleViewAction().trigger()
 
-        
+        #Update stats every time a mode is changed
+        self.stats.updateStats()
+        self.stats.updateStatsUI()
+
         self.mode_stack.setCurrentIndex(page_num)
         
     #for closing via File->Exit

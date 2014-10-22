@@ -107,7 +107,6 @@ class Trainer(QtGui.QWidget):
         if self.estimate_entry.text().length() > 0 :
             self.estimate_number += 1
 
-
             estimate = float(self.estimate_entry.text())
             actual = float(self.slide_display.count())
                  
@@ -119,7 +118,6 @@ class Trainer(QtGui.QWidget):
             self.estimate_count += 1
             self.error_sum += raw_percent_err
             self.session_error_sum += raw_percent_err
-            #print "Total Average Err: " + str(self.error_sum/self.estimate_count)           
             
             #format for less precision
             percent_err = "{:.2f}".format(raw_percent_err)
@@ -154,7 +152,6 @@ class Trainer(QtGui.QWidget):
 
                 if self.endMessage == QtGui.QMessageBox.Yes:
                     self.restartSession()
-                #TODO: Fix going to main menu
                 elif self.endMessage == QtGui.QMessageBox.No:
                     self.restartSession()
                     self.parent.changeMode(ModeEnum.MENU)
@@ -170,8 +167,6 @@ class Trainer(QtGui.QWidget):
 
         self.estimate_entry.clear()
         self.slide_display.genSlide()
-
-
 
 
     def dumpStats(self):
