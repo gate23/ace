@@ -67,7 +67,7 @@ class Slide(QtGui.QWidget):
                         self.texture_lib[key] = texture
 
                                             
-    def get_texture(self, cellType, depth, rotation, current_focus=1.0):
+    def get_texture(self, cellType, depth, rotation, current_focus=2.0):
         blur, sprite_depth = self.get_blur(depth, current_focus)
         
         rotation_rounded = ((int)(math.floor(rotation)/15)*15)        

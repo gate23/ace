@@ -113,7 +113,8 @@ class EditorScene(QtGui.QGraphicsScene):
         texture, rotation,blur = self.slide_ref.get_texture(   int(SpriteType.APHANOTHECE_OUTLINE),
                                                 zvalue, deg_rotation)
 
-        cell = QtGui.QGraphicsPixmapItem(texture) 
+        cell = QtGui.QGraphicsPixmapItem(texture)
+        cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
         cell.setPos(position.x(), position.y() )
         cell.setRotation(rotation)
          
