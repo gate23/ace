@@ -4,7 +4,7 @@ from PyQt4.QtGui import QTransform
 from PyQt4.QtGui import QPainter
 from PyQt4.QtGui import QBrush
 from random import randint, uniform, triangular, sample, shuffle
-from math import sqrt, floor
+from math import sqrt, floor, pi, fabs
 from slide import Slide
 from sprites import SpriteType
 import random
@@ -52,7 +52,9 @@ class SlideGen(Slide):
                     size = this_count - i
                 x_offset = uniform(0.0, SlideGen.VIEW_WIDTH) 
                 y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
-                R = triangular(size / 10, SlideGen.VIEW_HEIGHT/2, 5)
+                opt_r = sqrt(200 * size / pi)
+                max_r = SlideGen.VIEW_HEIGHT/2
+                R = triangular(opt_r, max_r, (opt_r + max_r) / 3)
                 cell_list[i].setPos( x_offset, y_offset)
 
             #plot point around the center
