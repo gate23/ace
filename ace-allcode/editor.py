@@ -8,18 +8,21 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import os.path
+from sprites import SpriteFactory, SpriteType
+from slide import Slide
 
 class Editor(QtGui.QWidget):
     def __init__(self, parent):
         super(Editor, self).__init__(parent)
         
-        self.scene = GraphicsScene(self)
+        self.slide = EditorSlide(self)
         
-        display = QtGui.QGraphicsView(self.scene)
+        display = self.slide.view
+        
         bgPath = os.path.normpath("./img/backgrounds/b2.png")
         bg_texture = QtGui.QPixmap(os.path.join(os.path.curdir, bgPath))
         background = QtGui.QBrush(bg_texture)
-        self.scene.setBackgroundBrush(background)
+        #self.scene.setBackgroundBrush(background)
         
           
         #toolbar with editing tools
@@ -32,7 +35,7 @@ class Editor(QtGui.QWidget):
         self.toolbar.toggleViewAction().setChecked(False)
         self.toolbar.toggleViewAction().trigger()
         
-        dropper = Dropper(self, self.scene) 
+        dropper = Dropper(self, self.slide.scene) 
         self.toolbar.addWidget(dropper)
         self.toolbar.addSeparator()
         
@@ -49,16 +52,23 @@ class Editor(QtGui.QWidget):
         
         self.setLayout(self.layout)
                               
-    
-#QGraphicsScene is subclassed in order to override its mousePressEvent method        
-class GraphicsScene(QtGui.QGraphicsScene):
+
+class EditorSlide(Slide):
     def __init__(self, parent):
-        super(GraphicsScene, self).__init__(parent)
+        super(EditorSlide, self).__init__(parent)
         
-        self.setSceneRect( QtCore.QRectF(0,0,500,400) )
+        self.scene = EditorScene(self)
+        self.view.setScene(self.scene)
         
-        self.texture = QtGui.QPixmap('aphanothece1.png')
-        self.texture = self.texture.scaled( QtCore.QSize(15, 15) )
+        background = QtGui.QBrush(self.bg_texture)
+        self.scene.setBackgroundBrush(background)
+        
+#QGraphicsScene is subclassed in order to override its mousePressEvent method        
+class EditorScene(QtGui.QGraphicsScene):
+    def __init__(self, parent):
+        super(EditorScene, self).__init__()
+    
+        self.slide_ref = parent
         
         self.time_placed = time.clock()
         self.flow_rate = 100 
@@ -70,8 +80,7 @@ class GraphicsScene(QtGui.QGraphicsScene):
                                     QtCore.SIGNAL("timeout()"),
                                     (lambda: self.addCellAtMouse(self.mouse_pos) )
                                 )
-    def print_timer(self):
-        print "Timer done!"
+                                
     #Stores the mouse event as the mouse moves. (Only when mouse is held down)
     #Allows drop_timer to add cells at the current mouse position.
     def mouseMoveEvent(self, event):
@@ -79,7 +88,7 @@ class GraphicsScene(QtGui.QGraphicsScene):
             self.mouse_pos = QtCore.QPointF(event.scenePos() )
         
     def mousePressEvent(self, event):
-        super(GraphicsScene, self).mousePressEvent(event)
+        super(EditorScene, self).mousePressEvent(event)
         self.addCellAtMouse(QtCore.QPointF(event.scenePos()) )
         
         self.mouse_down = True
@@ -88,7 +97,7 @@ class GraphicsScene(QtGui.QGraphicsScene):
         self.drop_timer.start(self.flow_rate)
            
     def mouseReleaseEvent(self, event):
-        super(GraphicsScene, self).mouseReleaseEvent(event)
+        super(EditorScene, self).mouseReleaseEvent(event)
         
         self.mouse_down = False
         
@@ -99,11 +108,13 @@ class GraphicsScene(QtGui.QGraphicsScene):
     #Adds a cell at the position of the mouse on the graphics scene.
     #Bugs: Position center is not corrected after rotation. 
     def addCellAtMouse(self, position):
-        cell = QtGui.QGraphicsPixmapItem(self.texture)
- 
+        deg_rotation = uniform(0.0,359.9)
+        zvalue = 3         
+        texture, rotation = self.slide_ref.get_texture(   int(SpriteType.APHANOTHECE_OUTLINE),
+                                                zvalue, deg_rotation)
+
+        cell = QtGui.QGraphicsPixmapItem(texture) 
         cell.setPos(position.x(), position.y() )
-        
-        rotation = uniform(0,359.9)
         cell.setRotation(rotation)
          
         self.addItem(cell)

@@ -1,8 +1,7 @@
 """
 stats.py
 
-Will eventually display training statistics
-**Placeholder right now
+Display training statistics
 """
 
 from PyQt4 import QtGui, QtCore
