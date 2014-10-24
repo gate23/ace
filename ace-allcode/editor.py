@@ -66,7 +66,7 @@ class EditorSlide(Slide):
 #QGraphicsScene is subclassed in order to override its mousePressEvent method        
 class EditorScene(QtGui.QGraphicsScene):
     def __init__(self, parent):
-        super(EditorScene, self).__init__()
+        super(EditorScene, self).__init__(parent)
     
         self.slide_ref = parent
         
