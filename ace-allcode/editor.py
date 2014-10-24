@@ -110,7 +110,7 @@ class EditorScene(QtGui.QGraphicsScene):
     def addCellAtMouse(self, position):
         deg_rotation = uniform(0.0,359.9)
         zvalue = 3         
-        texture, rotation = self.slide_ref.get_texture(   int(SpriteType.APHANOTHECE_OUTLINE),
+        texture, rotation,blur = self.slide_ref.get_texture(   int(SpriteType.APHANOTHECE_OUTLINE),
                                                 zvalue, deg_rotation)
 
         cell = QtGui.QGraphicsPixmapItem(texture) 
