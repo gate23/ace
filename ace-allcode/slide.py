@@ -13,7 +13,10 @@ import math
 class Slide(QtGui.QWidget):
     VIEW_WIDTH,VIEW_HEIGHT = 540,540
     
-    scale_size = 24
+    scale_size = 30
+    depth_alpha = 0.2
+    depth_blur_amount = 3.3
+    
     
     def __init__(self,parent):
         super(Slide, self).__init__(parent)
@@ -54,45 +57,21 @@ class Slide(QtGui.QWidget):
             for depth in range (1, 4):        
                 for degree in range(0, 360, 15):
                     filename, rotation = self.sprites.get_sprite(cellType, str(depth), degree)
-                    #print "filename="+filename+" rotation="+str(rotation)                
                     key = "t"+str(cellType)+"d"+str(depth)+"r"+str(degree);
                     
                     if int(rotation) == 0:
-                        #print "added "+filename
                         texture = QtGui.QPixmap(filename)
                         texture = texture.scaled(scaledSize, 
                                                 QtCore.Qt.KeepAspectRatio, 
                                                 QtCore.Qt.SmoothTransformation )
                         self.texture_lib[key] = texture
-            
-        
-        #print str(self.texture_lib)
-        #Load and scale the texture for the algae cells
-#        filename1, rotation = self.sprites.get_sprite(
-#            SpriteType.APHANOTHECE_OUTLINE, SpriteDepth.FAR, 0.0)
-#        filename2, rotation = self.sprites.get_sprite(
-#            SpriteType.APHANOTHECE_OUTLINE, SpriteDepth.CENTER, 0.0)
-#        filename3, rotation = self.sprites.get_sprite(
-#            SpriteType.APHANOTHECE_OUTLINE, SpriteDepth.NEAR, 0.0)
-#        
-#        self.texture1 = QtGui.QPixmap(filename1)
-#        self.texture1 = self.texture1.scaled( scaledSize, 
-#                                            QtCore.Qt.KeepAspectRatio, 
-#                                            QtCore.Qt.SmoothTransformation )
-#
-#        self.texture2 = QtGui.QPixmap(filename2)
-#        self.texture2 = self.texture2.scaled( scaledSize, 
-#                                            QtCore.Qt.KeepAspectRatio, 
-#                                            QtCore.Qt.SmoothTransformation )
-#
-#        self.texture3 = QtGui.QPixmap(filename3)
-#        self.texture3 = self.texture3.scaled( scaledSize, 
-#                                            QtCore.Qt.KeepAspectRatio, 
-#                                            QtCore.Qt.SmoothTransformation )
+
                                             
-    def get_texture(self, cellType, depth, rotation):
+    def get_texture(self, cellType, depth, rotation, current_focus):
+        blur, sprite_depth = self.get_blur(depth, current_focus)
+        
         rotation_rounded = ((int)(math.floor(rotation)/15)*15)        
-        key = "t"+str(cellType)+"d"+str(depth)+"r"+str(rotation_rounded)
+        key = "t"+str(cellType)+"d"+str(sprite_depth)+"r"+str(rotation_rounded)
         texture = None
         diff = 360
                 
@@ -102,7 +81,7 @@ class Slide(QtGui.QWidget):
             if t != cellType:
                 continue
             d = int((key.split("d")[1]).split("r")[0])
-            if d != depth:
+            if d != sprite_depth:
                 continue
             degree =  int(key.split("r")[1])
             
@@ -113,6 +92,16 @@ class Slide(QtGui.QWidget):
                 diff = test
                 texture = value
         
-        return texture, diff
+        return texture, diff, blur
         
-            
+    def get_blur(self, depth, current_focus):
+        amount = (current_focus - depth)
+        sprite_depth = 2 #sets middle
+
+        if abs(amount) > self.depth_alpha:        
+            if amount < 0:
+                sprite_depth = 3
+            else:
+                sprite_depth = 1
+
+        return abs(current_focus - depth) * self.depth_blur_amount, sprite_depth
