@@ -105,7 +105,6 @@ class Trainer(QtGui.QWidget):
         
     def submitEstimate(self):
         if self.estimate_entry.text().length() > 0 :
-            self.estimate_number += 1
 
             estimate = float(self.estimate_entry.text())
             actual = float(self.slide_display.count())
@@ -123,11 +122,14 @@ class Trainer(QtGui.QWidget):
             percent_err = "{:.2f}".format(raw_percent_err)
             
             self.estimate_display.append(
-                    "Estimate: " + str(self.estimate_entry.text()) +
-                    " Actual Count: " + str(self.slide_display.count()) )
+                    "Slide "+str(self.estimate_number)+
+                    "\nEstimate: " + str(self.estimate_entry.text()) +
+                    "\nActual Count: " + str(self.slide_display.count()) +"\n")
             self.estimate_entry.clear()
               
             self.slide_display.genSlide()
+            
+            self.estimate_number += 1
             
             if self.estimate_number < 11:
                 #Increment guess number and change text display
@@ -160,6 +162,9 @@ class Trainer(QtGui.QWidget):
     def restartSession(self):
         self.session_estimate_total = 0
         self.session_actual_total = 0
+        self.session_error = 0.0
+        self.session_error_sum = 0.0
+        
         self.estimate_number = 1
         self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
 
