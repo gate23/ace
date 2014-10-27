@@ -34,9 +34,9 @@ class MainWindow(QtGui.QMainWindow):
         self.mode_stack.addWidget(main_menu)
            
         self.stats = Statistics(self)
-        trainer = Trainer(self,self.stats)
+        self.trainer = Trainer(self,self.stats)
         
-        self.mode_stack.addWidget(trainer)
+        self.mode_stack.addWidget(self.trainer)
         self.mode_stack.addWidget(self.stats)
 
         
@@ -78,9 +78,11 @@ class MainWindow(QtGui.QMainWindow):
         #If switching to Editor, show the toolbar
         if page_num == ModeEnum.EDITOR:
             self.editor.toolbar.toggleViewAction().trigger()
-
-        if page_num == ModeEnum.STATS:
+        elif page_num == ModeEnum.STATS:
             self.stats.updateStatsUI()
+        elif page_num == ModeEnum.TRAINER:
+            self.trainer.estimate_entry.setFocus()
+            
 
         self.mode_stack.setCurrentIndex(page_num)
         
