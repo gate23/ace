@@ -6,7 +6,6 @@ Makes use of SlideGen class for generating and viewing slides
 """
 
 import math
-import pickle
 
 from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
@@ -15,11 +14,16 @@ from enum import ModeEnum
 MAX_ESTIMATE = 9999
 
 class Trainer(QtGui.QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, stats):
+        self.estimate_number = 1
+        self.error_sum = 0
+        
         super(Trainer,self).__init__(parent)
         
         self.initUI()
         self.parent = parent
+        self.stats_ref = stats
+        
         
     def initUI(self):
         layout = QtGui.QHBoxLayout()
@@ -32,25 +36,8 @@ class Trainer(QtGui.QWidget):
         self.setLayout(layout)
 
         #stats per session to hand off to stats
-        self.session_actual_total = 0
-        self.session_estimate_total = 0
-        self.session_error = 0.0
-        self.session_error_sum = 0.0
         
-        #stats stuff
-        try:
-            file = open('stats.ace')
-            opened = pickle.load(file)
-            
-            self.estimate_count = opened[0]
-            self.error_sum = opened[1]
-            
-        except:
-            self.estimate_count = 0
-            self.error_sum = 0.0
-
-            self.session_error_sum = 0.0
-    
+        
     def initSlideLayout(self):
         self.slide_display = SlideGen(self)
         self.slide_display.genSlide()
@@ -92,7 +79,6 @@ class Trainer(QtGui.QWidget):
         self.estimate_display.setReadOnly(1)
 
         #guess_label: shows which number guess user is making
-        self.estimate_number = 1
         self.estimate_label = QtGui.QLabel("Slide " +  str(self.estimate_number) + "/10")      
         
         estimate_layout = QtGui.QVBoxLayout()
@@ -108,44 +94,36 @@ class Trainer(QtGui.QWidget):
 
             estimate = float(self.estimate_entry.text())
             actual = float(self.slide_display.count())
-                 
-            self.session_estimate_total += estimate
-            self.session_actual_total += actual
+            
+            
             raw_percent_err = (math.fabs(estimate - actual) / actual) * 100.0
+            percent_err = "{:.1f}".format(raw_percent_err)
 
-            #TODO have estimate_number and _count, clean up
-            self.estimate_count += 1
-            self.error_sum += raw_percent_err
-            self.session_error_sum += raw_percent_err
-            
-            #format for less precision
-            percent_err = "{:.2f}".format(raw_percent_err)
-            
             self.estimate_display.append(
                     "Slide "+str(self.estimate_number)+
                     "\nEstimate: " + str(self.estimate_entry.text()) +
-                    "\nActual Count: " + str(self.slide_display.count()) +"\n")
+                    "\nActual Count: " + str(self.slide_display.count()) +
+                    "\nPercentage Error: " + str(percent_err))
             self.estimate_entry.clear()
-              
-            self.slide_display.genSlide()
             
             self.estimate_number += 1
-            
+            self.error_sum += raw_percent_err
+ 
+ 
             if self.estimate_number < 11:
-                #Increment guess number and change text display
+                self.slide_display.genSlide()
                 self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
                            
             elif self.estimate_number == 11:
                 #display stats for 10-estimate session
-                self.session_error = self.session_error_sum/10
-                self.session_error ="{:.2f}".format(self.session_error)
+                raw_session_error = self.error_sum / 10
+                session_error ="{:.2f}".format(raw_session_error)
+                
+                self.stats_ref.recordSession(raw_session_error)
+                
                 self.estimate_display.append("\n10-slide session complete!")
-                self.estimate_display.append("Total estimate count for session: " +
-                str(self.session_estimate_total))
-                self.estimate_display.append("Total actual count for session: " +
-                str(self.session_actual_total))
                 self.estimate_display.append("Average error for this session: " + 
-                str(self.session_error) + "\n")
+                                                str(session_error) + "\n")
 
                 #MessageBox - restart trainer or return to menu
                 self.endMessage = QtGui.QMessageBox.question(self,'Message',
@@ -153,17 +131,15 @@ class Trainer(QtGui.QWidget):
                      QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
 
                 if self.endMessage == QtGui.QMessageBox.Yes:
-                    self.restartSession()
+                    self.startNewSession()
                 elif self.endMessage == QtGui.QMessageBox.No:
-                    self.restartSession()
+                    self.startNewSession()
                     self.parent.changeMode(ModeEnum.MENU)
 
     #when session is complete, reset stuff
-    def restartSession(self):
-        self.session_estimate_total = 0
-        self.session_actual_total = 0
-        self.session_error = 0.0
-        self.session_error_sum = 0.0
+    def startNewSession(self):
+        self.estimate_sum = 0
+        self.actual_sum = 0
         
         self.estimate_number = 1
         self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
@@ -172,12 +148,3 @@ class Trainer(QtGui.QWidget):
 
         self.estimate_entry.clear()
         self.slide_display.genSlide()
-
-
-    def dumpStats(self):
-        stat_list = (self.estimate_count, self.error_sum)
-        
-        output = open('stats.ace','wb')
-        pickle.dump(stat_list, output)
-        
-        output.close()

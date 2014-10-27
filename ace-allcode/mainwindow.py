@@ -33,12 +33,13 @@ class MainWindow(QtGui.QMainWindow):
         main_menu = MainMenu(self)
         self.mode_stack.addWidget(main_menu)
            
-        trainer = Trainer(self)
-        self.mode_stack.addWidget(trainer)
+        self.stats = Statistics(self)
+        trainer = Trainer(self,self.stats)
         
-        #stats saved in trainer
-        self.stats = Statistics(self,trainer)
+        self.mode_stack.addWidget(trainer)
         self.mode_stack.addWidget(self.stats)
+
+        
         
         self.editor = Editor(self)
         self.editor.toolbar.toggleViewAction().trigger()
@@ -78,19 +79,18 @@ class MainWindow(QtGui.QMainWindow):
         if page_num == ModeEnum.EDITOR:
             self.editor.toolbar.toggleViewAction().trigger()
 
-        #Update stats every time a mode is changed
-        self.stats.updateStats()
-        self.stats.updateStatsUI()
+        if page_num == ModeEnum.STATS:
+            self.stats.updateStatsUI()
 
         self.mode_stack.setCurrentIndex(page_num)
         
     #for closing via File->Exit
     def exitProgram(self):
-        self.mode_stack.widget(ModeEnum.TRAINER).dumpStats()
+        self.mode_stack.widget(ModeEnum.STATS).writeStatsToFile()
         QtGui.qApp.quit()
     
         
     #for closing via 'X' window button
     def closeEvent(self, event):
-        self.mode_stack.widget(ModeEnum.TRAINER).dumpStats()
+        self.mode_stack.widget(ModeEnum.STATS).writeStatsToFile()
         event.accept()

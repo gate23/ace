@@ -6,14 +6,36 @@ Display training statistics
 
 from PyQt4 import QtGui, QtCore
 
-class Statistics(QtGui.QWidget):
-    def __init__(self, parent,trainer):
-        super (Statistics, self).__init__(parent)
-        self.trainer_ref = trainer
-        self.currentStats = {}
-        self.updateStats()
-        self.initUI()
+import pickle
 
+class Statistics(QtGui.QWidget):
+    def __init__(self, parent):
+        super (Statistics, self).__init__(parent)
+        self.loadStatsFromFile()
+        self.initUI()
+        
+    
+    def loadStatsFromFile(self):
+        try:
+            file = open('stats.ace')
+            opened = pickle.load(file)
+            
+            self.session_count = opened[0]
+            self.error_sum = opened[1]
+            
+        except:
+            self.session_count = 0
+            self.error_sum = 0.0
+            
+    def writeStatsToFile(self):
+        stat_list = (self.session_count, self.error_sum)
+        
+        output = open('stats.ace','wb')
+        pickle.dump(stat_list, output)
+        
+        output.close()
+
+            
     def initUI(self):
         layout = QtGui.QHBoxLayout()
         statLayout = self.initStatLayout()
@@ -26,15 +48,12 @@ class Statistics(QtGui.QWidget):
 
         top_layout = QtGui.QHBoxLayout()
         
-        self.label_estimate = QtGui.QLabel("Total estimates: " +
-            str(self.currentStats['totalEstimates']))
-        self.label_sum = QtGui.QLabel("Total error sum: " +
-            str(self.currentStats['totalError']))
-        self.label_session_estimate = QtGui.QLabel("Previous session avg error: "  +
-            str(self.currentStats['prevAvgError']))
+        self.label_estimate = QtGui.QLabel()
+        self.label_sum = QtGui.QLabel()
+        
+        
         top_layout.addWidget(self.label_estimate)
         top_layout.addWidget(self.label_sum)
-        top_layout.addWidget(self.label_session_estimate)
         layout.addLayout(top_layout)
 
         test_table = QtGui.QTableWidget()
@@ -54,18 +73,26 @@ class Statistics(QtGui.QWidget):
 
         layout.addWidget(test_table)
 
+        self.updateStatsUI()
+        
         return layout
 
     #TODO: Check trainer, this isn't updating estimates/error properly
-    def updateStats(self):
-        self.currentStats['totalEstimates'] = self.trainer_ref.estimate_count
-        self.currentStats['totalError'] = self.trainer_ref.error_sum
-        self.currentStats['prevAvgError'] = self.trainer_ref.session_error
+    def recordSession(self, error):
+        self.session_count += 1
+        self.error_sum += error
 
     def updateStatsUI(self):
-        self.label_estimate = QtGui.QLabel("Total estimates: " +
-            str(self.currentStats['totalEstimates']))
-        self.label_sum = QtGui.QLabel("Total error sum: " +
-            str(self.currentStats['totalError']))
-        self.label_session_estimate.setText("Previous session avg error: " +
-            str(self.currentStats['prevAvgError']))
+        if self.session_count>0:
+            error = self.error_sum/self.session_count
+        else:
+            error = 0.0
+        
+        self.label_estimate.setText("Total estimates: " +
+                                    (str(self.session_count*10)))
+        self.label_sum.setText("Lifetime Average Error: " +
+                                (str(error)))
+        
+
+
+    
