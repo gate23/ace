@@ -5,10 +5,43 @@ Display training statistics
 """
 
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtGui import *  
+from PyQt4.QtCore import *  
 
 import pickle
 
+class HistogramView(QListView):
+    def __init__(self, parent):
+        super(HistogramView, self).__init__()
+
+    def paintEvent(self, QPaintEvent):
+        painter = QPainter(self.viewport())
+        painter.setPen(Qt.black)
+
+        x0 = 40
+        y0 = 250
+
+    #y-axis
+        painter.drawLine(x0,y0,40,30)
+    #arrow at end of axis  
+        painter.drawLine(38,32,40,30)  
+        painter.drawLine(40,30,42,32)  
+          
+    #x-axis
+        painter.drawLine(x0,y0,520,250)
+    #arrow at end of x-axis  
+        painter.drawLine(518,248,520,250)  
+        painter.drawLine(520,250,518,252)
+    #x-axis label  
+        painter.drawText(530,250,"Log Difference")
+
+    def dataChanged(self):
+        self.viewport().update()
+
+
 class Statistics(QtGui.QWidget):
+
+
     def __init__(self, parent):
         super (Statistics, self).__init__(parent)
         self.loadStatsFromFile()
@@ -50,6 +83,7 @@ class Statistics(QtGui.QWidget):
         
         self.label_estimate = QtGui.QLabel()
         self.label_sum = QtGui.QLabel()
+        self.splitter = QSplitter(Qt.Horizontal)
         
         
         top_layout.addWidget(self.label_estimate)
@@ -73,6 +107,9 @@ class Statistics(QtGui.QWidget):
 
         layout.addWidget(test_table)
 
+        histogram = HistogramView(self.splitter)
+        layout.addWidget(histogram)
+
         self.updateStatsUI()
         
         return layout
@@ -92,7 +129,10 @@ class Statistics(QtGui.QWidget):
                                     (str(self.session_count*10)))
         self.label_sum.setText("Lifetime Average Error: " +
                                 (str(error)))
+
+
         
+
 
 
     
