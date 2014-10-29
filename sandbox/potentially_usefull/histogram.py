@@ -2,7 +2,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *  
 import sys  
   
-class HistogramView(QAbstractItemView):  
+class HistogramView(QListView):  
     def __init__(self,parent):  
         super(HistogramView,self).__init__()  
         self.listRegionM = []  

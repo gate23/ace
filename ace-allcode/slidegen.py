@@ -14,7 +14,7 @@ import PyQt4
 class SlideGen(Slide):
     MIN_COUNT = 250
     MAX_COUNT = 750
-    current_focus = 2.2
+    current_focus = 1.9
     
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
@@ -29,11 +29,10 @@ class SlideGen(Slide):
             cell.setZValue(rdepth) #set random depth
             cell.setVisible(False)
             cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
-
             self.scene.addItem(cell)
     
     def genSlide(self):
-        self.current_focus = 2.2
+        #self.current_focus = 1.9
         this_count = randint(SlideGen.MIN_COUNT, SlideGen.MAX_COUNT)
         cell_list = self.scene.items()
         shuffle(cell_list)
@@ -69,20 +68,18 @@ class SlideGen(Slide):
             
             texture, rotation, blur = self.get_texture(
                 int(SpriteType.APHANOTHECE_OUTLINE), depth, deg_rotation, self.current_focus)
-            
-            effect = PyQt4.QtGui.QGraphicsBlurEffect()
-            effect.setBlurRadius(blur)
-            
+
             cell_list[i].setPixmap(texture)
             cell_list[i].setRotation(rotation)
-            cell_list[i].setGraphicsEffect(effect)
             cell_list[i].setVisible(True)
         
         #hide the rest
         for i in range (this_count, SlideGen.MAX_COUNT-1):
             cell_list[i].setVisible(False)
+            cell_list[i].setGraphicsEffect(None)
             
         self.cell_count = this_count
+        self.updateSlide()
         
     def updateSlide(self):
         cell_list = self.scene.items()
@@ -94,14 +91,27 @@ class SlideGen(Slide):
                 depth = cell.zValue()
                 blur, sprite_depth = self.get_blur(depth, self.current_focus)
                 
-                effect = PyQt4.QtGui.QGraphicsBlurEffect()
-                effect.setBlurRadius(blur)
-                cell_list[i].setGraphicsEffect(effect)
+                cell_list[i].setGraphicsEffect(None)
+                
+                if blur > 12:
+                    blur = 12.0
+
+                if blur > 1.5:                        
+                    effect = PyQt4.QtGui.QGraphicsBlurEffect()
+                    effect.setBlurRadius(blur)
+                    cell_list[i].setGraphicsEffect(effect)
+                
                 cell_list[i].update()
         
     def count(self):
         return self.cell_count
         
     def wheelEvent(self, event):
-        self.current_focus = self.current_focus + (event.delta()/120)
+        factor = 0.2
+        self.current_focus = self.current_focus + (event.delta()/120.0*factor)
         self.updateSlide()
+        #print (event.delta()/120)
+        #print self.current_focus
+        
+    def mousePressEvent(self, event):
+        self.save_to_file("test1.png", 100, 100)

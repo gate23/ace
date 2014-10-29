@@ -4,11 +4,12 @@ slide.py
 Superclass for slide display widgets
 """
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, Qt
 from sprites import SpriteFactory, SpriteType, SpriteDepth
 import os.path
 #import sprites
 import math
+
 
 class Slide(QtGui.QWidget):
     VIEW_WIDTH,VIEW_HEIGHT = 540,540
@@ -26,6 +27,7 @@ class Slide(QtGui.QWidget):
                                                 Slide.VIEW_WIDTH,
                                                 Slide.VIEW_HEIGHT),
                                                 self)
+        
 
         self.view = QtGui.QGraphicsView(self.scene)
         self.view.setParent(self)
@@ -105,3 +107,16 @@ class Slide(QtGui.QWidget):
                 sprite_depth = 1
 
         return abs(current_focus - depth) * self.depth_blur_amount, sprite_depth
+        
+    def save_to_file(self, filename, width, height):
+            #outputimg = QtGui.QPixmap(width, height)
+            #image_size = QtGui.Q
+            outputimg = QtGui.QImage(100, 100, QtGui.QImage.Format_RGB32)
+            painter = QtGui.QPainter(outputimg)
+            targetrect = QtCore.QRectF(0, 0, width, height)
+            sourcerect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
+            self.scene.render(painter, targetrect, sourcerect, QtCore.Qt.KeepAspectRatio)
+            painter.end()         
+            outputimg.save("output.png", "PNG")
+            
+        
