@@ -38,23 +38,38 @@ class Statistics(QtGui.QWidget):
             
     def initUI(self):
         layout = QtGui.QHBoxLayout()
-        statLayout = self.initStatLayout()
-        layout.addLayout(statLayout)
 
+        stats_tabs = QtGui.QTabWidget()
+        session_tab = QtGui.QWidget()
+        lifetime_tab = QtGui.QWidget()
+        stats_tabs.addTab(session_tab,"Session")
+        stats_tabs.addTab(lifetime_tab,"Lifetime")
+        
+        sessionLayout = self.initSessionTab()
+        session_tab.setLayout(sessionLayout)
+        lifetimeLayout = self.initLifetimeTab()
+        lifetime_tab.setLayout(lifetimeLayout)
+
+        layout.addWidget(stats_tabs)
         self.setLayout(layout)
 
-    def initStatLayout(self):
-        layout = QtGui.QVBoxLayout()
+    def initSessionTab(self):
+        session_layout = QtGui.QVBoxLayout()
 
-        top_layout = QtGui.QHBoxLayout()
-        
+        session_box = QtGui.QComboBox()
+        session_box.addItem("Select session...")
+        session_box.addItem("Session 1 - Test session")
+        session_layout.addWidget(session_box)
+
+        #Currently useless, will add useful stats later
+        session_top_layout = QtGui.QHBoxLayout()
+        #move this around
         self.label_estimate = QtGui.QLabel()
         self.label_sum = QtGui.QLabel()
-        
-        
-        top_layout.addWidget(self.label_estimate)
-        top_layout.addWidget(self.label_sum)
-        layout.addLayout(top_layout)
+        #session_top_layout.addWidget(self.label_estimate)
+        #session_top_layout.addWidget(self.label_sum)
+        session_layout.addLayout(session_top_layout)
+
 
         test_table = QtGui.QTableWidget()
         test_table.setRowCount(10)
@@ -71,13 +86,24 @@ class Statistics(QtGui.QWidget):
         test_item = QtGui.QTableWidgetItem("test")
         test_table.setItem(0,0,test_item)
 
-        layout.addWidget(test_table)
+        session_layout.addWidget(test_table)
 
         self.updateStatsUI()
         
-        return layout
+        return session_layout
 
-    #TODO: Check trainer, this isn't updating estimates/error properly
+    def initLifetimeTab(self):
+        lifetime_layout = QtGui.QVBoxLayout()
+        
+        lifetime_layout.addWidget(self.label_estimate)
+        lifetime_layout.addWidget(self.label_sum)
+        test_label = QtGui.QLabel("YO PUT A GRAPH HERE.")
+        lifetime_layout.addWidget(test_label)
+
+        self.updateStatsUI()
+
+        return lifetime_layout
+
     def recordSession(self, error):
         self.session_count += 1
         self.error_sum += error
