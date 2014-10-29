@@ -37,14 +37,17 @@ class HistogramView(QListView):
 
         pos = x0 + 20
 
-        width = 10
+        width = 20
+        painter.setBrush(Qt.red)
         painter.drawRect(QRect(pos,y0 - 1 * 10,width,1 * 10)) 
-        painter.drawRect(QRect(pos+10,y0 - 2 * 10,width,2 * 10)) 
-        painter.drawRect(QRect(pos+20,y0 - 3 * 10,width,3 * 10)) 
-        painter.drawRect(QRect(pos+30,y0 - 4 * 10,width,4 * 10)) 
-        painter.drawRect(QRect(pos+40,y0 - 5 * 10,width,5 * 10)) 
-        painter.drawRect(QRect(pos+50,y0 - 6 * 10,width,6 * 10)) 
-        painter.drawRect(QRect(pos+60,y0 - 7 * 10,width,7 * 10)) 
+        painter.drawRect(QRect(pos+20,y0 - 2 * 10,width,2 * 10)) 
+        painter.setBrush(Qt.blue)
+        painter.drawRect(QRect(pos+40,y0 - 3 * 10,width,3 * 10)) 
+        painter.drawRect(QRect(pos+60,y0 - 4 * 10,width,4 * 10)) 
+        painter.drawRect(QRect(pos+80,y0 - 5 * 10,width,5 * 10)) 
+        painter.setBrush(Qt.red)
+        painter.drawRect(QRect(pos+100,y0 - 6 * 10,width,6 * 10)) 
+        painter.drawRect(QRect(pos+120,y0 - 7 * 10,width,7 * 10)) 
 
     def dataChanged(self):
         self.viewport().update()
