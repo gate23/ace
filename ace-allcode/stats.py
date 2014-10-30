@@ -9,6 +9,11 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *  
 
 import pickle
+import time
+import math
+
+from enum import FileEnum,SessionCol
+from session import Session
 
 class HistogramView(QListView):
     def __init__(self, parent):
@@ -54,28 +59,30 @@ class HistogramView(QListView):
 
 
 class Statistics(QtGui.QWidget):
-
-
     def __init__(self, parent):
         super (Statistics, self).__init__(parent)
         self.loadStatsFromFile()
         self.initUI()
         
-    
+           
     def loadStatsFromFile(self):
         try:
             file = open('stats.ace')
             opened = pickle.load(file)
             
-            self.session_count = opened[0]
-            self.error_sum = opened[1]
+            self.session_count = opened[FileEnum.SESSION_COUNT]
+            self.error_sum = opened[FileEnum.ERROR_SUM]
+            self.session_list = opened[FileEnum.SESSION_LIST]
+            
+            print "Session Count: "+str(len(self.session_list))+"\n"
             
         except:
             self.session_count = 0
             self.error_sum = 0.0
+            self.session_list = list()
             
     def writeStatsToFile(self):
-        stat_list = (self.session_count, self.error_sum)
+        stat_list = (self.session_count, self.error_sum, self.session_list)
         
         output = open('stats.ace','wb')
         pickle.dump(stat_list, output)
@@ -92,10 +99,10 @@ class Statistics(QtGui.QWidget):
         stats_tabs.addTab(session_tab,"Session")
         stats_tabs.addTab(lifetime_tab,"Lifetime")
         
-        sessionLayout = self.initSessionTab()
-        session_tab.setLayout(sessionLayout)
-        lifetimeLayout = self.initLifetimeTab()
-        lifetime_tab.setLayout(lifetimeLayout)
+        session_layout = self.initSessionTab()
+        session_tab.setLayout(session_layout)
+        lifetime_layout = self.initLifetimeTab()
+        lifetime_tab.setLayout(lifetime_layout)
 
         layout.addWidget(stats_tabs)
         self.setLayout(layout)
@@ -120,9 +127,9 @@ class Statistics(QtGui.QWidget):
         #session_top_layout.addWidget(self.label_sum)
         session_layout.addLayout(session_top_layout)
 
-        test_table = QtGui.QTableWidget()
-        test_table.setRowCount(10)
-        test_table.setColumnCount(5)
+        self.test_table = QtGui.QTableWidget()
+        self.test_table.setRowCount(10)
+        self.test_table.setColumnCount(5)
 
         header_labels = QtCore.QStringList()
         header_labels.append("Guessed")
@@ -130,12 +137,12 @@ class Statistics(QtGui.QWidget):
         header_labels.append("Difference")
         header_labels.append("Error")
         header_labels.append("Image")
-        test_table.setHorizontalHeaderLabels(header_labels)
+        self.test_table.setHorizontalHeaderLabels(header_labels)
 
         test_item = QtGui.QTableWidgetItem("test")
-        test_table.setItem(0,0,test_item)
+        self.test_table.setItem(0,0,test_item)
 
-        session_layout.addWidget(test_table)
+        session_layout.addWidget(self.test_table)
 
         histogram = HistogramView(self.splitter)
         session_layout.addWidget(histogram)
@@ -156,22 +163,53 @@ class Statistics(QtGui.QWidget):
 
         return lifetime_layout
 
-    def recordSession(self, error):
+    def recordSession(self, session):
         self.session_count += 1
-        self.error_sum += error
-
+       
+        self.error_sum += session.error_sum
+        completed_time = time.time() 
+        session.time = completed_time
+        
+        self.session_list.append(session)
+        
     def updateStatsUI(self):
         if self.session_count>0:
-            error = self.error_sum/self.session_count
+            error = self.error_sum/(self.session_count*10)
         else:
             error = 0.0
         
         self.label_estimate.setText("Total estimates: " +
                                     (str(self.session_count*10)))
+        err_str = str("{:.1f}".format(error))
         self.label_sum.setText("Lifetime Average Error: " +
-                                (str(error)))
+                                (err_str) +"%")
 
-
+        #Write session to table
+        #TODO: this only adds last session
+        # needs to write session corresponding to dropdown menu
+        if len(self.session_list) > 0:
+            session = self.session_list[-1]
+            est_idx = 0
+            for estimate in session.estimate_list:
+                est_item = QtGui.QTableWidgetItem(str(int(estimate.estimate)))
+                self.test_table.setItem(est_idx,SessionCol.ESTIMATE,est_item)
+                
+                actual_item = QtGui.QTableWidgetItem(str(int(estimate.actual)))
+                self.test_table.setItem(est_idx,SessionCol.ACTUAL,actual_item)
+                
+                diff_item = QtGui.QTableWidgetItem()
+                diff = math.fabs(estimate.estimate - estimate.actual)
+                diff_str = str(int(diff))
+                diff_item.setText(diff_str)
+                self.test_table.setItem(est_idx,SessionCol.DIFF,diff_item)
+                
+                err_item = QtGui.QTableWidgetItem()
+                err = "{:.2f}".format((diff/estimate.actual)*100)
+                err_str = str(err)+"%"
+                err_item.setText(err_str)
+                self.test_table.setItem(est_idx,SessionCol.ERROR,err_item)
+                
+                est_idx +=1
         
 
 

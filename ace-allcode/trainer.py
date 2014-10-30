@@ -10,13 +10,13 @@ import math
 from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
 from enum import ModeEnum
+from session import Session,Estimate
 
 MAX_ESTIMATE = 9999
 
 class Trainer(QtGui.QWidget):
     def __init__(self, parent, stats):
         self.estimate_number = 1
-        self.error_sum = 0
         
         super(Trainer,self).__init__(parent)
         
@@ -24,6 +24,7 @@ class Trainer(QtGui.QWidget):
         self.parent = parent
         self.stats_ref = stats
         
+        self.current_session = Session()
         
     def initUI(self):
         layout = QtGui.QHBoxLayout()
@@ -107,23 +108,28 @@ class Trainer(QtGui.QWidget):
             self.estimate_entry.clear()
             
             self.estimate_number += 1
-            self.error_sum += raw_percent_err
- 
+      
+            #add estimate to list
+            this_estimate = Estimate(estimate, actual)
+            self.current_session.addEstimate(this_estimate)
+            
+            self.current_session.error_sum += raw_percent_err
+
  
             if self.estimate_number < 11:
                 self.slide_display.genSlide()
                 self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
                            
             elif self.estimate_number == 11:
-                #display stats for 10-estimate session
-                raw_session_error = self.error_sum / 10
-                session_error ="{:.2f}".format(raw_session_error)
+                self.stats_ref.recordSession(self.current_session)
                 
-                self.stats_ref.recordSession(raw_session_error)
+                #display stats for 10-estimate session
+                raw_session_error = self.current_session.error_sum / 10
+                session_error ="{:.2f}".format(raw_session_error)
                 
                 self.estimate_display.append("\n10-slide session complete!")
                 self.estimate_display.append("Average error for this session: " + 
-                                                str(session_error) + "\n")
+                                                str(session_error) + "%\n")
 
                 #MessageBox - restart trainer or return to menu
                 self.endMessage = QtGui.QMessageBox.question(self,'Message',
@@ -148,3 +154,5 @@ class Trainer(QtGui.QWidget):
 
         self.estimate_entry.clear()
         self.slide_display.genSlide()
+        
+        self.current_session = Session()
