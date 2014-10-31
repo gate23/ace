@@ -74,8 +74,6 @@ class Statistics(QtGui.QWidget):
             self.error_sum = opened[FileEnum.ERROR_SUM]
             self.session_list = opened[FileEnum.SESSION_LIST]
             
-            print "Session Count: "+str(len(self.session_list))+"\n"
-            
         except:
             self.session_count = 0
             self.error_sum = 0.0
@@ -110,10 +108,15 @@ class Statistics(QtGui.QWidget):
     def initSessionTab(self):
         session_layout = QtGui.QVBoxLayout()
 
-        session_box = QtGui.QComboBox()
-        session_box.addItem("Select session...")
-        session_box.addItem("Session 1 - Test session")
-        session_layout.addWidget(session_box)
+        self.session_box = QtGui.QComboBox()
+        self.session_box.addItem("Select session...")
+        session_layout.addWidget(self.session_box)
+        
+        for i in range(1,self.session_count+1):
+            self.session_box.addItem("Session "+str(i))
+        
+        self.connect( self.session_box, QtCore.SIGNAL("currentIndexChanged(int)"),
+                        self.updateSessionTable)
 
         #Currently useless, will add useful stats later
         session_top_layout = QtGui.QHBoxLayout()
@@ -127,22 +130,19 @@ class Statistics(QtGui.QWidget):
         #session_top_layout.addWidget(self.label_sum)
         session_layout.addLayout(session_top_layout)
 
-        self.test_table = QtGui.QTableWidget()
-        self.test_table.setRowCount(10)
-        self.test_table.setColumnCount(5)
+        self.session_table = QtGui.QTableWidget()
+        self.session_table.setRowCount(10)
+        self.session_table.setColumnCount(5)
 
         header_labels = QtCore.QStringList()
-        header_labels.append("Guessed")
+        header_labels.append("Estimate")
         header_labels.append("Actual")
         header_labels.append("Difference")
         header_labels.append("Error")
         header_labels.append("Image")
-        self.test_table.setHorizontalHeaderLabels(header_labels)
-
-        test_item = QtGui.QTableWidgetItem("test")
-        self.test_table.setItem(0,0,test_item)
-
-        session_layout.addWidget(self.test_table)
+        self.session_table.setHorizontalHeaderLabels(header_labels)
+        
+        session_layout.addWidget(self.session_table)
 
         histogram = HistogramView(self.splitter)
         session_layout.addWidget(histogram)
@@ -171,6 +171,7 @@ class Statistics(QtGui.QWidget):
         session.time = completed_time
         
         self.session_list.append(session)
+        self.session_box.addItem("Session "+str(self.session_count))
         
     def updateStatsUI(self):
         if self.session_count>0:
@@ -183,34 +184,34 @@ class Statistics(QtGui.QWidget):
         err_str = str("{:.1f}".format(error))
         self.label_sum.setText("Lifetime Average Error: " +
                                 (err_str) +"%")
-
-        #Write session to table
-        #TODO: this only adds last session
-        # needs to write session corresponding to dropdown menu
-        if len(self.session_list) > 0:
-            session = self.session_list[-1]
+            
+    def updateSessionTable(self, sess_idx):
+        if len(self.session_list)+1 >= sess_idx:
+            session = self.session_list[sess_idx-1]
             est_idx = 0
             for estimate in session.estimate_list:
                 est_item = QtGui.QTableWidgetItem(str(int(estimate.estimate)))
-                self.test_table.setItem(est_idx,SessionCol.ESTIMATE,est_item)
+                self.session_table.setItem(est_idx,SessionCol.ESTIMATE,est_item)
                 
                 actual_item = QtGui.QTableWidgetItem(str(int(estimate.actual)))
-                self.test_table.setItem(est_idx,SessionCol.ACTUAL,actual_item)
+                self.session_table.setItem(est_idx,SessionCol.ACTUAL,actual_item)
                 
                 diff_item = QtGui.QTableWidgetItem()
                 diff = math.fabs(estimate.estimate - estimate.actual)
                 diff_str = str(int(diff))
                 diff_item.setText(diff_str)
-                self.test_table.setItem(est_idx,SessionCol.DIFF,diff_item)
+                self.session_table.setItem(est_idx,SessionCol.DIFF,diff_item)
                 
                 err_item = QtGui.QTableWidgetItem()
                 err = "{:.2f}".format((diff/estimate.actual)*100)
                 err_str = str(err)+"%"
                 err_item.setText(err_str)
-                self.test_table.setItem(est_idx,SessionCol.ERROR,err_item)
+                self.session_table.setItem(est_idx,SessionCol.ERROR,err_item)
                 
                 est_idx +=1
-        
+        else:
+            #TODO: this should never happen, but if it does actually raise an err
+            print "session nonexistent"
 
 
 
