@@ -12,8 +12,8 @@ import math
 import PyQt4
 
 class SlideGen(Slide):
-    MIN_COUNT = 250
-    MAX_COUNT = 750
+    MIN_COUNT = 2
+    MAX_COUNT = 2048
     current_focus = 2.5
     
     def __init__(self, parent):
@@ -24,7 +24,7 @@ class SlideGen(Slide):
         # init the layers
         for i in range(0, SlideGen.MAX_COUNT-1):
             cell = QtGui.QGraphicsPixmapItem()
-            rdepth = random.uniform(0.0, 4.0)
+            rdepth = int(random.uniform(0.0, 33.0))/8.25
 
             cell.setZValue(rdepth) #set random depth
             cell.setVisible(False)
@@ -119,7 +119,7 @@ class SlideGen(Slide):
 
     def changeFocus(self,delta):
         factor = 0.2
-        check = self.current_focus + (delta*factor)
+        check = self.current_focus + (-1*delta*factor)
         if(check > -1 and check < 6):
             self.current_focus = check
             self.updateSlide()

@@ -14,10 +14,13 @@ import time
 
 class Slide(QtGui.QWidget):
     VIEW_WIDTH,VIEW_HEIGHT = 540,540
+    SPRITE_PATH = "./img/sprites/"
     
-    scale_size = 30
+    scale_size = 15
     depth_alpha = 0.2
     depth_blur_amount = 3.3
+    
+    texture_lib = None
     
     
     def __init__(self,parent):
@@ -45,9 +48,14 @@ class Slide(QtGui.QWidget):
         self.bg_texture = QtGui.QPixmap(os.path.join(os.path.curdir, bgPath))
         background = QtGui.QBrush(self.bg_texture)
         self.scene.setBackgroundBrush(background)
+        
+        #load textures
+        self.load_textures(self.SPRITE_PATH)
 
+
+    def load_textures(self, sprite_path):
         #Load Sprites
-        spritePath = os.path.normpath("./img/sprites/")
+        spritePath = os.path.normpath(sprite_path)
         self.sprites = SpriteFactory(os.path.join(os.path.curdir, spritePath))
         self.texture_lib = {}
 
@@ -110,20 +118,23 @@ class Slide(QtGui.QWidget):
         return abs(current_focus - depth) * self.depth_blur_amount, sprite_depth
         
     def save_image(self, filename, width, height):
-                #outputimg = QtGui.QPixmap(width, height)
-                #image_size = QtGui.Q
-                outputimg = QtGui.QImage(self.VIEW_WIDTH, self.VIEW_HEIGHT, QtGui.QImage.Format_RGB32)
-                painter = QtGui.QPainter(outputimg)
-                painter.setRenderHint(QtGui.QPainter.SmoothPixmapTransform)
-                targetrect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
-                sourcerect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
-                self.scene.render(painter, targetrect, sourcerect, QtCore.Qt.KeepAspectRatio)
-                painter.end()
-                scaledSize = QtCore.QSize(width, height)
-                outputimg = outputimg.scaled(scaledSize, 
-                                             QtCore.Qt.KeepAspectRatio, 
-                                             QtCore.Qt.SmoothTransformation )
-                outputimg.save(filename, "PNG")
-                return filename
+        #outputimg = QtGui.QPixmap(width, height)
+        #image_size = QtGui.Q
+        outputimg = QtGui.QImage(self.VIEW_WIDTH, self.VIEW_HEIGHT, QtGui.QImage.Format_RGB32)
+        painter = QtGui.QPainter(outputimg)
+        painter.setRenderHint(QtGui.QPainter.SmoothPixmapTransform)
+        targetrect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
+        sourcerect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
+        self.scene.render(painter, targetrect, sourcerect, QtCore.Qt.KeepAspectRatio)
+        painter.end()
+        scaledSize = QtCore.QSize(width, height)
+        outputimg = outputimg.scaled(scaledSize, 
+                    QtCore.Qt.KeepAspectRatio, 
+                    QtCore.Qt.SmoothTransformation )
+        outputimg.save(filename, "PNG")
+        return filename
             
-        
+    def save_slide(self):
+        #loop through all items and save data serialized json
+        for cell in self.scene.items():
+            pass
