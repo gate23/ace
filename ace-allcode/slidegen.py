@@ -15,7 +15,6 @@ class SlideGen(Slide):
     MIN_COUNT = 250
     MAX_COUNT = 750
     current_focus = 2.5
-    factor = 0.2
     
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
@@ -112,14 +111,15 @@ class SlideGen(Slide):
 
     def focusUp(self):
         self.changeFocus(1)
-        
+
     def wheelEvent(self, event):
         self.changeFocus(event.delta()/120.0)
         #print (event.delta()/120)
         #print self.current_focus
 
     def changeFocus(self,delta):
-        check = self.current_focus + (delta*self.factor)
+        factor = 0.2
+        check = self.current_focus + (delta*factor)
         if(check > -1 and check < 6):
             self.current_focus = check
             self.updateSlide()
