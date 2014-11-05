@@ -208,6 +208,10 @@ class Statistics(QtGui.QWidget):
                 err_item.setText(err_str)
                 self.session_table.setItem(est_idx,SessionCol.ERROR,err_item)
                 
+                #image
+                #image_item = QtGui.QTableWidgetItem(QImage(QtGui.QPixmap("output.png")), "slide")
+                #self.session_table.setItem(est_idx,SessionCol.IMAGE,image_item)
+                
                 est_idx +=1
         else:
             #TODO: this should never happen, but if it does actually raise an err

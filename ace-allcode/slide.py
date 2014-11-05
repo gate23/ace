@@ -111,12 +111,17 @@ class Slide(QtGui.QWidget):
     def save_to_file(self, filename, width, height):
             #outputimg = QtGui.QPixmap(width, height)
             #image_size = QtGui.Q
-            outputimg = QtGui.QImage(100, 100, QtGui.QImage.Format_RGB32)
+            outputimg = QtGui.QImage(self.VIEW_WIDTH, self.VIEW_HEIGHT, QtGui.QImage.Format_RGB32)
             painter = QtGui.QPainter(outputimg)
-            targetrect = QtCore.QRectF(0, 0, width, height)
+            painter.setRenderHint(QtGui.QPainter.SmoothPixmapTransform)
+            targetrect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
             sourcerect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
             self.scene.render(painter, targetrect, sourcerect, QtCore.Qt.KeepAspectRatio)
-            painter.end()         
+            painter.end()
+            scaledSize = QtCore.QSize(width, height)
+            outputimg = outputimg.scaled(scaledSize, 
+                                         QtCore.Qt.KeepAspectRatio, 
+                                         QtCore.Qt.SmoothTransformation )
             outputimg.save("output.png", "PNG")
             
         

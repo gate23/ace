@@ -14,3 +14,4 @@ class SessionCol():
     ACTUAL = 1
     DIFF = 2
     ERROR = 3
+    IMAGE = 4

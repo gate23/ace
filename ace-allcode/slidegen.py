@@ -115,3 +115,4 @@ class SlideGen(Slide):
         
     def mousePressEvent(self, event):
         self.save_to_file("test1.png", 100, 100)
+        print "filesaved\n";
