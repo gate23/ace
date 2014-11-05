@@ -11,9 +11,11 @@ from PyQt4.QtCore import *
 import pickle
 import time
 import math
+import os.path
 
 from enum import FileEnum,SessionCol
 from session import Session
+
 
 class HistogramView(QListView):
     def __init__(self, parent):
@@ -133,6 +135,10 @@ class Statistics(QtGui.QWidget):
         self.session_table = QtGui.QTableWidget()
         self.session_table.setRowCount(10)
         self.session_table.setColumnCount(5)
+        self.session_table.setIconSize(QSize(100, 100))
+        
+        self.session_table.verticalHeader().resizeMode(QtGui.QHeaderView.Fixed)
+        self.session_table.verticalHeader().setDefaultSectionSize(100)        
 
         header_labels = QtCore.QStringList()
         header_labels.append("Estimate")
@@ -190,6 +196,8 @@ class Statistics(QtGui.QWidget):
             session = self.session_list[sess_idx-1]
             est_idx = 0
             for estimate in session.estimate_list:
+                self.session_table.rowHeight(100);        
+                
                 est_item = QtGui.QTableWidgetItem(str(int(estimate.estimate)))
                 self.session_table.setItem(est_idx,SessionCol.ESTIMATE,est_item)
                 
@@ -209,8 +217,14 @@ class Statistics(QtGui.QWidget):
                 self.session_table.setItem(est_idx,SessionCol.ERROR,err_item)
                 
                 #image
-                #image_item = QtGui.QTableWidgetItem(QImage(QtGui.QPixmap("output.png")), "slide")
-                #self.session_table.setItem(est_idx,SessionCol.IMAGE,image_item)
+                icon = QtGui.QIcon()
+                
+                imagePath = session.image_list[est_idx]
+                if (imagePath):
+                    icon.addPixmap(QtGui.QPixmap(os.path.join(os.path.curdir, imagePath)))
+                    image_item = QtGui.QTableWidgetItem(icon, "")
+                    image_item.setSizeHint(QSize(100, 100))
+                    self.session_table.setItem(est_idx,SessionCol.IMAGE,image_item)
                 
                 est_idx +=1
         else:

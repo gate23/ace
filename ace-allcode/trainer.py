@@ -11,6 +11,8 @@ from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
 from enum import ModeEnum
 from session import Session,Estimate
+import time
+import os.path
 
 MAX_ESTIMATE = 9999
 
@@ -107,20 +109,23 @@ class Trainer(QtGui.QWidget):
                     "\nPercentage Error: " + str(percent_err))
             self.estimate_entry.clear()
             
-            self.estimate_number += 1
-      
             #add estimate to list
             this_estimate = Estimate(estimate, actual)
             self.current_session.addEstimate(this_estimate)
             
             self.current_session.error_sum += raw_percent_err
+            filename = "thum_"+str(int(round(time.time())))+"_"+str(self.estimate_number)+".png"
+            imagePath = os.path.normpath("./session/"+filename)
+            self.current_session.addImage(self.slide_display.save_image(imagePath, 100, 100))
 
+            #update display            
+            self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
  
-            if self.estimate_number < 11:
+            if self.estimate_number < 10:
                 self.slide_display.genSlide()
-                self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
+                self.estimate_number += 1
                            
-            elif self.estimate_number == 11:
+            elif self.estimate_number == 10:
                 self.stats_ref.recordSession(self.current_session)
                 
                 #display stats for 10-estimate session

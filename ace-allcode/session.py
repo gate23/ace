@@ -16,6 +16,7 @@ class Session():
         self.error_sum = 0.0
         self.time = None
         self.estimate_list = list()
+        self.image_list = list()
         
     def isComplete(self):
         if len(self.estimate_list) > 9:
@@ -25,4 +26,8 @@ class Session():
             
     def addEstimate(self, estimate):
         self.estimate_list.append(estimate)
+        
+        
+    def addImage(self, image):
+        self.image_list.append(image)
 

@@ -9,6 +9,7 @@ from sprites import SpriteFactory, SpriteType, SpriteDepth
 import os.path
 #import sprites
 import math
+import time
 
 
 class Slide(QtGui.QWidget):
@@ -69,8 +70,8 @@ class Slide(QtGui.QWidget):
                         self.texture_lib[key] = texture
 
                                             
-    def get_texture(self, cellType, depth, rotation, current_focus=2.0):
-        blur, sprite_depth = self.get_blur(depth, current_focus)
+    def get_texture(self, cellType, depth, rotation, middle_focus=2.0):
+        blur, sprite_depth = self.get_blur(depth, middle_focus)
         
         rotation_rounded = ((int)(math.floor(rotation)/15)*15)        
         key = "t"+str(cellType)+"d"+str(sprite_depth)+"r"+str(rotation_rounded)
@@ -108,20 +109,21 @@ class Slide(QtGui.QWidget):
 
         return abs(current_focus - depth) * self.depth_blur_amount, sprite_depth
         
-    def save_to_file(self, filename, width, height):
-            #outputimg = QtGui.QPixmap(width, height)
-            #image_size = QtGui.Q
-            outputimg = QtGui.QImage(self.VIEW_WIDTH, self.VIEW_HEIGHT, QtGui.QImage.Format_RGB32)
-            painter = QtGui.QPainter(outputimg)
-            painter.setRenderHint(QtGui.QPainter.SmoothPixmapTransform)
-            targetrect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
-            sourcerect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
-            self.scene.render(painter, targetrect, sourcerect, QtCore.Qt.KeepAspectRatio)
-            painter.end()
-            scaledSize = QtCore.QSize(width, height)
-            outputimg = outputimg.scaled(scaledSize, 
-                                         QtCore.Qt.KeepAspectRatio, 
-                                         QtCore.Qt.SmoothTransformation )
-            outputimg.save("output.png", "PNG")
+    def save_image(self, filename, width, height):
+                #outputimg = QtGui.QPixmap(width, height)
+                #image_size = QtGui.Q
+                outputimg = QtGui.QImage(self.VIEW_WIDTH, self.VIEW_HEIGHT, QtGui.QImage.Format_RGB32)
+                painter = QtGui.QPainter(outputimg)
+                painter.setRenderHint(QtGui.QPainter.SmoothPixmapTransform)
+                targetrect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
+                sourcerect = QtCore.QRectF(0, 0, self.VIEW_WIDTH, self.VIEW_HEIGHT)
+                self.scene.render(painter, targetrect, sourcerect, QtCore.Qt.KeepAspectRatio)
+                painter.end()
+                scaledSize = QtCore.QSize(width, height)
+                outputimg = outputimg.scaled(scaledSize, 
+                                             QtCore.Qt.KeepAspectRatio, 
+                                             QtCore.Qt.SmoothTransformation )
+                outputimg.save(filename, "PNG")
+                return filename
             
         
