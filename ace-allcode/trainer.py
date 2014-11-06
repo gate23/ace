@@ -18,7 +18,7 @@ MAX_ESTIMATE = 9999
 
 class Trainer(QtGui.QWidget):
     def __init__(self, parent, stats):
-        self.estimate_number = 1
+        self.estimate_number = 2
         
         super(Trainer,self).__init__(parent)
         
@@ -84,6 +84,25 @@ class Trainer(QtGui.QWidget):
         self.focus_slider.setSliderPosition(value)
 
     def initEstimateLayout(self):
+        widget = QtGui.QWidget(self)
+        self.guess_group = QtGui.QButtonGroup(widget)
+        self.r0 = QtGui.QRadioButton("8-15")
+        self.guess_group.addButton(self.r0)
+        self.r1 = QtGui.QRadioButton("16-31")
+        self.guess_group.addButton(self.r1)
+        self.r2 = QtGui.QRadioButton("32-63")
+        self.guess_group.addButton(self.r2)
+        self.r3 = QtGui.QRadioButton("64-127")
+        self.guess_group.addButton(self.r3)
+        self.r4 = QtGui.QRadioButton("128-255")
+        self.guess_group.addButton(self.r4)
+        self.r5 = QtGui.QRadioButton("256-511")
+        self.guess_group.addButton(self.r5)
+        self.r6 = QtGui.QRadioButton("512-1023")
+        self.guess_group.addButton(self.r6)
+        self.r7 = QtGui.QRadioButton("1024-2047")
+        self.guess_group.addButton(self.r7)
+
         #estimate_entry: input line for estimate
         self.estimate_entry = QtGui.QLineEdit()
         validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
@@ -110,6 +129,15 @@ class Trainer(QtGui.QWidget):
         estimate_layout.addWidget(self.estimate_display)
         estimate_layout.addWidget(button)
         estimate_layout.addWidget(self.estimate_entry)
+
+        estimate_layout.addWidget(self.r0)
+        estimate_layout.addWidget(self.r1)
+        estimate_layout.addWidget(self.r2)
+        estimate_layout.addWidget(self.r3)
+        estimate_layout.addWidget(self.r4)
+        estimate_layout.addWidget(self.r5)
+        estimate_layout.addWidget(self.r6)
+        estimate_layout.addWidget(self.r7)
         
         return estimate_layout
         

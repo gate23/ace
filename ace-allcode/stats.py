@@ -141,9 +141,6 @@ class Statistics(QtGui.QWidget):
         self.session_table.setHorizontalHeaderLabels(header_labels)
         session_layout.addWidget(self.session_table)
 
-        histogram = HistogramView(self.splitter)
-        session_layout.addWidget(histogram)
-
         self.updateStatsUI()
         
         return session_layout
@@ -153,8 +150,9 @@ class Statistics(QtGui.QWidget):
         
         lifetime_layout.addWidget(self.label_estimate)
         lifetime_layout.addWidget(self.label_sum)
-        test_label = QtGui.QLabel("YO PUT A GRAPH HERE.")
-        lifetime_layout.addWidget(test_label)
+
+        histogram = HistogramView(self.splitter)
+        lifetime_layout.addWidget(histogram)
 
         self.updateStatsUI()
 

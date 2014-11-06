@@ -12,8 +12,8 @@ import math
 import PyQt4
 
 class SlideGen(Slide):
-    MIN_COUNT = 250
-    MAX_COUNT = 750
+    MIN_COUNT = 2
+    MAX_COUNT = 2048
     current_focus = 2.4
     factor = 0.2
     
@@ -26,7 +26,7 @@ class SlideGen(Slide):
         # init the layers
         for i in range(0, SlideGen.MAX_COUNT-1):
             cell = QtGui.QGraphicsPixmapItem()
-            rdepth = random.uniform(0.0, 4.0)
+            rdepth = int(random.uniform(0.0, 33.0))/8.25
 
             cell.setZValue(rdepth) #set random depth
             cell.setVisible(False)
@@ -34,11 +34,17 @@ class SlideGen(Slide):
             self.scene.addItem(cell)
     
     def genSlide(self):
-        #self.current_focus = 1.9
-        this_count = randint(SlideGen.MIN_COUNT, SlideGen.MAX_COUNT)
+        rangenum = randint(3,10)
+        low = 2**rangenum
+        high = (2**(rangenum+1)) - 1
+        this_count = int(triangular(low, high))
         cell_list = self.scene.items()
         shuffle(cell_list)
-        num_blobs = int(triangular(1, 20, 10))
+        if (this_count < 20):
+            max_blobs = this_count
+        else:
+            max_blobs = 20
+        num_blobs = int(triangular(1, max_blobs))
         shape_ends = sample(range(1, this_count-1), num_blobs-1)
         
         for i in range (0, this_count-1):
@@ -125,9 +131,17 @@ class SlideGen(Slide):
         self.updateSlide()
 
     def changeFocus(self,delta):
+<<<<<<< HEAD
         check = self.current_focus + (delta*self.factor)
         if(check > -1 and check < 6):
             self.current_focus = check
             # +1 so we use 0-7 range instead of -1-6, *15 to scale to 100
             self.trainer_ref.moveSlider((self.current_focus+1)*15)
             self.updateSlide()
+=======
+        factor = 0.2
+        check = self.current_focus + (-1*delta*factor)
+        if(check > -1 and check < 6):
+            self.current_focus = check
+            self.updateSlide()
+>>>>>>> 6f278f2a3bef7ed4d0d901fb0fe0bfabfe3cf116

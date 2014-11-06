@@ -23,14 +23,18 @@ class SpriteType:
     APHANOTHECE_OUTLINE = "0"
     APHANOTHECE_RENDER1 = "1"
     
+class BackgroundType:
+    CYAN_SOLID = "0"
+    GRAY_SOLID = "1"
+    
 class SpriteFactory:
     
     def __init__(self, directory):
         self.directory = directory
         self.sprite_paths = {}
-        self.load()
+        self.load_sprites()
 
-    def load(self):
+    def load_sprites(self):
         for dirname, dirnames, filenames in os.walk( self.directory ):
             for filename in filenames:
                 
@@ -41,7 +45,7 @@ class SpriteFactory:
                     self.sprite_paths[dirname].add(int(rotation))
                 else:
                     self.sprite_paths[dirname] = Set([int(rotation)])
-
+ 
     """ 
     Get the sprite with the closest rotation and return the amount require to rotate
     """                
