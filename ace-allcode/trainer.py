@@ -91,13 +91,13 @@ class Trainer(QtGui.QWidget):
         self.guess_group.addButton(self.r4)
         self.r5 = QtGui.QRadioButton("64-127")
         self.guess_group.addButton(self.r5)
-        self.r6 = QtGui.QRadioButton("128-254")
+        self.r6 = QtGui.QRadioButton("128-255")
         self.guess_group.addButton(self.r6)
         self.r7 = QtGui.QRadioButton("256-511")
         self.guess_group.addButton(self.r7)
         self.r8 = QtGui.QRadioButton("512-1023")
         self.guess_group.addButton(self.r8)
-        self.r9 = QtGui.QRadioButton("1023-2047")
+        self.r9 = QtGui.QRadioButton("1024-2047")
         self.guess_group.addButton(self.r9)
 
         #estimate_entry: input line for estimate
