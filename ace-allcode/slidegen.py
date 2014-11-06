@@ -14,11 +14,13 @@ import PyQt4
 class SlideGen(Slide):
     MIN_COUNT = 250
     MAX_COUNT = 750
-    current_focus = 2.5
+    current_focus = 2.4
+    factor = 0.2
     
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
         self.initCells()
+        self.trainer_ref = parent
         
     def initCells(self):
         # init the layers
@@ -117,9 +119,15 @@ class SlideGen(Slide):
         #print (event.delta()/120)
         #print self.current_focus
 
+    def sliderFocus(self,value):
+        # +3 for off by 1, /3 for 100/33 blur levels, *.2, -1 for -1-6 from 0-7
+        self.current_focus = (((value+3)/3) * self.factor) - 1
+        self.updateSlide()
+
     def changeFocus(self,delta):
-        factor = 0.2
-        check = self.current_focus + (delta*factor)
+        check = self.current_focus + (delta*self.factor)
         if(check > -1 and check < 6):
             self.current_focus = check
+            # +1 so we use 0-7 range instead of -1-6, *15 to scale to 100
+            self.trainer_ref.moveSlider((self.current_focus+1)*15)
             self.updateSlide()

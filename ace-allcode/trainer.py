@@ -56,7 +56,9 @@ class Trainer(QtGui.QWidget):
         zoom_layout.addWidget(zoom_out_btn)
         zoom_layout.addWidget(zoom_text)
 
-        focus_text = QtGui.QLabel("Focus: <Current Focus>")
+        focus_text = QtGui.QLabel("Focus: ")
+        self.focus_slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.focus_slider.setSliderPosition((self.slide_display.current_focus+1)*15)
         focus_plus_btn = QtGui.QPushButton("+")
         focus_minus_btn = QtGui.QPushButton("-")
         focus_plus_btn.setMaximumWidth(25)
@@ -65,17 +67,22 @@ class Trainer(QtGui.QWidget):
                         self.slide_display.focusUp)
         focus_minus_btn.connect(focus_minus_btn, QtCore.SIGNAL("pressed()"),
                         self.slide_display.focusDown)
+        self.focus_slider.sliderMoved.connect(self.slide_display.sliderFocus)
 
+        zoom_layout.addWidget(focus_text)
         zoom_layout.addWidget(focus_plus_btn)
         zoom_layout.addWidget(focus_minus_btn)
-        zoom_layout.addWidget(focus_text)
+        zoom_layout.addWidget(self.focus_slider)
   
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.slide_display)
         layout.addLayout(zoom_layout)
         
         return layout
-    
+
+    def moveSlider(self,value):
+        self.focus_slider.setSliderPosition(value)
+
     def initEstimateLayout(self):
         #estimate_entry: input line for estimate
         self.estimate_entry = QtGui.QLineEdit()
