@@ -12,7 +12,7 @@ import math
 import PyQt4
 
 class SlideGen(Slide):
-    MIN_COUNT = 250
+    MIN_COUNT = 1
     MAX_COUNT = 750
     current_focus = 2.5
     
