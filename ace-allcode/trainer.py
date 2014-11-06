@@ -51,10 +51,24 @@ class Trainer(QtGui.QWidget):
         zoom_out_btn = QtGui.QPushButton("-")
         zoom_in_btn.setMaximumWidth(25)
         zoom_out_btn.setMaximumWidth(25)
-        
+
         zoom_layout.addWidget(zoom_in_btn)
         zoom_layout.addWidget(zoom_out_btn)
         zoom_layout.addWidget(zoom_text)
+
+        focus_text = QtGui.QLabel("Focus: <Current Focus>")
+        focus_plus_btn = QtGui.QPushButton("+")
+        focus_minus_btn = QtGui.QPushButton("-")
+        focus_plus_btn.setMaximumWidth(25)
+        focus_minus_btn.setMaximumWidth(25)
+        focus_plus_btn.connect(focus_plus_btn, QtCore.SIGNAL("pressed()"),
+                        self.slide_display.focusUp)
+        focus_minus_btn.connect(focus_minus_btn, QtCore.SIGNAL("pressed()"),
+                        self.slide_display.focusDown)
+
+        zoom_layout.addWidget(focus_plus_btn)
+        zoom_layout.addWidget(focus_minus_btn)
+        zoom_layout.addWidget(focus_text)
   
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.slide_display)
