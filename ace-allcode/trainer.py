@@ -79,26 +79,22 @@ class Trainer(QtGui.QWidget):
     def initEstimateLayout(self):
         widget = QtGui.QWidget(self)
         self.guess_group = QtGui.QButtonGroup(widget)
-        self.r0 = QtGui.QRadioButton("2-3")
+        self.r0 = QtGui.QRadioButton("8-15")
         self.guess_group.addButton(self.r0)
-        self.r1 = QtGui.QRadioButton("4-7")
+        self.r1 = QtGui.QRadioButton("16-31")
         self.guess_group.addButton(self.r1)
-        self.r2 = QtGui.QRadioButton("8-15")
+        self.r2 = QtGui.QRadioButton("32-63")
         self.guess_group.addButton(self.r2)
-        self.r3 = QtGui.QRadioButton("16-31")
+        self.r3 = QtGui.QRadioButton("64-127")
         self.guess_group.addButton(self.r3)
-        self.r4 = QtGui.QRadioButton("32-63")
+        self.r4 = QtGui.QRadioButton("128-255")
         self.guess_group.addButton(self.r4)
-        self.r5 = QtGui.QRadioButton("64-127")
+        self.r5 = QtGui.QRadioButton("256-511")
         self.guess_group.addButton(self.r5)
-        self.r6 = QtGui.QRadioButton("128-255")
+        self.r6 = QtGui.QRadioButton("512-1023")
         self.guess_group.addButton(self.r6)
-        self.r7 = QtGui.QRadioButton("256-511")
+        self.r7 = QtGui.QRadioButton("1024-2047")
         self.guess_group.addButton(self.r7)
-        self.r8 = QtGui.QRadioButton("512-1023")
-        self.guess_group.addButton(self.r8)
-        self.r9 = QtGui.QRadioButton("1024-2047")
-        self.guess_group.addButton(self.r9)
 
         #estimate_entry: input line for estimate
         self.estimate_entry = QtGui.QLineEdit()
@@ -135,8 +131,6 @@ class Trainer(QtGui.QWidget):
         estimate_layout.addWidget(self.r5)
         estimate_layout.addWidget(self.r6)
         estimate_layout.addWidget(self.r7)
-        estimate_layout.addWidget(self.r8)
-        estimate_layout.addWidget(self.r9)
         
         return estimate_layout
         

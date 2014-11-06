@@ -32,11 +32,17 @@ class SlideGen(Slide):
             self.scene.addItem(cell)
     
     def genSlide(self):
-        #self.current_focus = 1.9
-        this_count = randint(SlideGen.MIN_COUNT, SlideGen.MAX_COUNT)
+        rangenum = randint(3,10)
+        low = 2**rangenum
+        high = (2**(rangenum+1)) - 1
+        this_count = int(triangular(low, high))
         cell_list = self.scene.items()
         shuffle(cell_list)
-        num_blobs = int(triangular(1, 20, 10))
+        if (this_count < 20):
+            max_blobs = this_count
+        else:
+            max_blobs = 20
+        num_blobs = int(triangular(1, max_blobs))
         shape_ends = sample(range(1, this_count-1), num_blobs-1)
         
         for i in range (0, this_count-1):
