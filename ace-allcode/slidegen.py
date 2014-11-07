@@ -131,17 +131,9 @@ class SlideGen(Slide):
         self.updateSlide()
 
     def changeFocus(self,delta):
-<<<<<<< HEAD
         check = self.current_focus + (delta*self.factor)
         if(check > -1 and check < 6):
             self.current_focus = check
             # +1 so we use 0-7 range instead of -1-6, *15 to scale to 100
             self.trainer_ref.moveSlider((self.current_focus+1)*15)
             self.updateSlide()
-=======
-        factor = 0.2
-        check = self.current_focus + (-1*delta*factor)
-        if(check > -1 and check < 6):
-            self.current_focus = check
-            self.updateSlide()
->>>>>>> 6f278f2a3bef7ed4d0d901fb0fe0bfabfe3cf116
