@@ -11,6 +11,7 @@ from PyQt4 import QtGui, QtCore
 from slidegen import SlideGen
 from enum import ModeEnum
 from session import Session,Estimate
+from math import log
 import time
 import os.path
 
@@ -18,7 +19,7 @@ MAX_ESTIMATE = 9999
 
 class Trainer(QtGui.QWidget):
     def __init__(self, parent, stats):
-        self.estimate_number = 2
+        self.estimate_number = 1
         
         super(Trainer,self).__init__(parent)
         
@@ -104,18 +105,18 @@ class Trainer(QtGui.QWidget):
         self.guess_group.addButton(self.r7)
 
         #estimate_entry: input line for estimate
-        self.estimate_entry = QtGui.QLineEdit()
-        validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
-        self.estimate_entry.setValidator(validator)
+        #self.estimate_entry = QtGui.QLineEdit()
+        #validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
+        #self.estimate_entry.setValidator(validator)
         
         #button to submit estimate
         button = QtGui.QPushButton("Estimate Algae Count")
         button.connect( button, QtCore.SIGNAL("pressed()"),
                         self.submitEstimate)
         #allow Enter press to submit estimate
-        self.estimate_entry.connect(
-                self.estimate_entry, QtCore.SIGNAL("returnPressed()"),
-                button, QtCore.SIGNAL("pressed()")  )
+        #self.estimate_entry.connect(
+        #        self.estimate_entry, QtCore.SIGNAL("returnPressed()"),
+        #        button, QtCore.SIGNAL("pressed()")  )
         
         #estimate_display: shows list of previous estimates
         self.estimate_display = QtGui.QTextEdit()
@@ -127,9 +128,6 @@ class Trainer(QtGui.QWidget):
         estimate_layout = QtGui.QVBoxLayout()
         estimate_layout.addWidget(self.estimate_label)
         estimate_layout.addWidget(self.estimate_display)
-        estimate_layout.addWidget(button)
-        estimate_layout.addWidget(self.estimate_entry)
-
         estimate_layout.addWidget(self.r0)
         estimate_layout.addWidget(self.r1)
         estimate_layout.addWidget(self.r2)
@@ -138,63 +136,92 @@ class Trainer(QtGui.QWidget):
         estimate_layout.addWidget(self.r5)
         estimate_layout.addWidget(self.r6)
         estimate_layout.addWidget(self.r7)
+        estimate_layout.addWidget(button)
+        #estimate_layout.addWidget(self.estimate_entry)
+
+
         
         return estimate_layout
         
     def submitEstimate(self):
-        if self.estimate_entry.text().length() > 0 :
 
-            estimate = float(self.estimate_entry.text())
-            actual = float(self.slide_display.count())
+        if self.r0.isChecked():
+            estimate = 8
+        elif self.r1.isChecked():
+            estimate = 16
+        elif self.r2.isChecked():
+            estimate = 32
+        elif self.r3.isChecked():
+            estimate = 64
+        elif self.r4.isChecked():
+            estimate = 128
+        elif self.r5.isChecked():
+            estimate = 256
+        elif self.r6.isChecked():
+            estimate = 512
+        elif self.r7.isChecked():
+            estimate = 1024
+
+        estimate_range = str(estimate) + '-' + str(estimate * 2 - 1)
+
+        actual = self.slide_display.count()
+
+        log_estimate = log(estimate, 2)
+        log_actual = int(log(actual,2))
+
+        low = 2**int(log(actual,2))
+        actual_range = str(low) + '-' + str(low * 2 - 1)
+        
+        log_error = log_estimate - log_actual
+
+        if log_error == 0:
+            status = " - Correct!"
+        else:
+            status = " - Incorrect"
+
+        self.estimate_display.append(
+                "Slide " + str(self.estimate_number) + status +
+                "\nEstimate: " + estimate_range +
+                "\nActual Range: " + actual_range +
+                "\nExact Count: " + str(actual) +
+                "\nLog Error: " + str(log_error))
+
+        #add estimate to list
+        this_estimate = Estimate(estimate, actual)
+        self.current_session.addEstimate(this_estimate)
+        
+        self.current_session.error_sum += log_error
+        filename = "thum_"+str(int(round(time.time())))+"_"+str(self.estimate_number)+".png"
+        imagePath = os.path.normpath("./session/"+filename)
+        self.current_session.addImage(self.slide_display.save_image(imagePath, 100, 100))
+
+        #update display            
+        self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
+
+        if self.estimate_number < 10:
+            self.slide_display.genSlide()
+            self.estimate_number += 1
+                       
+        elif self.estimate_number == 10:
+            self.stats_ref.recordSession(self.current_session)
             
+            #display stats for 10-estimate session
+            session_error = self.current_session.error_sum / 10
             
-            raw_percent_err = (math.fabs(estimate - actual) / actual) * 100.0
-            percent_err = "{:.1f}".format(raw_percent_err)
+            self.estimate_display.append("\n10-slide session complete!")
+            self.estimate_display.append("Average log error for this session: " + 
+                                            str(session_error) + "\n")
 
-            self.estimate_display.append(
-                    "Slide "+str(self.estimate_number)+
-                    "\nEstimate: " + str(self.estimate_entry.text()) +
-                    "\nActual Count: " + str(self.slide_display.count()) +
-                    "\nPercentage Error: " + str(percent_err))
-            self.estimate_entry.clear()
-            
-            #add estimate to list
-            this_estimate = Estimate(estimate, actual)
-            self.current_session.addEstimate(this_estimate)
-            
-            self.current_session.error_sum += raw_percent_err
-            filename = "thum_"+str(int(round(time.time())))+"_"+str(self.estimate_number)+".png"
-            imagePath = os.path.normpath("./session/"+filename)
-            self.current_session.addImage(self.slide_display.save_image(imagePath, 100, 100))
+            #MessageBox - restart trainer or return to menu
+            self.endMessage = QtGui.QMessageBox.question(self,'Message',
+                 "10 estimates complete! Try again?",
+                 QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
 
-            #update display            
-            self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
- 
-            if self.estimate_number < 10:
-                self.slide_display.genSlide()
-                self.estimate_number += 1
-                           
-            elif self.estimate_number == 10:
-                self.stats_ref.recordSession(self.current_session)
-                
-                #display stats for 10-estimate session
-                raw_session_error = self.current_session.error_sum / 10
-                session_error ="{:.2f}".format(raw_session_error)
-                
-                self.estimate_display.append("\n10-slide session complete!")
-                self.estimate_display.append("Average error for this session: " + 
-                                                str(session_error) + "%\n")
-
-                #MessageBox - restart trainer or return to menu
-                self.endMessage = QtGui.QMessageBox.question(self,'Message',
-                     "10 estimates complete! Try again?",
-                     QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
-
-                if self.endMessage == QtGui.QMessageBox.Yes:
-                    self.startNewSession()
-                elif self.endMessage == QtGui.QMessageBox.No:
-                    self.startNewSession()
-                    self.parent.changeMode(ModeEnum.MENU)
+            if self.endMessage == QtGui.QMessageBox.Yes:
+                self.startNewSession()
+            elif self.endMessage == QtGui.QMessageBox.No:
+                self.startNewSession()
+                self.parent.changeMode(ModeEnum.MENU)
 
     #when session is complete, reset stuff
     def startNewSession(self):
@@ -204,9 +231,9 @@ class Trainer(QtGui.QWidget):
         self.estimate_number = 1
         self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
 
+
         self.estimate_display.append("Beginning new session...")
 
-        self.estimate_entry.clear()
         self.slide_display.genSlide()
         
         self.current_session = Session()

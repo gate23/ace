@@ -81,7 +81,7 @@ class MainWindow(QtGui.QMainWindow):
         elif page_num == ModeEnum.STATS:
             self.stats.updateStatsUI()
         elif page_num == ModeEnum.TRAINER:
-            self.trainer.estimate_entry.setFocus()
+            self.trainer.setFocus()
             
 
         self.mode_stack.setCurrentIndex(page_num)
