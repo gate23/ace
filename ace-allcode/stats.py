@@ -10,11 +10,11 @@ from PyQt4.QtCore import *
 
 import pickle
 import time
-import math
 import os.path
 
 from enum import FileEnum,SessionCol
 from session import Session
+from math import log
 
 
 class HistogramView(QListView):
@@ -40,7 +40,7 @@ class HistogramView(QListView):
         painter.drawLine(518,248,520,250)  
         painter.drawLine(520,250,518,252)
     #x-axis label  
-        painter.drawText(530,250,"Log Difference")
+        painter.drawText(530,250,"Log Error")
 
         pos = x0 + 20
 
@@ -128,15 +128,16 @@ class Statistics(QtGui.QWidget):
 
         self.session_table = QtGui.QTableWidget()
         self.session_table.setRowCount(10)
-        self.session_table.setColumnCount(5)
+        self.session_table.setColumnCount(6)
         self.session_table.setIconSize(QSize(100, 100))
         self.session_table.verticalHeader().resizeMode(QtGui.QHeaderView.Fixed)
         self.session_table.verticalHeader().setDefaultSectionSize(100)        
         header_labels = QtCore.QStringList()
+        header_labels.append("Status")
         header_labels.append("Estimate")
         header_labels.append("Actual")
-        header_labels.append("Difference")
-        header_labels.append("Error")
+        header_labels.append("Exact")
+        header_labels.append("Log Error")
         header_labels.append("Image")
         self.session_table.setHorizontalHeaderLabels(header_labels)
         session_layout.addWidget(self.session_table)
@@ -176,34 +177,41 @@ class Statistics(QtGui.QWidget):
         
         self.label_estimate.setText("Total estimates: " +
                                     (str(self.session_count*10)))
-        err_str = str("{:.1f}".format(error))
+        err_str = str(error)
         self.label_sum.setText("Lifetime Average Error: " +
-                                (err_str) +"%")
+                                (err_str))
             
     def updateSessionTable(self, sess_idx):
         if len(self.session_list)+1 >= sess_idx:
             session = self.session_list[sess_idx-1]
             est_idx = 0
             for estimate in session.estimate_list:
-                self.session_table.rowHeight(100);        
+                self.session_table.rowHeight(100);
+                log_estimate = log(estimate.estimate, 2)
+                log_actual = int(log(estimate.actual,2))   
+                log_error = log_estimate - log_actual
+                if log_error == 0:
+                    status = "Correct!"
+                else:
+                    status = "Incorrect"
+
+                status_item = QtGui.QTableWidgetItem(status)
+                self.session_table.setItem(est_idx,SessionCol.STATUS,status_item)     
                 
-                est_item = QtGui.QTableWidgetItem(str(int(estimate.estimate)))
+                estimate_str = str(estimate.estimate) + ' - ' + str(estimate.estimate * 2 - 1)
+                est_item = QtGui.QTableWidgetItem(estimate_str)
                 self.session_table.setItem(est_idx,SessionCol.ESTIMATE,est_item)
                 
-                actual_item = QtGui.QTableWidgetItem(str(int(estimate.actual)))
+                low = 2**int(log(estimate.actual,2))
+                actual = str(low) + ' - ' + str(low * 2 - 1)
+                actual_item = QtGui.QTableWidgetItem(str(actual))
                 self.session_table.setItem(est_idx,SessionCol.ACTUAL,actual_item)
                 
-                diff_item = QtGui.QTableWidgetItem()
-                diff = math.fabs(estimate.estimate - estimate.actual)
-                diff_str = str(int(diff))
-                diff_item.setText(diff_str)
-                self.session_table.setItem(est_idx,SessionCol.DIFF,diff_item)
+                exact_item = QtGui.QTableWidgetItem(str(estimate.actual))
+                self.session_table.setItem(est_idx,SessionCol.EXACT,exact_item)
                 
-                err_item = QtGui.QTableWidgetItem()
-                err = "{:.2f}".format((diff/estimate.actual)*100)
-                err_str = str(err)+"%"
-                err_item.setText(err_str)
-                self.session_table.setItem(est_idx,SessionCol.ERROR,err_item)
+                diff_item = QtGui.QTableWidgetItem(str(log_error))
+                self.session_table.setItem(est_idx,SessionCol.LOG_ERROR,diff_item)
                 
                 #image
                 icon = QtGui.QIcon()

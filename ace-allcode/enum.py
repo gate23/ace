@@ -10,8 +10,9 @@ class FileEnum():
     SESSION_LIST = 2
     
 class SessionCol():
-    ESTIMATE = 0
-    ACTUAL = 1
-    DIFF = 2
-    ERROR = 3
-    IMAGE = 4
+    STATUS = 0
+    ESTIMATE = 1
+    ACTUAL = 2
+    EXACT = 3
+    LOG_ERROR = 4
+    IMAGE = 5
