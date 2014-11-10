@@ -188,8 +188,8 @@ class Statistics(QtGui.QWidget):
             for estimate in session.estimate_list:
                 self.session_table.rowHeight(100);
                 log_estimate = log(estimate.estimate, 2)
-                log_actual = int(log(estimate.actual,2))   
-                log_error = log_estimate - log_actual
+                log_actual = log(estimate.actual,2)   
+                log_error = int(log_estimate) - int(log_actual)
                 if log_error == 0:
                     status = "Correct!"
                 else:
@@ -198,16 +198,17 @@ class Statistics(QtGui.QWidget):
                 status_item = QtGui.QTableWidgetItem(status)
                 self.session_table.setItem(est_idx,SessionCol.STATUS,status_item)     
                 
-                estimate_str = str(estimate.estimate) + ' - ' + str(estimate.estimate * 2 - 1)
+                low = 2**int(log(estimate.estimate,2))
+                estimate_str = str(low) + ' - ' + str(low * 2 - 1)
                 est_item = QtGui.QTableWidgetItem(estimate_str)
                 self.session_table.setItem(est_idx,SessionCol.ESTIMATE,est_item)
                 
                 low = 2**int(log(estimate.actual,2))
-                actual = str(low) + ' - ' + str(low * 2 - 1)
-                actual_item = QtGui.QTableWidgetItem(str(actual))
+                actual_str = str(low) + ' - ' + str(low * 2 - 1)
+                actual_item = QtGui.QTableWidgetItem(str(actual_str))
                 self.session_table.setItem(est_idx,SessionCol.ACTUAL,actual_item)
                 
-                exact_item = QtGui.QTableWidgetItem(str(estimate.actual))
+                exact_item = QtGui.QTableWidgetItem(str(int(estimate.actual)))
                 self.session_table.setItem(est_idx,SessionCol.EXACT,exact_item)
                 
                 diff_item = QtGui.QTableWidgetItem(str(log_error))
