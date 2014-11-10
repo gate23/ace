@@ -16,6 +16,7 @@ class SlideGen(Slide):
     MAX_COUNT = 2048
     current_focus = 2.4
     factor = 0.2
+    sprite_list = [SpriteType.APHANOTHECE_OUTLINE, SpriteType.APHANOTHECE_RENDER1]
     
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
@@ -74,12 +75,16 @@ class SlideGen(Slide):
             deg_rotation = uniform(0.0,359.9)
             depth = cell_list[i].zValue()
             
+            sprite_type = random.choice(self.sprite_list)
+            
             texture, rotation, blur = self.get_texture(
-                int(SpriteType.APHANOTHECE_OUTLINE), depth, deg_rotation)
+                int(sprite_type), depth, deg_rotation)
 
             cell_list[i].setPixmap(texture)
             cell_list[i].setRotation(rotation)
             cell_list[i].setVisible(True)
+            cell_list[i].actual_rotation = deg_rotation
+            cell_list[i].sprite_code = sprite_type
         
         #hide the rest
         for i in range (this_count, SlideGen.MAX_COUNT-1):
