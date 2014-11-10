@@ -20,8 +20,9 @@ class SpriteDepth:
     BACK = "4"
     
 class SpriteType:
-    APHANOTHECE_OUTLINE = "0"
-    APHANOTHECE_RENDER1 = "1"
+    APHANOTHECE_OUTLINE = [0, 0, 0, 2, 3]
+    APHANOTHECE_RENDER1 = [1]
+    COUNT = 4
     
 class BackgroundType:
     CYAN_SOLID = "0"

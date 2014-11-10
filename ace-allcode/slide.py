@@ -16,7 +16,7 @@ class Slide(QtGui.QWidget):
     VIEW_WIDTH,VIEW_HEIGHT = 540,540
     SPRITE_PATH = "./img/sprites/"
     
-    scale_size = 15
+    scale_size = 20
     depth_alpha = 0.2
     depth_blur_amount = 3.3
     
@@ -59,12 +59,10 @@ class Slide(QtGui.QWidget):
         self.sprites = SpriteFactory(os.path.join(os.path.curdir, spritePath))
         self.texture_lib = {}
 
-        cellTypes = {SpriteType.APHANOTHECE_OUTLINE,
-                     SpriteType.APHANOTHECE_RENDER1}
         scaledSize = QtCore.QSize(self.scale_size, self.scale_size)        
         
         #Load Textures
-        for cellType in cellTypes:
+        for cellType in range(SpriteType.COUNT):
             for depth in range (1, 4):        
                 for degree in range(0, 360, 15):
                     filename, rotation = self.sprites.get_sprite(cellType, str(depth), degree)
