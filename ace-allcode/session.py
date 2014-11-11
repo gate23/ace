@@ -17,6 +17,10 @@ class Session():
         self.time = None
         self.estimate_list = list()
         self.image_list = list()
+        self.log_err_list = list()
+        for i in range(15):
+            self.log_err_list.append(0)
+        self.total_estimates = 0
         
     def isComplete(self):
         if len(self.estimate_list) > 9:
