@@ -38,8 +38,6 @@ class Trainer(QtGui.QWidget):
         layout.addLayout(estimate_layout)
         
         self.setLayout(layout)
-
-        #stats per session to hand off to stats
         
         
     def initSlideLayout(self):
@@ -80,9 +78,6 @@ class Trainer(QtGui.QWidget):
         layout.addLayout(zoom_layout)
         
         return layout
-
-    def moveSlider(self,value):
-        self.focus_slider.setSliderPosition(value)
 
     def initEstimateLayout(self):
         widget = QtGui.QWidget(self)
