@@ -75,7 +75,8 @@ class SlideGen(Slide):
             deg_rotation = uniform(0.0,359.9)
             depth = cell_list[i].zValue()
             
-            sprite_type = random.choice(SpriteType.APHANOTHECE_OUTLINE)
+            #set sprite type
+            sprite_type = random.choice(SpriteType.APHANOTHECE_RENDER1)
             
             texture, rotation, blur = self.get_texture(
                 sprite_type, depth, deg_rotation)
@@ -83,8 +84,9 @@ class SlideGen(Slide):
             cell_list[i].setPixmap(texture)
             cell_list[i].setRotation(rotation)
             cell_list[i].setVisible(True)
-            cell_list[i].actual_rotation = deg_rotation
+            cell_list[i].sprite_rotation = deg_rotation
             cell_list[i].sprite_code = sprite_type
+            
         
         #hide the rest
         for i in range (this_count, SlideGen.MAX_COUNT-1):
@@ -129,6 +131,9 @@ class SlideGen(Slide):
         self.changeFocus(event.delta()/120.0)
         #print (event.delta()/120)
         #print self.current_focus
+        
+    def mousePressEvent(self, event):
+        self.save_slide()
 
     def sliderFocus(self,value):
         # +3 for off by 1, /3 for 100/33 blur levels, *.2, -1 for -1-6 from 0-7

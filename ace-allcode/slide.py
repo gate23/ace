@@ -10,6 +10,7 @@ import os.path
 #import sprites
 import math
 import time
+import pickle
 
 
 class Slide(QtGui.QWidget):
@@ -102,7 +103,6 @@ class Slide(QtGui.QWidget):
                 texture = value
         
         return texture, diff, blur
-        
     def get_blur(self, depth, current_focus):
         amount = (current_focus - depth)
         sprite_depth = 2 #sets middle
@@ -133,6 +133,15 @@ class Slide(QtGui.QWidget):
         return filename
             
     def save_slide(self):
-        #loop through all items and save data serialized json
+        #loop through all items and save data serialized json or pickle
+        cell_list = []
+        
         for cell in self.scene.items():
-            pass
+            if(cell.isVisible()):
+                #print "cell: x=%d y=%d,z=%f type=%d rotation=%d" % (cell.x(), cell.y(), cell.zValue(), cell.sprite_code, cell.sprite_rotation)
+                cell_list.append([cell.x(), cell.y(), cell.zValue(), cell.sprite_code, cell.sprite_rotation])
+
+        output = open('last_slide.ace','wb')
+        pickle.dump(cell_list, output)
+        output.close()
+        print "slide saved" 
