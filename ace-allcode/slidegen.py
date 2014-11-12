@@ -36,11 +36,15 @@ class SlideGen(Slide):
     
     def genSlide(self):
         rangenum = randint(3,10)
-        low = 2**rangenum
-        high = (2**(rangenum+1)) - 1
-        this_count = int(triangular(low, high))
+        # low = 2**rangenum
+        # high = (2**(rangenum+1)) - 1
+        # this_count = int(triangular(low, high))
+        this_count = 8
         cell_list = self.scene.items()
         shuffle(cell_list)
+        pos_or_neg = [1,-1]
+        try_again = []
+
         if (this_count < 20):
             max_blobs = this_count
         else:
@@ -48,7 +52,7 @@ class SlideGen(Slide):
         num_blobs = int(triangular(1, max_blobs))
         shape_ends = sample(range(1, this_count-1), num_blobs-1)
         
-        for i in range (0, this_count-1):
+        for i in range (0, this_count):
             #chooses the center point of the blob
             if ((i == 0) or (i in shape_ends)):
                 if (i != 0):
@@ -58,8 +62,8 @@ class SlideGen(Slide):
                     size = next - i
                 else:
                     size = this_count - i
-                x_offset = uniform(0.0, SlideGen.VIEW_WIDTH) 
-                y_offset = uniform(0.0, SlideGen.VIEW_HEIGHT)
+                x_offset = uniform(5.0, SlideGen.VIEW_WIDTH - 5) 
+                y_offset = uniform(5.0, SlideGen.VIEW_HEIGHT - 5)
                 opt_r = sqrt(200 * size / pi)
                 max_r = SlideGen.VIEW_HEIGHT/2
                 R = triangular(opt_r, max_r, (opt_r + max_r) / 3)
@@ -69,29 +73,57 @@ class SlideGen(Slide):
             else:
                 r = uniform(0, R)
                 x = uniform(-r, r)
+                select = sample(pos_or_neg, 1)
                 y = sqrt(r**2 - x**2)
-                cell_list[i].setPos(x_offset + x,y_offset + y)
+                y = y * select[0]
+                new_x = x_offset + x
+                new_y = y_offset + y
+                #check if cell is to be placed on screen
+                if ((new_x > 5) and (new_x < SlideGen.VIEW_WIDTH - 5) and (new_y > 5) and (new_y < SlideGen.VIEW_HEIGHT - 5)):
+                    cell_list[i].setPos(new_x,new_y)
+                else:
+                    try_again.append(i)
 
-            deg_rotation = uniform(0.0,359.9)
-            depth = cell_list[i].zValue()
+            if i not in try_again:
+                deg_rotation = uniform(0.0,359.9)
+                depth = cell_list[i].zValue()
+                #set sprite type
+                sprite_type = random.choice(SpriteType.APHANOTHECE_RENDER1)
+                
+                texture, rotation, blur = self.get_texture(
+                    sprite_type, depth, deg_rotation)
+
+                cell_list[i].setPixmap(texture)
+                cell_list[i].setRotation(rotation)
+                cell_list[i].setVisible(True)
+                cell_list[i].sprite_rotation = deg_rotation
+                cell_list[i].sprite_code = sprite_type
             
+        for val in try_again:
+            x_offset = uniform(5.0, SlideGen.VIEW_WIDTH - 5) 
+            y_offset = uniform(5.0, SlideGen.VIEW_HEIGHT - 5)
+            cell_list[val].setPos(x_offset, y_offset)
+            deg_rotation = uniform(0.0,359.9)
+            depth = cell_list[val].zValue()
             #set sprite type
             sprite_type = random.choice(SpriteType.APHANOTHECE_RENDER1)
             
             texture, rotation, blur = self.get_texture(
                 sprite_type, depth, deg_rotation)
 
-            cell_list[i].setPixmap(texture)
-            cell_list[i].setRotation(rotation)
-            cell_list[i].setVisible(True)
-            cell_list[i].sprite_rotation = deg_rotation
-            cell_list[i].sprite_code = sprite_type
-            
+            cell_list[val].setPixmap(texture)
+            cell_list[val].setRotation(rotation)
+            cell_list[val].setVisible(True)
+            cell_list[val].sprite_rotation = deg_rotation
+            cell_list[val].sprite_code = sprite_type
         
         #hide the rest
         for i in range (this_count, SlideGen.MAX_COUNT-1):
             cell_list[i].setVisible(False)
             cell_list[i].setGraphicsEffect(None)
+
+
+
             
         self.cell_count = this_count
         self.updateSlide()
