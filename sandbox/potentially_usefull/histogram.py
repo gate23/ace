@@ -163,7 +163,7 @@ class MainWindow(QMainWindow):
       
     def setupView(self):  
         table = QTableView()  
-        histogram = HistogramView(self.splitter)  
+        histogram = HistogramView(self.splitter, stats)  
           
         table.setModel(self.model)  
         self.setCentralWidget(table)  

@@ -18,8 +18,9 @@ from math import log
 
 
 class HistogramView(QListView):
-    def __init__(self, parent):
+    def __init__(self, parent, splitter):
         super(HistogramView, self).__init__()
+        self.parent = parent
 
     def paintEvent(self, QPaintEvent):
         painter = QPainter(self.viewport())
@@ -28,33 +29,43 @@ class HistogramView(QListView):
         x0 = 40
         y0 = 250
 
-    #y-axis
+        #y-axis
         painter.drawLine(x0,y0,40,30)
-    #arrow at end of axis  
+        #arrow at end of axis  
         painter.drawLine(38,32,40,30)  
         painter.drawLine(40,30,42,32)  
           
-    #x-axis
+        #x-axis
         painter.drawLine(x0,y0,520,250)
-    #arrow at end of x-axis  
+        #arrow at end of x-axis  
         painter.drawLine(518,248,520,250)  
         painter.drawLine(520,250,518,252)
-    #x-axis label  
+        #x-axis label  
         painter.drawText(530,250,"Log Error")
 
+        #label each block
+        posL = x0 + 25
+        for i in xrange(-7,8):
+            painter.drawText(posL,y0+20,str(i))
+            posL += 20
+
+        #fill in data
         pos = x0 + 20
+        max_val = 200
 
         width = 20
+        
+        max_in_list = max(self.parent.log_err_list)
         painter.setBrush(Qt.red)
-        painter.drawRect(QRect(pos,y0 - 1 * 10,width,1 * 10)) 
-        painter.drawRect(QRect(pos+20,y0 - 2 * 10,width,2 * 10)) 
-        painter.setBrush(Qt.blue)
-        painter.drawRect(QRect(pos+40,y0 - 3 * 10,width,3 * 10)) 
-        painter.drawRect(QRect(pos+60,y0 - 4 * 10,width,4 * 10)) 
-        painter.drawRect(QRect(pos+80,y0 - 5 * 10,width,5 * 10)) 
-        painter.setBrush(Qt.red)
-        painter.drawRect(QRect(pos+100,y0 - 6 * 10,width,6 * 10)) 
-        painter.drawRect(QRect(pos+120,y0 - 7 * 10,width,7 * 10)) 
+        if (max_in_list != 0):
+            for i in range(15):
+                if i == 5:
+                    painter.setBrush(Qt.blue)
+                if i == 10:
+                    painter.setBrush(Qt.red)
+                height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
+                painter.drawRect(QRect(pos,y0 - height,width,height))
+                pos += 20 
 
     def dataChanged(self):
         self.viewport().update()
@@ -75,14 +86,20 @@ class Statistics(QtGui.QWidget):
             self.session_count = opened[FileEnum.SESSION_COUNT]
             self.error_sum = opened[FileEnum.ERROR_SUM]
             self.session_list = opened[FileEnum.SESSION_LIST]
+            self.log_err_list = opened[FileEnum.LOG_ERR_LIST]
+            self.total_estimates = opened[FileEnum.TOTAL_ESTIMATES]
             
         except:
             self.session_count = 0
             self.error_sum = 0.0
             self.session_list = list()
+            self.log_err_list = list()
+            for i in range(15):
+                self.log_err_list.append(0)
+            self.total_estimates = 0
             
     def writeStatsToFile(self):
-        stat_list = (self.session_count, self.error_sum, self.session_list)
+        stat_list = (self.session_count, self.error_sum, self.session_list, self.log_err_list, self.total_estimates)
         
         output = open('stats.ace','wb')
         pickle.dump(stat_list, output)
@@ -152,8 +169,8 @@ class Statistics(QtGui.QWidget):
         lifetime_layout.addWidget(self.label_estimate)
         lifetime_layout.addWidget(self.label_sum)
 
-        histogram = HistogramView(self.splitter)
-        lifetime_layout.addWidget(histogram)
+        self.histogram = HistogramView(self,self.splitter)
+        lifetime_layout.addWidget(self.histogram)
 
         self.updateStatsUI()
 
@@ -165,19 +182,24 @@ class Statistics(QtGui.QWidget):
         self.error_sum += session.error_sum
         completed_time = time.time() 
         session.time = completed_time
+        self.total_estimates += session.total_estimates
+        for i in range(15):
+            self.log_err_list[i] += session.log_err_list[i]
         
         self.session_list.append(session)
-        self.session_box.addItem("Session "+str(self.session_count))
+        self.session_box.addItem("Session "+ str(self.session_count))
+        self.histogram.dataChanged()
+
         
     def updateStatsUI(self):
         if self.session_count>0:
-            error = self.error_sum/(self.session_count*10)
+            avg_error = self.error_sum/(self.session_count*10)
         else:
-            error = 0.0
+            avg_error = 0.0
         
         self.label_estimate.setText("Total estimates: " +
                                     (str(self.session_count*10)))
-        err_str = str(error)
+        err_str = str(avg_error)
         self.label_sum.setText("Lifetime Average Error: " +
                                 (err_str))
             
@@ -186,7 +208,7 @@ class Statistics(QtGui.QWidget):
             session = self.session_list[sess_idx-1]
             est_idx = 0
             for estimate in session.estimate_list:
-                self.session_table.rowHeight(100);
+                self.session_table.rowHeight(100)
                 log_estimate = log(estimate.estimate, 2)
                 log_actual = log(estimate.actual,2)   
                 log_error = int(log_estimate) - int(log_actual)

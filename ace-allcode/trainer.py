@@ -38,8 +38,6 @@ class Trainer(QtGui.QWidget):
         layout.addLayout(estimate_layout)
         
         self.setLayout(layout)
-
-        #stats per session to hand off to stats
         
         
     def initSlideLayout(self):
@@ -80,9 +78,6 @@ class Trainer(QtGui.QWidget):
         layout.addLayout(zoom_layout)
         
         return layout
-
-    def moveSlider(self,value):
-        self.focus_slider.setSliderPosition(value)
 
     def initEstimateLayout(self):
         widget = QtGui.QWidget(self)
@@ -166,7 +161,7 @@ class Trainer(QtGui.QWidget):
 
         actual = self.slide_display.count()
 
-        log_estimate = log(estimate, 2)
+        log_estimate = int(log(estimate, 2))
         log_actual = int(log(actual,2))
 
         low = 2**int(log(actual,2))
@@ -184,13 +179,17 @@ class Trainer(QtGui.QWidget):
                 "\nEstimate: " + estimate_range +
                 "\nActual Range: " + actual_range +
                 "\nExact Count: " + str(actual) +
-                "\nLog Error: " + str(log_error))
+                "\nLog Error: " + str(log_error) + "\n")
 
         #add estimate to list
         this_estimate = Estimate(estimate, actual)
         self.current_session.addEstimate(this_estimate)
+
         
         self.current_session.error_sum += log_error
+        self.current_session.total_estimates += 1
+        bias = 7
+        self.current_session.log_err_list[log_error+bias] += 1
         filename = "thum_"+str(int(round(time.time())))+"_"+str(self.estimate_number)+".png"
         imagePath = os.path.normpath("./session/"+filename)
         self.current_session.addImage(self.slide_display.save_image(imagePath, 100, 100))

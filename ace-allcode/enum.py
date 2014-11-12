@@ -8,6 +8,8 @@ class FileEnum():
     SESSION_COUNT = 0
     ERROR_SUM = 1
     SESSION_LIST = 2
+    LOG_ERR_LIST = 3
+    TOTAL_ESTIMATES = 4
     
 class SessionCol():
     STATUS = 0

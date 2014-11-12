@@ -135,15 +135,17 @@ class SlideGen(Slide):
     def mousePressEvent(self, event):
         self.save_slide()
 
+    #this is called when the slider is moved - value between 0 and 100
     def sliderFocus(self,value):
         # +3 for off by 1, /3 for 100/33 blur levels, *.2, -1 for -1-6 from 0-7
         self.current_focus = (((value+3)/3) * self.factor) - 1
         self.updateSlide()
 
+    #this is called when scrolling or clicking the button - delta 1 or -1
     def changeFocus(self,delta):
         check = self.current_focus + (delta*self.factor)
         if(check > -1 and check < 6):
             self.current_focus = check
             # +1 so we use 0-7 range instead of -1-6, *15 to scale to 100
-            self.trainer_ref.moveSlider((self.current_focus+1)*15)
+            self.trainer_ref.focus_slider.setSliderPosition((self.current_focus+1)*15)
             self.updateSlide()
