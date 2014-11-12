@@ -15,7 +15,7 @@ from math import log
 import time
 import os.path
 
-MAX_ESTIMATE = 9999
+#MAX_ESTIMATE = 9999
 
 class Trainer(QtGui.QWidget):
     def __init__(self, parent, stats):
@@ -31,13 +31,13 @@ class Trainer(QtGui.QWidget):
         
     def initUI(self):
         layout = QtGui.QHBoxLayout()
-                
         slide_layout = self.initSlideLayout()
         estimate_layout = self.initEstimateLayout()        
         layout.addLayout(slide_layout)
         layout.addLayout(estimate_layout)
         
         self.setLayout(layout)
+
         
         
     def initSlideLayout(self):
@@ -195,19 +195,18 @@ class Trainer(QtGui.QWidget):
         self.current_session.addImage(self.slide_display.save_image(imagePath, 100, 100))
 
         #update display            
-        self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
-
-        if self.estimate_number < 10:
+        self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" + str(self.num_slides))
+        if (self.estimate_number < self.num_slides):
             self.slide_display.genSlide()
             self.estimate_number += 1
                        
-        elif self.estimate_number == 10:
+        elif (self.estimate_number == self.num_slides):
             self.stats_ref.recordSession(self.current_session)
             
             #display stats for 10-estimate session
-            session_error = self.current_session.error_sum / 10
+            session_error = self.current_session.error_sum / self.num_slides
             
-            self.estimate_display.append("\n10-slide session complete!")
+            self.estimate_display.append("\nSession complete!")
             self.estimate_display.append("Average log error for this session: " + 
                                             str(session_error) + "\n")
 
@@ -219,16 +218,25 @@ class Trainer(QtGui.QWidget):
             if self.endMessage == QtGui.QMessageBox.Yes:
                 self.startNewSession()
             elif self.endMessage == QtGui.QMessageBox.No:
-                self.startNewSession()
+                #self.startNewSession()
                 self.parent.changeMode(ModeEnum.MENU)
 
     #when session is complete, reset stuff
+    #TODO: THIS IS SLOPPY. This gets called in main window, repeating some actions
     def startNewSession(self):
         self.estimate_sum = 0
         self.actual_sum = 0
-        
         self.estimate_number = 1
-        self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/10")
+
+        self.num_slides, ok = QtGui.QInputDialog.getText(self, 'Trainer', 
+            'How many algae slides would you like to generate?')
+        # validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
+        # self.num_slides.setValidator(validator)
+        if ok:
+            
+            self.num_slides = int(self.num_slides)
+            self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" +
+                str(self.num_slides))
 
 
         self.estimate_display.append("Beginning new session...")
