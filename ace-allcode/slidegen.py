@@ -36,10 +36,9 @@ class SlideGen(Slide):
     
     def genSlide(self):
         rangenum = randint(3,10)
-        # low = 2**rangenum
-        # high = (2**(rangenum+1)) - 1
-        # this_count = int(triangular(low, high))
-        this_count = 8
+        low = 2**rangenum
+        high = (2**(rangenum+1)) - 1
+        this_count = int(triangular(low, high))
         cell_list = self.scene.items()
         shuffle(cell_list)
         pos_or_neg = [1,-1]
