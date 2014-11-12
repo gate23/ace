@@ -81,6 +81,7 @@ class MainWindow(QtGui.QMainWindow):
         elif page_num == ModeEnum.STATS:
             self.stats.updateStatsUI()
         elif page_num == ModeEnum.TRAINER:
+            self.trainer.startNewSession()
             self.trainer.setFocus()
             
 
