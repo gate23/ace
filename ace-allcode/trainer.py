@@ -20,6 +20,7 @@ import os.path
 class Trainer(QtGui.QWidget):
     def __init__(self, parent, stats):
         self.estimate_number = 1
+        self.max_session_length = 100
         
         super(Trainer,self).__init__(parent)
         
@@ -99,8 +100,6 @@ class Trainer(QtGui.QWidget):
         self.r7 = QtGui.QRadioButton("1024-2047")
         self.guess_group.addButton(self.r7)
 
-        #estimate_entry: input line for estimate
-        #self.estimate_entry = QtGui.QLineEdit()
         #validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
         #self.estimate_entry.setValidator(validator)
         
@@ -227,14 +226,16 @@ class Trainer(QtGui.QWidget):
         self.estimate_sum = 0
         self.actual_sum = 0
         self.estimate_number = 1
+        
+        session_length_input = QtGui.QInputDialog(self)     
+        
+        self.num_slides, ok = QtGui.QInputDialog.getInt(self, 'Trainer', 
+            'How many algae slides would you like to generate?',
+            10, 1, self.max_session_length)
 
-        self.num_slides, ok = QtGui.QInputDialog.getText(self, 'Trainer', 
-            'How many algae slides would you like to generate?')
-        # validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
-        # self.num_slides.setValidator(validator)
         if ok:
             
-            self.num_slides = int(self.num_slides)
+            self.num_slides = self.num_slides
             self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" +
                 str(self.num_slides))
 
