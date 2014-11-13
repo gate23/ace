@@ -140,7 +140,8 @@ class Trainer(QtGui.QWidget):
         return estimate_layout
         
     def submitEstimate(self):
-
+        estimate = 0
+        
         if self.r0.isChecked():
             estimate = 8
         elif self.r1.isChecked():
@@ -157,7 +158,10 @@ class Trainer(QtGui.QWidget):
             estimate = 512
         elif self.r7.isChecked():
             estimate = 1024
-
+        
+        if (estimate == 0):
+            return False
+            
         estimate_range = str(estimate) + '-' + str(estimate * 2 - 1)
 
         actual = self.slide_display.count()
