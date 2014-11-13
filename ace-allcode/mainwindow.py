@@ -65,7 +65,7 @@ class MainWindow(QtGui.QMainWindow):
         help_menu = menu_bar.addMenu('&Help')
         
         about_action = QtGui.QAction('About', self)
-        #TBD: connect about_actions's trigger to something
+        #TODO: connect about_actions's trigger to something
         
         help_menu.addAction(about_action)
         
@@ -79,11 +79,11 @@ class MainWindow(QtGui.QMainWindow):
         if page_num == ModeEnum.EDITOR:
             self.editor.toolbar.toggleViewAction().trigger()
         elif page_num == ModeEnum.STATS:
-            self.stats.updateStatsUI()
+            self.stats.updateStatsUI()   
         elif page_num == ModeEnum.TRAINER:
-            self.trainer.startNewSession()
-            self.trainer.setFocus()
-            
+            if (not self.trainer.has_active_session):
+                if (not self.trainer.startNewSession()):
+                    return #Don't switch to trainer
 
         self.mode_stack.setCurrentIndex(page_num)
         

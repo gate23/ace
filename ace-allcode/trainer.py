@@ -28,6 +28,8 @@ class Trainer(QtGui.QWidget):
         self.parent = parent
         self.stats_ref = stats
         
+        self.has_active_session = False
+        
         self.current_session = Session()
         
     def initUI(self):
@@ -217,7 +219,7 @@ class Trainer(QtGui.QWidget):
             if self.endMessage == QtGui.QMessageBox.Yes:
                 self.startNewSession()
             elif self.endMessage == QtGui.QMessageBox.No:
-                #self.startNewSession()
+                self.has_active_session = False
                 self.parent.changeMode(ModeEnum.MENU)
 
     #when session is complete, reset stuff
@@ -234,14 +236,18 @@ class Trainer(QtGui.QWidget):
             10, 1, self.max_session_length)
 
         if ok:
-            
+            self.has_active_session = True
             self.num_slides = self.num_slides
             self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" +
                 str(self.num_slides))
+            
 
+            self.estimate_display.append("Beginning new session...")
 
-        self.estimate_display.append("Beginning new session...")
-
-        self.slide_display.genSlide()
-        
-        self.current_session = Session()
+            self.slide_display.genSlide()
+            
+            self.current_session = Session()
+            return True
+        else:
+            self.has_active_session =False
+            return False
