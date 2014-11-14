@@ -30,8 +30,6 @@ class Trainer(QtGui.QWidget):
         
         self.has_active_session = False
         
-        self.current_session = Session()
-        
     def initUI(self):
         layout = QtGui.QHBoxLayout()
         slide_layout = self.initSlideLayout()
@@ -201,11 +199,11 @@ class Trainer(QtGui.QWidget):
 
         #update display            
         self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" + str(self.num_slides))
-        if (self.estimate_number < self.num_slides):
+        if (not self.current_session.isComplete() ):
             self.slide_display.genSlide()
             self.estimate_number += 1
                        
-        elif (self.estimate_number == self.num_slides):
+        else:
             self.stats_ref.recordSession(self.current_session)
             
             #display stats for 10-estimate session
@@ -241,7 +239,6 @@ class Trainer(QtGui.QWidget):
 
         if ok:
             self.has_active_session = True
-            self.num_slides = self.num_slides
             self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" +
                 str(self.num_slides))
             
@@ -250,7 +247,7 @@ class Trainer(QtGui.QWidget):
 
             self.slide_display.genSlide()
             
-            self.current_session = Session()
+            self.current_session = Session(self.num_slides)
             return True
         else:
             self.has_active_session =False

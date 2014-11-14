@@ -12,7 +12,9 @@ class Estimate():
         
         
 class Session():
-    def __init__(self):
+    def __init__(self,length):
+        self.length = length;
+        
         self.error_sum = 0.0
         self.time = None
         self.estimate_list = list()
@@ -23,7 +25,7 @@ class Session():
         self.total_estimates = 0
         
     def isComplete(self):
-        if len(self.estimate_list) > 9:
+        if len(self.estimate_list) > self.length-1:
             return True
         else:
             return False

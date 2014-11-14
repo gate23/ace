@@ -206,6 +206,8 @@ class Statistics(QtGui.QWidget):
     def updateSessionTable(self, sess_idx):
         if len(self.session_list)+1 >= sess_idx:
             session = self.session_list[sess_idx-1]
+            self.session_table.setRowCount(session.length)
+            
             est_idx = 0
             for estimate in session.estimate_list:
                 self.session_table.rowHeight(100)
