@@ -86,9 +86,6 @@ class MainWindow(QtGui.QMainWindow):
             if (not self.trainer.has_active_session):
                 if (not self.trainer.startNewSession()):
                     return #Don't switch to trainer
-        elif page_num == ModeEnum.GENERATOR:
-            if (not self.generator.genNewSlide()):
-                return #Don't switch to generator
 
         self.mode_stack.setCurrentIndex(page_num)
         

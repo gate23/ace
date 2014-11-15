@@ -26,17 +26,17 @@ class Generator(QtGui.QWidget):
         
     def initUI(self):
         layout = QtGui.QHBoxLayout()
-        slide_layout = self.initSlideLayout()      
+        slide_layout = self.initSlideLayout()
+        numCells_layout = self.initNumCellsLayout()       
         layout.addLayout(slide_layout)
+        layout.addLayout(numCells_layout)
         
         self.setLayout(layout)
-
-        
         
     def initSlideLayout(self):
         self.slide_display = SlideGen(self)
         self.slide_display.genSlide(self, -1)
-        self.slide_display.setMaximumSize(540,540)
+        self.slide_display.setMinimumSize(540,540)
 
         zoom_layout = QtGui.QHBoxLayout()
 
@@ -64,16 +64,77 @@ class Generator(QtGui.QWidget):
         
         return layout
 
-    def genNewSlide(self):
+    def initNumCellsLayout(self):
+        widget = QtGui.QWidget(self)
+        self.guess_group = QtGui.QButtonGroup(widget)
+        self.r0 = QtGui.QRadioButton("8-15")
+        self.guess_group.addButton(self.r0)
+        self.r1 = QtGui.QRadioButton("16-31")
+        self.guess_group.addButton(self.r1)
+        self.r2 = QtGui.QRadioButton("32-63")
+        self.guess_group.addButton(self.r2)
+        self.r3 = QtGui.QRadioButton("64-127")
+        self.guess_group.addButton(self.r3)
+        self.r4 = QtGui.QRadioButton("128-255")
+        self.guess_group.addButton(self.r4)
+        self.r5 = QtGui.QRadioButton("256-511")
+        self.guess_group.addButton(self.r5)
+        self.r6 = QtGui.QRadioButton("512-1023")
+        self.guess_group.addButton(self.r6)
+        self.r7 = QtGui.QRadioButton("1024-2047")
+        self.guess_group.addButton(self.r7)
         
-        session_length_input = QtGui.QInputDialog(self)     
+        #button to submit estimate
+        button = QtGui.QPushButton("Generate New Slide")
+        button.connect( button, QtCore.SIGNAL("pressed()"),
+                        self.genNewSlide)
+        #allow Enter press to submit estimate
+        #button.connect(
+        #        button, QtCore.SIGNAL("returnPressed()"),
+        #        button, QtCore.SIGNAL("pressed()")  )
         
-        self.num_cells, ok = QtGui.QInputDialog.getInt(self, 'Slide Generator', 
-            'How many algae cells would you like to generate?',
-            0, 1, 2048)
+        #estimate_display: shows list of previous estimates
+        self.display = QtGui.QTextEdit()
+        self.display.setReadOnly(1)    
+        
+        num_cells_layout = QtGui.QVBoxLayout()
+        num_cells_layout.addWidget(self.display)
+        num_cells_layout.addWidget(self.r0)
+        num_cells_layout.addWidget(self.r1)
+        num_cells_layout.addWidget(self.r2)
+        num_cells_layout.addWidget(self.r3)
+        num_cells_layout.addWidget(self.r4)
+        num_cells_layout.addWidget(self.r5)
+        num_cells_layout.addWidget(self.r6)
+        num_cells_layout.addWidget(self.r7)
+        num_cells_layout.addWidget(button)
 
-        if ok:
-            self.slide_display.genSlide(self, self.num_cells)
-            return True
-        else:
+
+        
+        return num_cells_layout
+
+    def genNewSlide(self):
+
+        self.num_cells = 0
+        
+        if self.r0.isChecked():
+            self.num_cells = 8
+        elif self.r1.isChecked():
+            self.num_cells = 16
+        elif self.r2.isChecked():
+            self.num_cells = 32
+        elif self.r3.isChecked():
+            self.num_cells = 64
+        elif self.r4.isChecked():
+            self.num_cells = 128
+        elif self.r5.isChecked():
+            self.num_cells = 256
+        elif self.r6.isChecked():
+            self.num_cells = 512
+        elif self.r7.isChecked():
+            self.num_cells = 1024
+        
+        if (self.num_cells == 0):
             return False
+
+        self.slide_display.genSlide(self, self.num_cells)
