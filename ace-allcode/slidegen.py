@@ -24,16 +24,7 @@ class SlideGen(Slide):
         self.trainer_ref = parent
         self.num_cells = 8
         
-    def initCells(self):
-        # init the layers
-        for i in range(0, SlideGen.MAX_COUNT-1):
-            cell = QtGui.QGraphicsPixmapItem()
-            rdepth = int(random.uniform(0.0, 33.0))/8.25
 
-            cell.setZValue(rdepth) #set random depth
-            cell.setVisible(False)
-            cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
-            self.scene.addItem(cell)
     
     def genSlide(self, parent, num_cells):
         self.num_cells = num_cells

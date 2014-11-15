@@ -9,24 +9,32 @@ from sprites import SpriteFactory, SpriteType, SpriteDepth
 import os.path
 #import sprites
 import math
-import time
 import pickle
 
 
 class Slide(QtGui.QWidget):
     VIEW_WIDTH,VIEW_HEIGHT = 540,540
     SPRITE_PATH = "./img/sprites/"
+
+    CELL_MIN_COUNT = 2
+    CELL_MAX_COUNT = 2048
     
-    scale_size = 20
+    CELL_SCALE_SIZE = 20
+    CELL_DEPTH_ALPHA = 0.2
+    CELL_DEPTH_BLUR_FACTOR = 3.3
+    
+    # these have global scope between classes.
     depth_alpha = 0.2
     depth_blur_amount = 3.3
     
+    #shared texture lib... need LoadTextureLib()
     texture_lib = None
     
     
     def __init__(self,parent):
         super(Slide, self).__init__(parent)
         
+        #create scene and view
         self.scene = QtGui.QGraphicsScene(  QtCore.QRectF(
                                                 0,0,
                                                 Slide.VIEW_WIDTH,
@@ -40,8 +48,10 @@ class Slide(QtGui.QWidget):
         self.view.setSizePolicy(    QtGui.QSizePolicy.MinimumExpanding,
                                     QtGui.QSizePolicy.MinimumExpanding)        
 
+        #build layout        
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.view)
+        
         self.setLayout(layout)
 
         #Load and set view background
@@ -54,13 +64,26 @@ class Slide(QtGui.QWidget):
         self.load_textures(self.SPRITE_PATH)
 
 
+    def initCells(self):
+        # init the layers
+        for i in range(self.CELL_MAX_COUNT):
+            
+            #create a new cell            
+            cell = QtGui.QGraphicsPixmapItem()
+            #rdepth = int(random.uniform(0.0, 33.0))/8.25
+
+            cell.setZValue(rdepth) #set random depth
+            cell.setVisible(False)
+            cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
+            self.scene.addItem(cell)
+
     def load_textures(self, sprite_path):
         #Load Sprites
         spritePath = os.path.normpath(sprite_path)
         self.sprites = SpriteFactory(os.path.join(os.path.curdir, spritePath))
         self.texture_lib = {}
 
-        scaledSize = QtCore.QSize(self.scale_size, self.scale_size)        
+        scaledSize = QtCore.QSize(self.CELL_SCALE_SIZE, self.CELL_SCALE_SIZE)
         
         #Load Textures
         for cellType in range(SpriteType.COUNT):
