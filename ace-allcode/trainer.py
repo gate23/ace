@@ -38,23 +38,21 @@ class Trainer(QtGui.QWidget):
         layout.addLayout(estimate_layout)
         
         self.setLayout(layout)
-
-        
         
     def initSlideLayout(self):
         self.slide_display = SlideGen(self)
-        self.slide_display.genSlide()
+        self.slide_display.genSlide(self, -1)
     
         zoom_layout = QtGui.QHBoxLayout()
-        zoom_text = QtGui.QLabel("Magnification: <Current Zoom>")
-        zoom_in_btn = QtGui.QPushButton("+")
-        zoom_out_btn = QtGui.QPushButton("-")
-        zoom_in_btn.setMaximumWidth(25)
-        zoom_out_btn.setMaximumWidth(25)
+        # zoom_text = QtGui.QLabel("Magnification: <Current Zoom>")
+        # zoom_in_btn = QtGui.QPushButton("+")
+        # zoom_out_btn = QtGui.QPushButton("-")
+        # zoom_in_btn.setMaximumWidth(25)
+        # zoom_out_btn.setMaximumWidth(25)
 
-        zoom_layout.addWidget(zoom_in_btn)
-        zoom_layout.addWidget(zoom_out_btn)
-        zoom_layout.addWidget(zoom_text)
+        # zoom_layout.addWidget(zoom_in_btn)
+        # zoom_layout.addWidget(zoom_out_btn)
+        # zoom_layout.addWidget(zoom_text)
 
         focus_text = QtGui.QLabel("Focus: ")
         self.focus_slider = QtGui.QSlider(QtCore.Qt.Horizontal)
@@ -108,8 +106,8 @@ class Trainer(QtGui.QWidget):
         button.connect( button, QtCore.SIGNAL("pressed()"),
                         self.submitEstimate)
         #allow Enter press to submit estimate
-        #self.estimate_entry.connect(
-        #        self.estimate_entry, QtCore.SIGNAL("returnPressed()"),
+        #button.connect(
+        #        button, QtCore.SIGNAL("returnPressed()"),
         #        button, QtCore.SIGNAL("pressed()")  )
         
         #estimate_display: shows list of previous estimates
@@ -200,7 +198,7 @@ class Trainer(QtGui.QWidget):
         #update display            
         self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" + str(self.num_slides))
         if (not self.current_session.isComplete() ):
-            self.slide_display.genSlide()
+            self.slide_display.genSlide(self, -1)
             self.estimate_number += 1
                        
         else:
@@ -245,7 +243,7 @@ class Trainer(QtGui.QWidget):
 
             self.estimate_display.append("Beginning new session...")
 
-            self.slide_display.genSlide()
+            self.slide_display.genSlide(self, -1)
             
             self.current_session = Session(self.num_slides)
             return True

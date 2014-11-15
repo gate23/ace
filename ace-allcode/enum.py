@@ -3,6 +3,7 @@ class ModeEnum():
     TRAINER = 1
     STATS = 2
     EDITOR = 3
+    GENERATOR = 4
     
 class FileEnum():
     SESSION_COUNT = 0

@@ -11,6 +11,7 @@ from trainer import Trainer
 from stats import Statistics
 from editor import Editor
 from enum import ModeEnum
+from generator import Generator
 
 class MainWindow(QtGui.QMainWindow):
     
@@ -18,7 +19,7 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__()        
         
         self.setWindowTitle("Algae Count Estimator")
-        self.setMinimumSize(800,630)
+        self.setMinimumSize(640,500)
         
         self.initPages()
         self.initMenuBar()       
@@ -38,13 +39,13 @@ class MainWindow(QtGui.QMainWindow):
         
         self.mode_stack.addWidget(self.trainer)
         self.mode_stack.addWidget(self.stats)
-
-        
         
         self.editor = Editor(self)
         self.editor.toolbar.toggleViewAction().trigger()
         self.mode_stack.addWidget(self.editor)
-     
+
+        self.generator = Generator(self)
+        self.mode_stack.addWidget(self.generator)
         
         self.setCentralWidget(self.mode_stack)
                 
@@ -78,12 +79,16 @@ class MainWindow(QtGui.QMainWindow):
         #If switching to Editor, show the toolbar
         if page_num == ModeEnum.EDITOR:
             self.editor.toolbar.toggleViewAction().trigger()
+
         elif page_num == ModeEnum.STATS:
             self.stats.updateStatsUI()   
         elif page_num == ModeEnum.TRAINER:
             if (not self.trainer.has_active_session):
                 if (not self.trainer.startNewSession()):
                     return #Don't switch to trainer
+        elif page_num == ModeEnum.GENERATOR:
+            if (not self.generator.genNewSlide()):
+                return #Don't switch to generator
 
         self.mode_stack.setCurrentIndex(page_num)
         

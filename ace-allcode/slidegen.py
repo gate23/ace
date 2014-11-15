@@ -22,6 +22,7 @@ class SlideGen(Slide):
         super(SlideGen, self).__init__(parent)
         self.initCells()
         self.trainer_ref = parent
+        self.num_cells = 8
         
     def initCells(self):
         # init the layers
@@ -34,11 +35,15 @@ class SlideGen(Slide):
             cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
             self.scene.addItem(cell)
     
-    def genSlide(self):
-        rangenum = randint(3,10)
-        low = 2**rangenum
-        high = (2**(rangenum+1)) - 1
-        this_count = int(triangular(low, high))
+    def genSlide(self, parent, num_cells):
+        self.num_cells = num_cells
+        if(self.num_cells < 2048 and self.num_cells > 0):
+            this_count = self.num_cells
+        else:
+            rangenum = randint(3,10)
+            low = 2**rangenum
+            high = (2**(rangenum+1)) - 1
+            this_count = int(triangular(low, high))
         cell_list = self.scene.items()
         shuffle(cell_list)
         pos_or_neg = [1,-1]

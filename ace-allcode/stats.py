@@ -59,9 +59,9 @@ class HistogramView(QListView):
         painter.setBrush(Qt.red)
         if (max_in_list != 0):
             for i in range(15):
-                if i == 5:
+                if i == 6:
                     painter.setBrush(Qt.blue)
-                if i == 10:
+                if i == 9:
                     painter.setBrush(Qt.red)
                 height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
                 painter.drawRect(QRect(pos,y0 - height,width,height))

@@ -30,8 +30,9 @@ class MainMenu(QtGui.QWidget):
         
         #Create selection buttons
         trainer_button = TitleButton("Estimation Trainer")
-        editor_button = TitleButton("Slide Editor")
+        #editor_button = TitleButton("Slide Editor")
         stats_button = TitleButton("Estimation Statistics")
+        generator_button = TitleButton("Slide Generator")
         
         #Set connections for the buttons
         trainer_button.connect(
@@ -46,17 +47,24 @@ class MainMenu(QtGui.QWidget):
                 (lambda: self.win_ref.changeMode(ModeEnum.STATS))
         )
         
-        editor_button.connect(
-                editor_button,
+        # editor_button.connect(
+        #         editor_button,
+        #         QtCore.SIGNAL("pressed()"),
+        #         (lambda: self.win_ref.changeMode(ModeEnum.EDITOR))
+        # )
+
+        generator_button.connect(
+                generator_button,
                 QtCore.SIGNAL("pressed()"),
-                (lambda: self.win_ref.changeMode(ModeEnum.EDITOR))
+                (lambda: self.win_ref.changeMode(ModeEnum.GENERATOR))
         )
         
         #Add title and buttons to the page layout
         layout.addWidget(title)
         layout.addWidget(trainer_button)
         layout.addWidget(stats_button)
-        layout.addWidget(editor_button)
+        #layout.addWidget(editor_button)
+        layout.addWidget(generator_button)
         
         self.setLayout(layout)
 
