@@ -12,31 +12,28 @@ import math
 import PyQt4
 
 class SlideGen(Slide):
-    MIN_COUNT = 2
-    MAX_COUNT = 2048
-    current_focus = 2.4
+    
+    #used for focus control
     factor = 0.2
-    #sprite_list = [SpriteType.APHANOTHECE_OUTLINE, SpriteType.APHANOTHECE_OUTLINE2, SpriteType.APHANOTHECE_OUTLINE3]
     
     def __init__(self, parent):
         super(SlideGen, self).__init__(parent)
-        self.initCells()
         self.trainer_ref = parent
-        self.num_cells = 8
-        
-
     
     def genSlide(self, parent, num_cells):
-        self.num_cells = num_cells
-        if(self.num_cells < 2048 and self.num_cells > 0):
-            this_count = self.num_cells
+        #num_cells = 2000
+        
+        if(num_cells < self.CELL_MAX_COUNT and num_cells >= self.CELL_MIN_COUNT):
+            this_count = num_cells
         else:
             rangenum = randint(3,10)
             low = 2**rangenum
             high = (2**(rangenum+1)) - 1
             this_count = int(triangular(low, high))
+
+        #get cell list        
         cell_list = self.scene.items()
-        shuffle(cell_list)
+
         pos_or_neg = [1,-1]
         try_again = []
 
@@ -44,10 +41,33 @@ class SlideGen(Slide):
             max_blobs = this_count
         else:
             max_blobs = 20
+
         num_blobs = int(triangular(1, max_blobs))
         shape_ends = sample(range(1, this_count-1), num_blobs-1)
         
-        for i in range (0, this_count):
+        for i in range (this_count):
+            #update cell depth and type
+            #depth = 2 + (random.randint(-16, 16)*0.1875) #range -2 to 5
+            depth = 2 + (random.randint(-16, 16)*0.125) #range -1 to 4
+            
+            
+            #choose sprite type
+            sprite_type = random.choice(SpriteType.APHANOTHECE_RENDER1)
+            
+            #choose random rotation
+            deg_rotation = uniform(0.0,359.9)
+
+            texture, rotation, blur = self.get_texture(
+                sprite_type, depth, deg_rotation)
+            
+            #set vals
+            cell_list[i].setZValue(depth)
+            cell_list[i].setPixmap(texture)
+            cell_list[i].setRotation(rotation)
+            cell_list[i].setVisible(True)
+            cell_list[i].sprite_rotation = deg_rotation
+            cell_list[i].sprite_code = sprite_type
+            
             #chooses the center point of the blob
             if ((i == 0) or (i in shape_ends)):
                 if (i != 0):
@@ -57,12 +77,17 @@ class SlideGen(Slide):
                     size = next - i
                 else:
                     size = this_count - i
-                x_offset = uniform(5.0, SlideGen.VIEW_WIDTH - 5) 
-                y_offset = uniform(5.0, SlideGen.VIEW_HEIGHT - 5)
+                
+                x_offset = uniform(self.SLIDE_PADDING, SlideGen.VIEW_WIDTH - self.SLIDE_PADDING) 
+                y_offset = uniform(self.SLIDE_PADDING, SlideGen.VIEW_HEIGHT - self.SLIDE_PADDING)
+
                 opt_r = sqrt(200 * size / pi)
                 max_r = SlideGen.VIEW_HEIGHT/2
                 R = triangular(opt_r, max_r, (opt_r + max_r) / 3)
-                cell_list[i].setPos( x_offset, y_offset)
+
+                #set position                
+                #cell_list[i].setPos( x_offset, y_offset)
+                self.updatePos(cell_list[i], x_offset, y_offset)
 
             #plot point around the center
             else:
@@ -73,77 +98,34 @@ class SlideGen(Slide):
                 y = y * select[0]
                 new_x = x_offset + x
                 new_y = y_offset + y
+                
                 #check if cell is to be placed on screen
-                if ((new_x > 5) and (new_x < SlideGen.VIEW_WIDTH - 5) and (new_y > 5) and (new_y < SlideGen.VIEW_HEIGHT - 5)):
-                    cell_list[i].setPos(new_x,new_y)
+                if ((new_x > self.SLIDE_PADDING) and (new_x < SlideGen.VIEW_WIDTH - self.SLIDE_PADDING) and (new_y > self.SLIDE_PADDING) and (new_y < SlideGen.VIEW_HEIGHT - self.SLIDE_PADDING)):
+                    #set position                    
+                    #cell_list[i].setPos(new_x,new_y)
+                    self.updatePos(cell_list[i], new_x, new_y)
                 else:
                     try_again.append(i)
-
-            if i not in try_again:
-                deg_rotation = uniform(0.0,359.9)
-                depth = cell_list[i].zValue()
-                #set sprite type
-                sprite_type = random.choice(SpriteType.APHANOTHECE_RENDER1)
-                
-                texture, rotation, blur = self.get_texture(
-                    sprite_type, depth, deg_rotation)
-
-                cell_list[i].setPixmap(texture)
-                cell_list[i].setRotation(rotation)
-                cell_list[i].setVisible(True)
-                cell_list[i].sprite_rotation = deg_rotation
-                cell_list[i].sprite_code = sprite_type
             
         for val in try_again:
-            x_offset = uniform(5.0, SlideGen.VIEW_WIDTH - 5) 
-            y_offset = uniform(5.0, SlideGen.VIEW_HEIGHT - 5)
-            cell_list[val].setPos(x_offset, y_offset)
-            deg_rotation = uniform(0.0,359.9)
-            depth = cell_list[val].zValue()
-            #set sprite type
-            sprite_type = random.choice(SpriteType.APHANOTHECE_RENDER1)
-            
-            texture, rotation, blur = self.get_texture(
-                sprite_type, depth, deg_rotation)
+            x_offset = uniform(self.SLIDE_PADDING, SlideGen.VIEW_WIDTH - self.SLIDE_PADDING) 
+            y_offset = uniform(self.SLIDE_PADDING, SlideGen.VIEW_HEIGHT - self.SLIDE_PADDING)
 
-            cell_list[val].setPixmap(texture)
-            cell_list[val].setRotation(rotation)
-            cell_list[val].setVisible(True)
-            cell_list[val].sprite_rotation = deg_rotation
-            cell_list[val].sprite_code = sprite_type
+            #set position            
+            #cell_list[val].setPos(x_offset, y_offset)
+            self.updatePos(cell_list[val], x_offset, y_offset)
         
         #hide the rest
-        for i in range (this_count, SlideGen.MAX_COUNT-1):
+        for i in range (this_count, self.CELL_MAX_COUNT):
             cell_list[i].setVisible(False)
             cell_list[i].setGraphicsEffect(None)
-
-
-
             
         self.cell_count = this_count
         self.updateSlide()
-        
-    def updateSlide(self):
-        cell_list = self.scene.items()
-        
-        for i in range (0, SlideGen.MAX_COUNT-1):
-            cell = cell_list[i]
 
-            if cell.isVisible():
-                depth = cell.zValue()
-                blur, sprite_depth = self.get_blur(depth, self.current_focus)
-                
-                cell_list[i].setGraphicsEffect(None)
-                
-                if blur > 12:
-                    blur = 12.0
-
-                if blur > 1.5:                        
-                    effect = PyQt4.QtGui.QGraphicsBlurEffect()
-                    effect.setBlurRadius(blur)
-                    cell_list[i].setGraphicsEffect(effect)
-                
-                cell_list[i].update()
+    def updatePos(self, cell, x, y):
+        cell.setPos(x - (self.CELL_SCALE_SIZE / 2), y - (self.CELL_SCALE_SIZE / 2))
+        
         
     def count(self):
         return self.cell_count

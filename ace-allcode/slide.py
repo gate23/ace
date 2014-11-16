@@ -20,19 +20,18 @@ class Slide(QtGui.QWidget):
     CELL_MAX_COUNT = 2048
     
     CELL_SCALE_SIZE = 20
+    SLIDE_PADDING = CELL_SCALE_SIZE / 2
     CELL_DEPTH_ALPHA = 0.2
     CELL_DEPTH_BLUR_FACTOR = 3.3
-    
-    # these have global scope between classes.
-    depth_alpha = 0.2
-    depth_blur_amount = 3.3
     
     #shared texture lib... need LoadTextureLib()
     texture_lib = None
     
-    
     def __init__(self,parent):
         super(Slide, self).__init__(parent)
+        
+        #setup current focus
+        self.current_focus = 2.4
         
         #create scene and view
         self.scene = QtGui.QGraphicsScene(  QtCore.QRectF(
@@ -40,7 +39,6 @@ class Slide(QtGui.QWidget):
                                                 Slide.VIEW_WIDTH,
                                                 Slide.VIEW_HEIGHT),
                                                 self)
-        
 
         self.view = QtGui.QGraphicsView(self.scene)
         self.view.setParent(self)
@@ -60,24 +58,51 @@ class Slide(QtGui.QWidget):
         background = QtGui.QBrush(self.bg_texture)
         self.scene.setBackgroundBrush(background)
         
+        #init empty cells         
+        self.initCells()
+        
         #load textures
         self.load_textures(self.SPRITE_PATH)
-
-
+        
     def initCells(self):
         # init the layers
         for i in range(self.CELL_MAX_COUNT):
-            
             #create a new cell            
             cell = QtGui.QGraphicsPixmapItem()
-            #rdepth = int(random.uniform(0.0, 33.0))/8.25
-
-            cell.setZValue(rdepth) #set random depth
             cell.setVisible(False)
             cell.setTransformationMode(QtCore.Qt.SmoothTransformation)
             self.scene.addItem(cell)
 
+    def updateSlide(self):
+        cell_list = self.scene.items()
+        
+        for i in range (self.CELL_MAX_COUNT):
+            cell = cell_list[i]
+
+            if cell.isVisible():
+                depth = cell.zValue()
+                blur, sprite_depth = self.get_blur(depth, self.current_focus)
+                
+                #remove effect
+                cell_list[i].setGraphicsEffect(None)
+                
+                if blur > 12:
+                    blur = 12.0
+
+                if blur > 1.5:                        
+                    effect = QtGui.QGraphicsBlurEffect()
+                    effect.setBlurRadius(blur)
+                    cell_list[i].setGraphicsEffect(effect)
+                
+                cell_list[i].update()    
+    
+    
+    
     def load_textures(self, sprite_path):
+        if(self.texture_lib):
+            print "already loaded"
+            return;        
+        
         #Load Sprites
         spritePath = os.path.normpath(sprite_path)
         self.sprites = SpriteFactory(os.path.join(os.path.curdir, spritePath))
@@ -126,17 +151,18 @@ class Slide(QtGui.QWidget):
                 texture = value
         
         return texture, diff, blur
+        
     def get_blur(self, depth, current_focus):
         amount = (current_focus - depth)
         sprite_depth = 2 #sets middle
 
-        if abs(amount) > self.depth_alpha:        
+        if abs(amount) > self.CELL_DEPTH_ALPHA:        
             if amount < 0:
                 sprite_depth = 3
             else:
                 sprite_depth = 1
 
-        return abs(current_focus - depth) * self.depth_blur_amount, sprite_depth
+        return abs(current_focus - depth) * self.CELL_DEPTH_BLUR_FACTOR, sprite_depth
         
     def save_image(self, filename, width, height):
         #outputimg = QtGui.QPixmap(width, height)
