@@ -20,7 +20,7 @@ class Slide(QtGui.QWidget):
     CELL_MAX_COUNT = 2048
     
     CELL_SCALE_SIZE = 20
-    SLIDE_PADDING = CELL_SCALE_SIZE / 2
+    SLIDE_PADDING = CELL_SCALE_SIZE / 3
     CELL_DEPTH_ALPHA = 0.2
     CELL_DEPTH_BLUR_FACTOR = 3.3
     
@@ -32,17 +32,20 @@ class Slide(QtGui.QWidget):
         
         #setup current focus
         self.current_focus = 2.4
+
+        #widget size        
+        self.setMinimumSize(self.VIEW_WIDTH, self.VIEW_HEIGHT)
         
         #create scene and view
         self.scene = QtGui.QGraphicsScene(  QtCore.QRectF(
                                                 0,0,
-                                                Slide.VIEW_WIDTH,
-                                                Slide.VIEW_HEIGHT),
+                                                self.VIEW_WIDTH,
+                                                self.VIEW_HEIGHT),
                                                 self)
 
         self.view = QtGui.QGraphicsView(self.scene)
         self.view.setParent(self)
-        self.view.setMinimumSize(QtCore.QSize(Slide.VIEW_WIDTH, Slide.VIEW_HEIGHT))
+        self.view.setMinimumSize(QtCore.QSize(self.VIEW_WIDTH, self.VIEW_HEIGHT))
         self.view.setSizePolicy(    QtGui.QSizePolicy.MinimumExpanding,
                                     QtGui.QSizePolicy.MinimumExpanding)        
 
@@ -99,9 +102,7 @@ class Slide(QtGui.QWidget):
     
     
     def load_textures(self, sprite_path):
-        if(self.texture_lib):
-            print "already loaded"
-            return;        
+        #print "loading textures "+ str(self.texture_lib) + " " + str(sprite_path)
         
         #Load Sprites
         spritePath = os.path.normpath(sprite_path)

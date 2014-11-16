@@ -20,7 +20,7 @@ class SlideGen(Slide):
         super(SlideGen, self).__init__(parent)
         self.trainer_ref = parent
     
-    def genSlide(self, parent, num_cells):
+    def genSlide(self, num_cells = 0):
         #num_cells = 2000
         
         if(num_cells < self.CELL_MAX_COUNT and num_cells >= self.CELL_MIN_COUNT):
@@ -143,6 +143,7 @@ class SlideGen(Slide):
         
     def mousePressEvent(self, event):
         self.save_slide()
+        self.trainer_ref
 
     #this is called when the slider is moved - value between 0 and 100
     def sliderFocus(self,value):

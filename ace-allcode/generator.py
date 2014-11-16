@@ -35,8 +35,7 @@ class Generator(QtGui.QWidget):
         
     def initSlideLayout(self):
         self.slide_display = SlideGen(self)
-        self.slide_display.genSlide(self, -1)
-        self.slide_display.setMinimumSize(540,540)
+        self.slide_display.genSlide()
 
         zoom_layout = QtGui.QHBoxLayout()
 
@@ -137,4 +136,4 @@ class Generator(QtGui.QWidget):
         if (self.num_cells == 0):
             return False
 
-        self.slide_display.genSlide(self, self.num_cells)
+        self.slide_display.genSlide(self.num_cells)

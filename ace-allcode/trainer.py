@@ -41,7 +41,7 @@ class Trainer(QtGui.QWidget):
         
     def initSlideLayout(self):
         self.slide_display = SlideGen(self)
-        self.slide_display.genSlide(self, -1)
+        self.slide_display.genSlide()
     
         zoom_layout = QtGui.QHBoxLayout()
         # zoom_text = QtGui.QLabel("Magnification: <Current Zoom>")
@@ -198,7 +198,7 @@ class Trainer(QtGui.QWidget):
         #update display            
         self.estimate_label.setText("Slide " +  str(self.estimate_number) + "/" + str(self.num_slides))
         if (not self.current_session.isComplete() ):
-            self.slide_display.genSlide(self, -1)
+            self.slide_display.genSlide()
             self.estimate_number += 1
                        
         else:
@@ -243,7 +243,7 @@ class Trainer(QtGui.QWidget):
 
             self.estimate_display.append("Beginning new session...")
 
-            self.slide_display.genSlide(self, -1)
+            self.slide_display.genSlide()
             
             self.current_session = Session(self.num_slides)
             return True
