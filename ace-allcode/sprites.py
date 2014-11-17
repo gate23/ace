@@ -47,10 +47,10 @@ class SpriteFactory:
                 else:
                     self.sprite_paths[dirname] = Set([int(rotation)])
  
-    """ 
-    Get the sprite with the closest rotation and return the amount require to rotate
-    """                
+               
     def get_sprite(self, code, depth, rotation):
+        """Gets the sprite with the closest rotation and return the amount 
+        require to rotate""" 
         dirname = os.path.join(self.directory,"t"+str(code),"d"+str(depth))
         filename = None
         diff = 360

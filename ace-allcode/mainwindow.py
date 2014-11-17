@@ -7,7 +7,8 @@ is responsible for switching between them.
 """
 from PyQt4 import QtCore, QtGui
 from mainmenu import MainMenu
-from trainer import Trainer
+#from trainer import Trainer
+from trainer_new import Trainer
 from stats import Statistics
 from editor import Editor
 from enum import ModeEnum
@@ -19,7 +20,7 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__()        
         
         self.setWindowTitle("Algae Count Estimator")
-        self.setMinimumSize(640,500)
+        self.setMinimumSize(800,600)
         
         self.initPages()
         self.initMenuBar()       
@@ -31,19 +32,24 @@ class MainWindow(QtGui.QMainWindow):
     def initPages(self):
         self.mode_stack = QtGui.QStackedWidget()
         
+        #0
         main_menu = MainMenu(self)
         self.mode_stack.addWidget(main_menu)
-           
-        self.stats = Statistics(self)
-        self.trainer = Trainer(self,self.stats)
         
-        self.mode_stack.addWidget(self.trainer)
+        #1
+        self.stats = Statistics(self)        
         self.mode_stack.addWidget(self.stats)
+           
+        #2
+        self.trainer = Trainer(self,self.stats)
+        self.mode_stack.addWidget(self.trainer)
         
+        #3
         self.editor = Editor(self)
         self.editor.toolbar.toggleViewAction().trigger()
         self.mode_stack.addWidget(self.editor)
 
+        #4
         self.generator = Generator(self)
         self.mode_stack.addWidget(self.generator)
         

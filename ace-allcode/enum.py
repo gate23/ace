@@ -1,7 +1,7 @@
 class ModeEnum():
     MENU = 0
-    TRAINER = 1
-    STATS = 2
+    STATS = 1
+    TRAINER = 2
     EDITOR = 3
     GENERATOR = 4
     
