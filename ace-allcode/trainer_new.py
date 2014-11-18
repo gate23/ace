@@ -24,11 +24,10 @@ class Trainer(QtGui.QWidget):
     
     def __init__(self, parent, stats):
         super(Trainer,self).__init__(parent)
-        
+        self.parent = parent
         self.estimate_number = 1
         self.max_session_length = 100
         self.has_active_session = False
-        self.parent = parent
         self.stats_ref = stats #stats instance
 
         self.slide_gen = SlideGen(self, 2, 2048)
@@ -57,15 +56,14 @@ class Trainer(QtGui.QWidget):
                                                     self) #trainer is parent
                                           
         #build the view
-        self.view = QtGui.QGraphicsView(self.slide_scene)
-        self.view.setParent(self)
-#        self.view.setFixedSize(QtCore.QSize(self.SLIDE_WIDTH+2, self.SLIDE_HEIGHT+2))
+        self.view = QtGui.QGraphicsView(self.slide_scene,
+                                        self) #trainer is parent
 
         self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         
-        self.view.setSizePolicy(    QtGui.QSizePolicy.Fixed,
-                                    QtGui.QSizePolicy.Fixed)        
+        self.view.setSizePolicy(QtGui.QSizePolicy.Fixed,
+                                QtGui.QSizePolicy.Fixed)        
                                     
         
         #use open gl (need to test under windows)
@@ -85,9 +83,8 @@ class Trainer(QtGui.QWidget):
         #Controls
         focus_text = QtGui.QLabel("Focus: ")
         self.focus_slider = QtGui.QSlider(QtCore.Qt.Horizontal)
-
-#        self.focus_slider.setSliderPosition((self.slide_display.current_focus+1)*15)
-
+        self.focus_slider.setSliderPosition((self.slide_scene.current_focus+1)*15)
+        
         focus_plus_btn = QtGui.QPushButton("+")
         focus_minus_btn = QtGui.QPushButton("-")
         focus_plus_btn.setMaximumWidth(25)
@@ -100,7 +97,6 @@ class Trainer(QtGui.QWidget):
                         self.focusDown)
         
         self.focus_slider.sliderMoved.connect(self.sliderFocus)
-        self.focus_slider.update
 
         #add controls
         focus_layout.addWidget(focus_text)
@@ -149,7 +145,7 @@ class Trainer(QtGui.QWidget):
         
         #estimate_display: shows list of previous estimates
         self.estimate_display = QtGui.QTextEdit()
-        self.estimate_display.setReadOnly(1)
+        self.estimate_display.setReadOnly(True)
 
         #guess_label: shows which number guess user is making
         self.estimate_label = QtGui.QLabel("Slide " +  str(self.estimate_number) + "/10")      

@@ -12,7 +12,7 @@ from trainer_new import Trainer
 from stats import Statistics
 from editor import Editor
 from enum import ModeEnum
-from generator import Generator
+from generator_new import Generator
 
 class MainWindow(QtGui.QMainWindow):
     
@@ -20,7 +20,12 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__()        
         
         self.setWindowTitle("Algae Count Estimator")
-        self.setMinimumSize(800,600)
+        
+        self.setSizePolicy(QtGui.QSizePolicy.Fixed,
+                           QtGui.QSizePolicy.Fixed)
+        
+        self.setFixedSize(QtCore.QSize(800,600))
+#        self.setMinimumSize(800,600)
         
         self.initPages()
         self.initMenuBar()       
@@ -31,26 +36,15 @@ class MainWindow(QtGui.QMainWindow):
     #populates the stacked widget with instances of the modes
     def initPages(self):
         self.mode_stack = QtGui.QStackedWidget()
-        
-        #0
-        main_menu = MainMenu(self)
-        self.mode_stack.addWidget(main_menu)
-        
-        #1
-        self.stats = Statistics(self)        
-        self.mode_stack.addWidget(self.stats)
-           
-        #2
-        self.trainer = Trainer(self,self.stats)
-        self.mode_stack.addWidget(self.trainer)
-        
-        #3
-        self.editor = Editor(self)
-        self.editor.toolbar.toggleViewAction().trigger()
-        self.mode_stack.addWidget(self.editor)
 
-        #4
-        self.generator = Generator(self)
+        main_menu = MainMenu(self) #0
+        self.stats = Statistics(self) #1
+        self.trainer = Trainer(self,self.stats) #2
+        self.generator = Generator(self) #3
+        
+        self.mode_stack.addWidget(main_menu)
+        self.mode_stack.addWidget(self.stats)
+        self.mode_stack.addWidget(self.trainer)
         self.mode_stack.addWidget(self.generator)
         
         self.setCentralWidget(self.mode_stack)
@@ -78,20 +72,15 @@ class MainWindow(QtGui.QMainWindow):
         
         
     def changeMode(self, page_num):
-        #Editor Mode uses a toolbar that must be owned by MainWindow
-        #If switching away from editor, hide the toolbar
-        if self.mode_stack.currentIndex() == ModeEnum.EDITOR:
-            self.editor.toolbar.toggleViewAction().trigger()
-        #If switching to Editor, show the toolbar
-        if page_num == ModeEnum.EDITOR:
-            self.editor.toolbar.toggleViewAction().trigger()
-
+        if   page_num == ModeEnum.GENERATOR:
+            pass
+        
         elif page_num == ModeEnum.STATS:
-            self.stats.updateStatsUI()   
+            self.stats.updateStatsUI()
+
         elif page_num == ModeEnum.TRAINER:
             if (not self.trainer.has_active_session):
-                if (not self.trainer.startNewSession()):
-                    return #Don't switch to trainer
+                self.trainer.startNewSession()
 
         self.mode_stack.setCurrentIndex(page_num)
         

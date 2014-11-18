@@ -8,9 +8,9 @@ from PyQt4 import QtCore, QtGui
 from enum import ModeEnum
 
 class MainMenu(QtGui.QWidget):
-    
     def __init__(self, parent):
         super(MainMenu, self).__init__(parent)
+
         self.win_ref = parent
         self.initUI()
         
@@ -30,7 +30,6 @@ class MainMenu(QtGui.QWidget):
         
         #Create selection buttons
         trainer_button = TitleButton("Estimation Trainer")
-        #editor_button = TitleButton("Slide Editor")
         stats_button = TitleButton("Estimation Statistics")
         generator_button = TitleButton("Slide Generator")
         
@@ -47,12 +46,6 @@ class MainMenu(QtGui.QWidget):
                 (lambda: self.win_ref.changeMode(ModeEnum.STATS))
         )
         
-        # editor_button.connect(
-        #         editor_button,
-        #         QtCore.SIGNAL("pressed()"),
-        #         (lambda: self.win_ref.changeMode(ModeEnum.EDITOR))
-        # )
-
         generator_button.connect(
                 generator_button,
                 QtCore.SIGNAL("pressed()"),
@@ -63,7 +56,6 @@ class MainMenu(QtGui.QWidget):
         layout.addWidget(title)
         layout.addWidget(trainer_button)
         layout.addWidget(stats_button)
-        #layout.addWidget(editor_button)
         layout.addWidget(generator_button)
         
         self.setLayout(layout)

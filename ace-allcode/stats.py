@@ -252,7 +252,3 @@ class Statistics(QtGui.QWidget):
         else:
             #TODO: this should never happen, but if it does actually raise an err
             print "session nonexistent"
-
-
-
-    
