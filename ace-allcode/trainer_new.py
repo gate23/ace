@@ -59,7 +59,7 @@ class Trainer(QtGui.QWidget):
         #build the view
         self.view = QtGui.QGraphicsView(self.slide_scene)
         self.view.setParent(self)
-        self.view.setFixedSize(QtCore.QSize(self.SLIDE_WIDTH+2, self.SLIDE_HEIGHT+2))
+#        self.view.setFixedSize(QtCore.QSize(self.SLIDE_WIDTH+2, self.SLIDE_HEIGHT+2))
 
         self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
