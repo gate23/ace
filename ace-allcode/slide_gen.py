@@ -9,7 +9,7 @@ class SlideGen(QtGui.QWidget):
         self.cell_min_count = cellMin
         self.cell_max_count = cellMax
 
-    
+    #TODO: make type a parameter
     def genSlide(self, slide_scene, num_cells = 0):
         slide_width = slide_scene.width()        
         slide_height = slide_scene.height()

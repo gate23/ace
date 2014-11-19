@@ -210,7 +210,6 @@ class SlideScene(QtGui.QGraphicsScene):
     def changeFocus(self, delta):
         """Changes focus setting and calls update can be called when scrolling or clicking the buttons """
         check = self.current_focus + (delta * self.SLIDE_FOCUS_STEP)
-        if(check > -1 and check < 6):
+        if(check > -1.2 and check < 5.8):
             self.current_focus = check
-            self.parent.focus_slider.setSliderPosition((self.current_focus+1)*15)
-            self.updateSlide()
+            self.parent.focus_slider.setSliderPosition(math.ceil((check+1.0)*15))

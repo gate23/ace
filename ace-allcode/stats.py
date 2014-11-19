@@ -196,12 +196,13 @@ class Statistics(QtGui.QWidget):
         
     def updateStatsUI(self):
         if self.session_count>0:
-            avg_error = self.error_sum/(self.session_count*10)
+            
+            avg_error = self.error_sum/self.total_estimates
         else:
             avg_error = 0.0
         
         self.label_estimate.setText("Total estimates: " +
-                                    (str(self.session_count*10)))
+                                    (str(self.total_estimates)))
         err_str = str(avg_error)
         self.label_sum.setText("Lifetime Average Absolute Log Error: " +
                                 (err_str))

@@ -66,7 +66,7 @@ class Generator(QtGui.QWidget):
         focus_minus_btn.connect(focus_minus_btn, QtCore.SIGNAL("pressed()"),
                         self.focusDown)
         
-        self.focus_slider.sliderMoved.connect(self.sliderFocus)
+        self.focus_slider.valueChanged.connect(self.sliderFocus)
 
         #add controls
         focus_layout.addWidget(focus_text)
@@ -158,4 +158,5 @@ class Generator(QtGui.QWidget):
         
     def sliderFocus(self,value):
         """Called when the slider is moved - value between 0 and 100"""
-        self.slide_scene.setFocus((((value+3)/3) * self.slide_scene.SLIDE_FOCUS_STEP) - 1)
+#        print "Slider val="+str(value)
+        self.slide_scene.setFocus(((value/3) * self.slide_scene.SLIDE_FOCUS_STEP) - 1)
