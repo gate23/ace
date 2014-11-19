@@ -7,11 +7,10 @@ is responsible for switching between them.
 """
 from PyQt4 import QtCore, QtGui
 from mainmenu import MainMenu
-#from trainer import Trainer
-from trainer_new import Trainer
+from trainer import Trainer
 from stats import Statistics
+from generator import Generator
 from enum import ModeEnum
-from generator_new import Generator
 
 class MainWindow(QtGui.QMainWindow):
     
