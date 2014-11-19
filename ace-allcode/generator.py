@@ -5,9 +5,11 @@ Generator is the class representing the slide generator
 It provides a view of the slides being generated as well as a 
 way to save a slide
 """
+
 from PyQt4 import QtGui, QtCore
 from slide_gen import SlideGen
 from slide_scene import SlideScene
+from random import triangular
 
 class Generator(QtGui.QWidget):
     SLIDE_WIDTH,SLIDE_HEIGHT = 540,540
@@ -103,17 +105,12 @@ class Generator(QtGui.QWidget):
         button = QtGui.QPushButton("Generate New Slide")
         button.connect( button, QtCore.SIGNAL("pressed()"),
                         self.genNewSlide)
-        #allow Enter press to submit estimate
-        #button.connect(
-        #        button, QtCore.SIGNAL("returnPressed()"),
-        #        button, QtCore.SIGNAL("pressed()")  )
         
-        #estimate_display: shows list of previous estimates
-        self.display = QtGui.QTextEdit()
-        self.display.setReadOnly(True)
+        self.exact_display = QtGui.QTextEdit('Exact Count: ' + str(0))
+        self.exact_display.setReadOnly(True)
         
         num_cells_layout = QtGui.QVBoxLayout()
-        num_cells_layout.addWidget(self.display)
+        num_cells_layout.addWidget(self.exact_display)
         num_cells_layout.addWidget(self.r0)
         num_cells_layout.addWidget(self.r1)
         num_cells_layout.addWidget(self.r2)
@@ -131,26 +128,27 @@ class Generator(QtGui.QWidget):
         self.num_cells = 0
         
         if self.r0.isChecked():
-            self.num_cells = 8
+            self.num_cells = int(triangular(8,15))
         elif self.r1.isChecked():
-            self.num_cells = 16
+            self.num_cells = int(triangular(16,31))
         elif self.r2.isChecked():
-            self.num_cells = 32
+            self.num_cells = int(triangular(32,63))
         elif self.r3.isChecked():
-            self.num_cells = 64
+            self.num_cells = int(triangular(64,127))
         elif self.r4.isChecked():
-            self.num_cells = 128
+            self.num_cells = int(triangular(128,255))
         elif self.r5.isChecked():
-            self.num_cells = 256
+            self.num_cells = int(triangular(256,511))
         elif self.r6.isChecked():
-            self.num_cells = 512
+            self.num_cells = int(triangular(512,1023))
         elif self.r7.isChecked():
-            self.num_cells = 1024
+            self.num_cells = int(triangular(1024,2047))
         
         if (self.num_cells == 0):
             return False
 
         self.slide_gen.genSlide(self.slide_scene, self.num_cells)
+        self.exact_display.append('Exact Count: ' + str(self.num_cells))
 
     def focusDown(self):
         self.slide_scene.changeFocus(-1)

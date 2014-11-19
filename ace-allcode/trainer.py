@@ -13,7 +13,7 @@ from slide_gen import SlideGen
 from slide_scene import SlideScene
 from enum import ModeEnum
 from session import Session,Estimate
-from math import log
+from math import log, fabs
 import time
 import os.path
 
@@ -218,7 +218,7 @@ class Trainer(QtGui.QWidget):
         self.current_session.addEstimate(this_estimate)
 
         
-        self.current_session.error_sum += log_error
+        self.current_session.error_sum += fabs(log_error)
         self.current_session.total_estimates += 1
         bias = 7
         self.current_session.log_err_list[log_error+bias] += 1
