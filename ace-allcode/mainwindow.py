@@ -23,7 +23,6 @@ class MainWindow(QtGui.QMainWindow):
                            QtGui.QSizePolicy.Fixed)
         
         self.setFixedSize(QtCore.QSize(800,620))
-#        self.setMinimumSize(800,600)
         
         self.initPages()
         self.initMenuBar()       
