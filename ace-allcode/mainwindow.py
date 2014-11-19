@@ -78,7 +78,8 @@ class MainWindow(QtGui.QMainWindow):
 
         elif page_num == ModeEnum.TRAINER:
             if (not self.trainer.has_active_session):
-                self.trainer.startNewSession()
+                if (not self.trainer.startNewSession()):
+                    return
 
         self.mode_stack.setCurrentIndex(page_num)
         
