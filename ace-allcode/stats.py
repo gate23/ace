@@ -144,7 +144,7 @@ class Statistics(QtGui.QWidget):
         self.splitter = QSplitter(Qt.Horizontal)
 
         self.session_table = QtGui.QTableWidget()
-        self.session_table.setRowCount(10)
+        self.session_table.setRowCount(0)
         self.session_table.setColumnCount(6)
         self.session_table.setIconSize(QSize(100, 100))
         self.session_table.verticalHeader().resizeMode(QtGui.QHeaderView.Fixed)
@@ -204,7 +204,10 @@ class Statistics(QtGui.QWidget):
                                 (err_str))
             
     def updateSessionTable(self, sess_idx):
-        if len(self.session_list)+1 >= sess_idx:
+        if (sess_idx == 0):
+            self.session_table.setRowCount(0)
+            
+        elif len(self.session_list)+1 >= sess_idx:
             session = self.session_list[sess_idx-1]
             self.session_table.setRowCount(session.length)
             
