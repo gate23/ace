@@ -203,13 +203,13 @@ class Statistics(QtGui.QWidget):
         
         self.label_estimate.setText("Total estimates: " +
                                     (str(self.total_estimates)))
-        err_str = str(avg_error)
         self.label_sum.setText("Lifetime Average Absolute Log Error: " +
-                                (err_str))
+                                "{:.2f}".format(avg_error))
             
     def updateSessionTable(self, sess_idx):
         if (sess_idx == 0):
             self.session_table.setRowCount(0)
+            self.label_session_score.setText('')
             
         elif len(self.session_list)+1 >= sess_idx:
             session = self.session_list[sess_idx-1]
@@ -267,4 +267,4 @@ class Statistics(QtGui.QWidget):
                                               '\tSession Average Log Error: ' + 
                                               str(session_log_err/session.length) +
                                               '\tSession Average Absolute Log Error: ' + 
-                                              str(session_abs_log_err/session.length))
+                                              "{:.2f}".format(session_abs_log_err/session.length))
