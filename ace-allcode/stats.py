@@ -131,8 +131,8 @@ class Statistics(QtGui.QWidget):
         self.session_box.addItem("Select session...")
         session_layout.addWidget(self.session_box)
         
-        for i in range(1,self.session_count+1):
-            self.session_box.addItem("Session "+str(i))
+        for i in range(0,self.session_count):
+            self.session_box.addItem("Session "+str(self.session_count-i))
         
         self.connect( self.session_box, QtCore.SIGNAL("currentIndexChanged(int)"),
                         self.updateSessionTable)
@@ -189,8 +189,8 @@ class Statistics(QtGui.QWidget):
         for i in range(15):
             self.log_err_list[i] += session.log_err_list[i]
         
-        self.session_list.append(session)
-        self.session_box.addItem("Session "+ str(self.session_count))
+        self.session_list.insert(0,session)
+        self.session_box.insertItem(1,"Session "+ str(self.session_count))
         self.histogram.dataChanged()
 
         
