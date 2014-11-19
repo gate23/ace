@@ -10,7 +10,6 @@ from mainmenu import MainMenu
 #from trainer import Trainer
 from trainer_new import Trainer
 from stats import Statistics
-from editor import Editor
 from enum import ModeEnum
 from generator_new import Generator
 
@@ -24,7 +23,7 @@ class MainWindow(QtGui.QMainWindow):
         self.setSizePolicy(QtGui.QSizePolicy.Fixed,
                            QtGui.QSizePolicy.Fixed)
         
-        self.setFixedSize(QtCore.QSize(800,600))
+        self.setFixedSize(QtCore.QSize(800,620))
 #        self.setMinimumSize(800,600)
         
         self.initPages()
