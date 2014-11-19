@@ -14,7 +14,7 @@ import os.path
 
 from enum import FileEnum,SessionCol
 from session import Session
-from math import log
+from math import log, fabs
 
 
 class HistogramView(QListView):
@@ -144,7 +144,7 @@ class Statistics(QtGui.QWidget):
         self.splitter = QSplitter(Qt.Horizontal)
 
         self.session_table = QtGui.QTableWidget()
-        self.session_table.setRowCount(10)
+        self.session_table.setRowCount(0)
         self.session_table.setColumnCount(6)
         self.session_table.setIconSize(QSize(100, 100))
         self.session_table.verticalHeader().resizeMode(QtGui.QHeaderView.Fixed)
@@ -158,6 +158,9 @@ class Statistics(QtGui.QWidget):
         header_labels.append("Image")
         self.session_table.setHorizontalHeaderLabels(header_labels)
         session_layout.addWidget(self.session_table)
+
+        self.label_session_score = QtGui.QLabel()
+        session_layout.addWidget(self.label_session_score)
 
         self.updateStatsUI()
         
@@ -200,13 +203,19 @@ class Statistics(QtGui.QWidget):
         self.label_estimate.setText("Total estimates: " +
                                     (str(self.session_count*10)))
         err_str = str(avg_error)
-        self.label_sum.setText("Lifetime Average Error: " +
+        self.label_sum.setText("Lifetime Average Absolute Log Error: " +
                                 (err_str))
             
     def updateSessionTable(self, sess_idx):
-        if len(self.session_list)+1 >= sess_idx:
+        if (sess_idx == 0):
+            self.session_table.setRowCount(0)
+            
+        elif len(self.session_list)+1 >= sess_idx:
             session = self.session_list[sess_idx-1]
             self.session_table.setRowCount(session.length)
+            correct_num = 0
+            session_log_err = 0
+            session_abs_log_err = 0
             
             est_idx = 0
             for estimate in session.estimate_list:
@@ -214,8 +223,11 @@ class Statistics(QtGui.QWidget):
                 log_estimate = log(estimate.estimate, 2)
                 log_actual = log(estimate.actual,2)   
                 log_error = int(log_estimate) - int(log_actual)
+                session_log_err += log_error
+                session_abs_log_err += fabs(log_error)
                 if log_error == 0:
                     status = "Correct!"
+                    correct_num += 1
                 else:
                     status = "Incorrect"
 
@@ -249,6 +261,14 @@ class Statistics(QtGui.QWidget):
                     self.session_table.setItem(est_idx,SessionCol.IMAGE,image_item)
                 
                 est_idx +=1
+
+            self.label_session_score.setText('Score: ' + str(correct_num) + '/' + str(session.length) +
+                                              '\tSession Average Log Error: ' + 
+                                              str(session_log_err/session.length) +
+                                              '\tSession Average Absolute Log Error: ' + 
+                                              str(session_abs_log_err/session.length))
+
+
         else:
             #TODO: this should never happen, but if it does actually raise an err
             print "session nonexistent"

@@ -1,28 +1,26 @@
 """
-trainer.py
+generator.py
 
-Trainer is the class representing the trainer mode (duh)
-Makes use of SlideGen class for generating and viewing slides
+Generator is the class representing the slide generator
+It provides a view of the slides being generated as well as a 
+way to save a slide
 """
 
-import math
-
 from PyQt4 import QtGui, QtCore
-from slidegen import SlideGen
-from enum import ModeEnum
-from session import Session,Estimate
-from math import log
-import time
-import os.path
+from slide_gen import SlideGen
+from slide_scene import SlideScene
+from random import triangular
 
 class Generator(QtGui.QWidget):
+    SLIDE_WIDTH,SLIDE_HEIGHT = 540,540
+    
     def __init__(self, parent):
-        
         super(Generator,self).__init__(parent)
-        
-        self.initUI()
         self.parent = parent
         self.num_cells = 8
+
+        self.slide_gen = SlideGen(self, 2, 2048)
+        self.initUI()
         
     def initUI(self):
         layout = QtGui.QHBoxLayout()
@@ -34,32 +32,52 @@ class Generator(QtGui.QWidget):
         self.setLayout(layout)
         
     def initSlideLayout(self):
-        self.slide_display = SlideGen(self)
-        self.slide_display.genSlide()
+        self.slide_scene = SlideScene(QtCore.QRectF(0,
+                                                    0,
+                                                    self.SLIDE_WIDTH,
+                                                    self.SLIDE_HEIGHT), 
+                                                    self) #generator is parent
+                                          
+        #build the view
+        self.view = QtGui.QGraphicsView(self.slide_scene,
+                                        self) #generator is parent
 
-        zoom_layout = QtGui.QHBoxLayout()
+        self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        
+        self.view.setSizePolicy(QtGui.QSizePolicy.Fixed,
+                                QtGui.QSizePolicy.Fixed)        
 
+        focus_layout = QtGui.QHBoxLayout()
+
+        #Controls
         focus_text = QtGui.QLabel("Focus: ")
         self.focus_slider = QtGui.QSlider(QtCore.Qt.Horizontal)
-        self.focus_slider.setSliderPosition((self.slide_display.current_focus+1)*15)
+        self.focus_slider.setSliderPosition((self.slide_scene.current_focus+1)*15)
+        
         focus_plus_btn = QtGui.QPushButton("+")
         focus_minus_btn = QtGui.QPushButton("-")
         focus_plus_btn.setMaximumWidth(25)
         focus_minus_btn.setMaximumWidth(25)
-        focus_plus_btn.connect(focus_plus_btn, QtCore.SIGNAL("pressed()"),
-                        self.slide_display.focusUp)
-        focus_minus_btn.connect(focus_minus_btn, QtCore.SIGNAL("pressed()"),
-                        self.slide_display.focusDown)
-        self.focus_slider.sliderMoved.connect(self.slide_display.sliderFocus)
 
-        zoom_layout.addWidget(focus_text)
-        zoom_layout.addWidget(focus_plus_btn)
-        zoom_layout.addWidget(focus_minus_btn)
-        zoom_layout.addWidget(self.focus_slider)
+        #connect         
+        focus_plus_btn.connect(focus_plus_btn, QtCore.SIGNAL("pressed()"),
+                        self.focusUp)
+        focus_minus_btn.connect(focus_minus_btn, QtCore.SIGNAL("pressed()"),
+                        self.focusDown)
+        
+        self.focus_slider.sliderMoved.connect(self.sliderFocus)
+
+        #add controls
+        focus_layout.addWidget(focus_text)
+        focus_layout.addWidget(focus_plus_btn)
+        focus_layout.addWidget(focus_minus_btn)
+        focus_layout.addWidget(self.focus_slider)
   
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.slide_display)
-        layout.addLayout(zoom_layout)
+        
+        layout.addWidget(self.view)
+        layout.addLayout(focus_layout)
         
         return layout
 
@@ -87,17 +105,12 @@ class Generator(QtGui.QWidget):
         button = QtGui.QPushButton("Generate New Slide")
         button.connect( button, QtCore.SIGNAL("pressed()"),
                         self.genNewSlide)
-        #allow Enter press to submit estimate
-        #button.connect(
-        #        button, QtCore.SIGNAL("returnPressed()"),
-        #        button, QtCore.SIGNAL("pressed()")  )
         
-        #estimate_display: shows list of previous estimates
-        self.display = QtGui.QTextEdit()
-        self.display.setReadOnly(1)    
+        self.exact_display = QtGui.QTextEdit('Exact Count: ' + str(0))
+        self.exact_display.setReadOnly(True)
         
         num_cells_layout = QtGui.QVBoxLayout()
-        num_cells_layout.addWidget(self.display)
+        num_cells_layout.addWidget(self.exact_display)
         num_cells_layout.addWidget(self.r0)
         num_cells_layout.addWidget(self.r1)
         num_cells_layout.addWidget(self.r2)
@@ -107,8 +120,6 @@ class Generator(QtGui.QWidget):
         num_cells_layout.addWidget(self.r6)
         num_cells_layout.addWidget(self.r7)
         num_cells_layout.addWidget(button)
-
-
         
         return num_cells_layout
 
@@ -117,23 +128,35 @@ class Generator(QtGui.QWidget):
         self.num_cells = 0
         
         if self.r0.isChecked():
-            self.num_cells = 8
+            self.num_cells = int(triangular(8,15))
         elif self.r1.isChecked():
-            self.num_cells = 16
+            self.num_cells = int(triangular(16,31))
         elif self.r2.isChecked():
-            self.num_cells = 32
+            self.num_cells = int(triangular(32,63))
         elif self.r3.isChecked():
-            self.num_cells = 64
+            self.num_cells = int(triangular(64,127))
         elif self.r4.isChecked():
-            self.num_cells = 128
+            self.num_cells = int(triangular(128,255))
         elif self.r5.isChecked():
-            self.num_cells = 256
+            self.num_cells = int(triangular(256,511))
         elif self.r6.isChecked():
-            self.num_cells = 512
+            self.num_cells = int(triangular(512,1023))
         elif self.r7.isChecked():
-            self.num_cells = 1024
+            self.num_cells = int(triangular(1024,2047))
         
         if (self.num_cells == 0):
             return False
 
-        self.slide_display.genSlide(self.num_cells)
+        self.slide_gen.genSlide(self.slide_scene, self.num_cells)
+        self.exact_display.append('Exact Count: ' + str(self.num_cells))
+
+    def focusDown(self):
+        self.slide_scene.changeFocus(-1)
+
+    def focusUp(self):
+        self.slide_scene.changeFocus(1)
+        
+    def sliderFocus(self,value):
+        """Called when the slider is moved - value between 0 and 100"""
+#        print "Slider val="+str(value)
+        self.slide_scene.setFocus((((value+3)/3) * self.slide_scene.SLIDE_FOCUS_STEP) - 1)

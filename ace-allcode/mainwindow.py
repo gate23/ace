@@ -7,12 +7,10 @@ is responsible for switching between them.
 """
 from PyQt4 import QtCore, QtGui
 from mainmenu import MainMenu
-#from trainer import Trainer
-from trainer_new import Trainer
+from trainer import Trainer
 from stats import Statistics
-from editor import Editor
+from generator import Generator
 from enum import ModeEnum
-from generator_new import Generator
 
 class MainWindow(QtGui.QMainWindow):
     
@@ -24,8 +22,7 @@ class MainWindow(QtGui.QMainWindow):
         self.setSizePolicy(QtGui.QSizePolicy.Fixed,
                            QtGui.QSizePolicy.Fixed)
         
-        self.setFixedSize(QtCore.QSize(800,600))
-#        self.setMinimumSize(800,600)
+        self.setFixedSize(QtCore.QSize(800,620))
         
         self.initPages()
         self.initMenuBar()       
@@ -80,7 +77,8 @@ class MainWindow(QtGui.QMainWindow):
 
         elif page_num == ModeEnum.TRAINER:
             if (not self.trainer.has_active_session):
-                self.trainer.startNewSession()
+                if (not self.trainer.startNewSession()):
+                    return
 
         self.mode_stack.setCurrentIndex(page_num)
         
