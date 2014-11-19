@@ -11,7 +11,6 @@ class SlideGen(QtGui.QWidget):
 
     #TODO: make type a parameter
     def genSlide(self, slide_scene, num_cells = 0):
-        #num_cells = 2000
         slide_width = slide_scene.width()        
         slide_height = slide_scene.height()
         
@@ -39,7 +38,6 @@ class SlideGen(QtGui.QWidget):
         
         for i in range (this_count):
             #update cell depth, type, rotation
-            #depth = 2 + (random.randint(-16, 16)*0.1875) #range -2 to 5
             depth = 2 + (randint(-16, 16) * 0.125) #range -1 to 4
             sprite_type = choice(SpriteType.APHANOTHECE_RENDER1)
             deg_rotation = uniform(0.0,359.9)

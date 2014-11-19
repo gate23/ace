@@ -63,7 +63,6 @@ class MainWindow(QtGui.QMainWindow):
         help_menu = menu_bar.addMenu('&Help')
         
         about_action = QtGui.QAction('About', self)
-        #TODO: connect about_actions's trigger to something
         
         help_menu.addAction(about_action)
         
