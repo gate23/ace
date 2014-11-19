@@ -158,5 +158,4 @@ class Generator(QtGui.QWidget):
         
     def sliderFocus(self,value):
         """Called when the slider is moved - value between 0 and 100"""
-#        print "Slider val="+str(value)
         self.slide_scene.setFocus((((value+3)/3) * self.slide_scene.SLIDE_FOCUS_STEP) - 1)

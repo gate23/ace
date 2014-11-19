@@ -8,7 +8,6 @@ Makes use of SlideGen class for generating and viewing slides
 import math
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtOpenGL import *
 from slide_gen import SlideGen
 from slide_scene import SlideScene
 from enum import ModeEnum
@@ -16,8 +15,6 @@ from session import Session,Estimate
 from math import log, fabs
 import time
 import os.path
-
-#MAX_ESTIMATE = 9999
 
 class Trainer(QtGui.QWidget):
     SLIDE_WIDTH,SLIDE_HEIGHT = 540,540
@@ -47,8 +44,6 @@ class Trainer(QtGui.QWidget):
         
         
     def initSlideLayout(self):
-        #self.slide_display = SlideGen(self)
-        #self.slide_display.genSlide()
         self.slide_scene = SlideScene(QtCore.QRectF(0,
                                                     0,
                                                     self.SLIDE_WIDTH,
@@ -64,21 +59,8 @@ class Trainer(QtGui.QWidget):
         
         self.view.setSizePolicy(QtGui.QSizePolicy.Fixed,
                                 QtGui.QSizePolicy.Fixed)        
-                                    
-        
-        #use open gl (need to test under windows)
-        #self.view.setViewport(QGLWidget())
     
         focus_layout = QtGui.QHBoxLayout()
-        # zoom_text = QtGui.QLabel("Magnification: <Current Zoom>")
-        # zoom_in_btn = QtGui.QPushButton("+")
-        # zoom_out_btn = QtGui.QPushButton("-")
-        # zoom_in_btn.setMaximumWidth(25)
-        # zoom_out_btn.setMaximumWidth(25)
-
-        # zoom_layout.addWidget(zoom_in_btn)
-        # zoom_layout.addWidget(zoom_out_btn)
-        # zoom_layout.addWidget(zoom_text)
 
         #Controls
         focus_text = QtGui.QLabel("Focus: ")
@@ -131,19 +113,12 @@ class Trainer(QtGui.QWidget):
         self.r7 = QtGui.QRadioButton("1024-2047")
         self.guess_group.addButton(self.r7)
 
-        #validator = QtGui.QIntValidator(0,MAX_ESTIMATE,self.estimate_entry)
-        #self.estimate_entry.setValidator(validator)
         
         #button to submit estimate
         button = QtGui.QPushButton("Estimate Algae Count")
         button.connect( button, QtCore.SIGNAL("pressed()"),
                         self.submitEstimate)
-        #allow Enter press to submit estimate
-        #button.connect(
-        #        button, QtCore.SIGNAL("returnPressed()"),
-        #        button, QtCore.SIGNAL("pressed()")  )
-        
-        #estimate_display: shows list of previous estimates
+
         self.estimate_display = QtGui.QTextEdit()
         self.estimate_display.setReadOnly(True)
 
@@ -162,7 +137,6 @@ class Trainer(QtGui.QWidget):
         estimate_layout.addWidget(self.r6)
         estimate_layout.addWidget(self.r7)
         estimate_layout.addWidget(button)
-        #estimate_layout.addWidget(self.estimate_entry)
         
         return estimate_layout
         
@@ -244,7 +218,7 @@ class Trainer(QtGui.QWidget):
 
             #MessageBox - restart trainer or return to menu
             self.endMessage = QtGui.QMessageBox.question(self,'Message',
-                 "10 estimates complete! Try again?",
+                 "Session complete! Try again?",
                  QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
 
             if self.endMessage == QtGui.QMessageBox.Yes:
@@ -254,7 +228,6 @@ class Trainer(QtGui.QWidget):
                 self.parent.changeMode(ModeEnum.MENU)
 
     #when session is complete, reset stuff
-    #TODO: THIS IS SLOPPY. This gets called in main window, repeating some actions
     def startNewSession(self):
         self.estimate_sum = 0
         self.actual_sum = 0
@@ -273,7 +246,7 @@ class Trainer(QtGui.QWidget):
             
             self.estimate_display.append("Beginning new session...")
 
-            #pass slide to generator
+            #pass slide to slide_gen
             self.slide_gen.genSlide(self.slide_scene)
             self.current_session = Session(self.num_slides)
             self.focus_slider.setSliderPosition((self.slide_scene.current_focus+1)*15)
@@ -290,5 +263,4 @@ class Trainer(QtGui.QWidget):
         
     def sliderFocus(self,value):
         """Called when the slider is moved - value between 0 and 100"""
-#        print "Slider val="+str(value)
         self.slide_scene.setFocus((((value+3)/3) * self.slide_scene.SLIDE_FOCUS_STEP) - 1)

@@ -267,8 +267,3 @@ class Statistics(QtGui.QWidget):
                                               str(session_log_err/session.length) +
                                               '\tSession Average Absolute Log Error: ' + 
                                               str(session_abs_log_err/session.length))
-
-
-        else:
-            #TODO: this should never happen, but if it does actually raise an err
-            print "session nonexistent"

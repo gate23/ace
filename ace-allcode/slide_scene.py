@@ -7,7 +7,6 @@ Superclass for slide display widgets
 from PyQt4 import QtGui, QtCore, Qt
 from sprites import SpriteFactory, SpriteType, SpriteDepth
 import os.path
-#import sprites
 import math
 import pickle
 
@@ -46,24 +45,6 @@ class SlideScene(QtGui.QGraphicsScene):
         
         #load textures
         self.load_textures(self.SPRITE_PATH)
-        
-#        #test
-#        self.placeCell(200, 300, 2, 0, 0)
-#        self.placeCell(215, 300, 2, 180, 0)
-#        self.resetSlide()
-#        
-#        self.placeCell(270, 270, 1, 90, 1)
-#        self.placeCell(0, 270, 2, 0, 0)
-#        self.placeCell(0, 0, 2, 0, 0)
-#        self.placeCell(540, 0, 2, 0, 0)        
-#        self.placeCell(540, 270, 2, 0, 0)
-#        self.placeCell(540, 540, 2, 0, 0)
-#        self.placeCell(0, 540, 2, 0, 0)
-#        
-#        self.placeCell(220, 300, 1.8, 180, 1)
-#        self.placeCell(260, 300, 2.6, 60, 1)
-#        self.placeCell(290, 300, 3.8, 90, 1)
-#        self.updateSlide()
 
     def updateSlide(self):
         for cell in self.items():
@@ -206,7 +187,6 @@ class SlideScene(QtGui.QGraphicsScene):
         
         for cell in self.items():
             if(cell.isVisible()):
-                #print "cell: x=%d y=%d,z=%f type=%d rotation=%d" % (cell.x(), cell.y(), cell.zValue(), cell.sprite_code, cell.sprite_rotation)
                 cell_list.append([cell.x(), cell.y(), cell.zValue(), cell.sprite_code, cell.sprite_rotation])
 
         output = open('last_slide.ace','wb')
@@ -219,8 +199,6 @@ class SlideScene(QtGui.QGraphicsScene):
         
     def wheelEvent(self, event):
         self.changeFocus(event.delta()/120.0)
-#        print (event.delta()/120)
-#        print self.current_focus
         
     def mousePressEvent(self, event):
         self.save_slide()        
@@ -234,6 +212,5 @@ class SlideScene(QtGui.QGraphicsScene):
         check = self.current_focus + (delta * self.SLIDE_FOCUS_STEP)
         if(check > -1 and check < 6):
             self.current_focus = check
-            # +1 so we use 0-7 range instead of -1-6, *15 to scale to 100
             self.parent.focus_slider.setSliderPosition((self.current_focus+1)*15)
             self.updateSlide()

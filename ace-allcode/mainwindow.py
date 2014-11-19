@@ -23,7 +23,6 @@ class MainWindow(QtGui.QMainWindow):
                            QtGui.QSizePolicy.Fixed)
         
         self.setFixedSize(QtCore.QSize(800,620))
-#        self.setMinimumSize(800,600)
         
         self.initPages()
         self.initMenuBar()       
@@ -64,7 +63,6 @@ class MainWindow(QtGui.QMainWindow):
         help_menu = menu_bar.addMenu('&Help')
         
         about_action = QtGui.QAction('About', self)
-        #TODO: connect about_actions's trigger to something
         
         help_menu.addAction(about_action)
         
