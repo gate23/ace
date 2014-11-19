@@ -219,14 +219,11 @@ class SlideScene(QtGui.QGraphicsScene):
         
     def wheelEvent(self, event):
         self.changeFocus(event.delta()/120.0)
-#        print (event.delta()/120)
-#        print self.current_focus
         
     def mousePressEvent(self, event):
         self.save_slide()        
 
     def setFocus(self, focus):
-        print "A" + str(focus)
         self.current_focus = focus
         self.updateSlide()
         
