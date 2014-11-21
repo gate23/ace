@@ -56,20 +56,43 @@ class HistogramView(QListView):
         width = 20
         
         max_in_list = max(self.parent.log_err_list)
-        painter.setBrush(Qt.red)
+        
+        #color starts at red shifts to green and back while painting bars
+        r,g,b = 255,0,0
+        color = QtGui.QColor(r,g,b)
+        painter.setBrush(color)
         if (max_in_list != 0):
-            for i in range(15):
-                if i == 6:
-                    painter.setBrush(Qt.blue)
-                if i == 9:
-                    painter.setBrush(Qt.red)
+            for i in range(7):
+                g += 30
+                
+                color.setRgb(r,g,b)
+                painter.setBrush(color)
+                height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
+                painter.drawRect(QRect(pos,y0 - height,width,height))
+                pos += 20 
+            
+            i=7
+            #middle bar
+            r,g = 10,230
+            color.setRgb(r,g,b)
+            painter.setBrush(color)
+            height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
+            painter.drawRect(QRect(pos,y0 - height,width,height))
+            pos += 20            
+            
+            r=255
+            for i in range(8,15):
+                g -= 30
+                color.setRgb(r,g,b)
+                painter.setBrush(color)
                 height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
                 painter.drawRect(QRect(pos,y0 - height,width,height))
                 pos += 20 
 
+                
     def dataChanged(self):
         self.viewport().update()
-
+        
 
 class Statistics(QtGui.QWidget):
     def __init__(self, parent):
