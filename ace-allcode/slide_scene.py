@@ -4,8 +4,8 @@ slide.py
 Superclass for slide display widgets
 """
 
-from PyQt4 import QtGui, QtCore, Qt
-from sprites import SpriteFactory, SpriteType, SpriteDepth
+from PyQt4 import QtGui, QtCore
+from sprites import SpriteFactory, SpriteType
 import os.path
 import math
 import pickle
