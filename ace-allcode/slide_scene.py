@@ -32,7 +32,10 @@ class SlideScene(QtGui.QGraphicsScene):
         #setup current focus
         self.current_focus = 2.4
         self.cell_count = 0
-        
+
+        #for slider focus
+        self.prev_value = 0 
+
         #parent ref
         self.parent = parent
 
@@ -213,3 +216,15 @@ class SlideScene(QtGui.QGraphicsScene):
         if(check > -1.2 and check < 5.8):
             self.current_focus = check
             self.parent.focus_slider.setSliderPosition(math.ceil((check+1.0)*15))
+
+    def focusDown(self):
+        self.changeFocus(-1)
+
+    def focusUp(self):
+        self.changeFocus(1)
+        
+    def sliderFocus(self,value):
+        if (math.fabs(value - self.prev_value) >= 3):
+            self.prev_value = value
+            """Called when the slider is moved - value between 0 and 100"""
+            self.setFocus((((value)/3) * self.SLIDE_FOCUS_STEP) - 1)
