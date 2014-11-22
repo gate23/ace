@@ -63,6 +63,7 @@ class Trainer(QtGui.QWidget):
         #Controls
         focus_text = QtGui.QLabel("Focus: ")
         self.focus_slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.focus_slider.setTickInterval(25)
         self.focus_slider.setSliderPosition((self.slide_scene.current_focus+1)*15)
         
         focus_plus_btn = QtGui.QPushButton("+")
@@ -72,11 +73,11 @@ class Trainer(QtGui.QWidget):
 
         #connect         
         focus_plus_btn.connect(focus_plus_btn, QtCore.SIGNAL("pressed()"),
-                        self.focusUp)
+                        self.slide_scene.focusUp)
         focus_minus_btn.connect(focus_minus_btn, QtCore.SIGNAL("pressed()"),
-                        self.focusDown)
+                        self.slide_scene.focusDown)
         
-        self.focus_slider.valueChanged.connect(self.sliderFocus)
+        self.focus_slider.valueChanged.connect(self.slide_scene.sliderFocus)
 
         #add controls
         focus_layout.addWidget(focus_text)
@@ -253,12 +254,4 @@ class Trainer(QtGui.QWidget):
             self.has_active_session = False
             return False
 
-    def focusDown(self):
-        self.slide_scene.changeFocus(-1)
-
-    def focusUp(self):
-        self.slide_scene.changeFocus(1)
-        
-    def sliderFocus(self,value):
-        """Called when the slider is moved - value between 0 and 100"""
-        self.slide_scene.setFocus((((value)/3) * self.slide_scene.SLIDE_FOCUS_STEP) - 1)
+    
