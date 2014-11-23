@@ -254,4 +254,5 @@ class Trainer(QtGui.QWidget):
             self.has_active_session = False
             return False
 
-    
+    def mousePressEvent(self, event):
+        self.slide_gen.saveSlide(self.slide_scene)

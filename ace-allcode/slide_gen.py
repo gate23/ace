@@ -2,14 +2,73 @@ from PyQt4 import QtGui
 from random import randint, uniform, triangular, sample, choice
 from math import sqrt, pi
 from sprites import SpriteType
+import pickle
+import zipfile
+import os
+from os import path
+import time
 
 class SlideGen(QtGui.QWidget):
     def __init__(self, parent, cellMin, cellMax):
         super(SlideGen, self).__init__(parent)
         self.cell_min_count = cellMin
         self.cell_max_count = cellMax
+        
+    def loadSlide(self, slide_scene, file_name):
+        """open pickle file, builds slide"""
+        with open(file_name, "rb") as f:
+            slide = pickle.load(f)
+        
+        #reset scene
+        slide_scene.resetSlide()        
+        for cell in slide:
+            #create cell
+            slide_scene.placeCell(cell[0], cell[1], cell[2], cell[3], cell[4])
+            
+        slide_scene.updateSlide()
+    
+    def saveSlide(self, slide_scene, file_name = None):
+        """Loops through all items and save data serialized pickle"""
+        cell_list = []
+        if (file_name is None):
+            file_fullpath = QtGui.QFileDialog.getSaveFileName(self,
+                                                     "Save File",
+                                                     str(path.join(path.curdir, 'slide', 'last.slz')), #default dir / filename
+                                                     filter = "Slide (*.slz)")
+                                                     
+        dir_name, file_name = path.split(str(file_fullpath))
+        dir_name = path.normpath(dir_name)
+        temp_file = str(int(round(time.time())))+'.sli'
+        
+        if (not file_name):
+            return
+                                                     
+        for cell in slide_scene.items():
+            if(cell.isVisible()):
+                cell_list.append([cell.x() + (slide_scene.CELL_SCALE_SIZE / 2),
+                                  cell.y() + (slide_scene.CELL_SCALE_SIZE / 2),
+                                  cell.zValue(),
+                                  cell.sprite_rotation,
+                                  cell.sprite_type])
 
-    #TODO: make type a parameter
+        with open(temp_file,'wb') as output:
+            pickle.dump(cell_list, output)
+            
+        try:
+            import zlib
+            compression = zipfile.ZIP_DEFLATED
+        except:
+            compression = zipfile.ZIP_STORED
+        
+        with zipfile.ZipFile(path.join(dir_name, file_name), 'w') as slidezip:
+            slidezip.write(temp_file, compress_type=compression)
+        
+        #remove temp
+        os.remove(temp_file)
+            
+        print "slide saved" 
+
+    
     def genSlide(self, slide_scene, num_cells = 0):
         slide_width = slide_scene.width()        
         slide_height = slide_scene.height()
@@ -59,7 +118,7 @@ class SlideGen(QtGui.QWidget):
                 max_r = slide_scene.height()/2
                 R = triangular(opt_r, max_r, (opt_r + max_r) / 3)
 
-                #set position                
+                #create cell
                 slide_scene.placeCell(x_offset, y_offset, depth, deg_rotation, sprite_type)
 
             #plot point around the center
@@ -78,7 +137,7 @@ class SlideGen(QtGui.QWidget):
                     (new_y > slide_scene.SLIDE_PADDING) and 
                     (new_y < slide_height - slide_scene.SLIDE_PADDING)):
 
-                    #set position                    
+                    #create cell
                     slide_scene.placeCell(new_x, new_y, depth, deg_rotation, sprite_type)
                 else:
                     try_again.append(i)
@@ -92,6 +151,7 @@ class SlideGen(QtGui.QWidget):
             sprite_type = choice(SpriteType.APHANOTHECE_RENDER1)
             deg_rotation = uniform(0.0,359.9)
             
+            #create cell
             slide_scene.placeCell(x_offset, y_offset, depth, deg_rotation, sprite_type)
         
         slide_scene.updateSlide()

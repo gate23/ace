@@ -22,6 +22,9 @@ class Generator(QtGui.QWidget):
         self.slide_gen = SlideGen(self, 2, 2048)
         self.initUI()
         
+        #load last
+        #self.slide_gen.loadSlide(self.slide_scene, "last.sli")
+        
     def initUI(self):
         layout = QtGui.QHBoxLayout()
         slide_layout = self.initSlideLayout()

@@ -8,8 +8,6 @@ from PyQt4 import QtGui, QtCore
 from sprites import SpriteFactory, SpriteType
 import os.path
 import math
-import pickle
-
 
 class SlideScene(QtGui.QGraphicsScene):
     #sprite
@@ -117,7 +115,7 @@ class SlideScene(QtGui.QGraphicsScene):
 
         #store extra info
         cell.sprite_rotation = rotation
-        cell.sprite_code = spriteType
+        cell.sprite_type = spriteType
         
         self.addItem(cell)
         self.cell_count += 1
@@ -184,28 +182,12 @@ class SlideScene(QtGui.QGraphicsScene):
         outputimg.save(filename, "PNG")
         return filename
             
-    def save_slide(self):
-        """Loops through all items and save data serialized pickle"""
-        cell_list = []
-        
-        for cell in self.items():
-            if(cell.isVisible()):
-                cell_list.append([cell.x(), cell.y(), cell.zValue(), cell.sprite_code, cell.sprite_rotation])
-
-        output = open('last_slide.ace','wb')
-        pickle.dump(cell_list, output)
-        output.close()
-        print "slide saved" 
-        
     def count(self):
         return self.cell_count
         
     def wheelEvent(self, event):
         self.changeFocus(event.delta()/120.0)
         
-    def mousePressEvent(self, event):
-        self.save_slide()        
-
     def setFocus(self, focus):
         self.current_focus = focus
         self.updateSlide()
