@@ -22,9 +22,6 @@ class Generator(QtGui.QWidget):
         self.slide_gen = SlideGen(self, 2, 2048)
         self.initUI()
         
-        #load last
-        #self.slide_gen.loadSlide(self.slide_scene, "last.sli")
-        
     def initUI(self):
         layout = QtGui.QHBoxLayout()
         slide_layout = self.initSlideLayout()
@@ -105,14 +102,19 @@ class Generator(QtGui.QWidget):
         self.guess_group.addButton(self.r7)
         
         #button to submit estimate
-        button = QtGui.QPushButton("Generate New Slide")
-        button.connect( button, QtCore.SIGNAL("pressed()"),
+        buttonLoad = QtGui.QPushButton("Load Slide")
+        buttonLoad.connect( buttonLoad, QtCore.SIGNAL("pressed()"),
+                        self.loadSlide)
+        
+        buttonGen = QtGui.QPushButton("Generate New Slide")
+        buttonGen.connect( buttonGen, QtCore.SIGNAL("pressed()"),
                         self.genNewSlide)
         
         self.exact_display = QtGui.QTextEdit('Exact Count: ' + str(0))
         self.exact_display.setReadOnly(True)
         
         num_cells_layout = QtGui.QVBoxLayout()
+        num_cells_layout.addWidget(buttonLoad)
         num_cells_layout.addWidget(self.exact_display)
         num_cells_layout.addWidget(self.r0)
         num_cells_layout.addWidget(self.r1)
@@ -122,9 +124,13 @@ class Generator(QtGui.QWidget):
         num_cells_layout.addWidget(self.r5)
         num_cells_layout.addWidget(self.r6)
         num_cells_layout.addWidget(self.r7)
-        num_cells_layout.addWidget(button)
+        num_cells_layout.addWidget(buttonGen)
         
         return num_cells_layout
+        
+    def loadSlide(self):
+        self.slide_gen.loadSlide(self.slide_scene)
+        self.exact_display.append('Exact Count: ' + str(self.slide_scene.cell_count))
 
     def genNewSlide(self):
 

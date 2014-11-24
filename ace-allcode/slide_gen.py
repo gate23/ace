@@ -14,14 +14,34 @@ class SlideGen(QtGui.QWidget):
         self.cell_min_count = cellMin
         self.cell_max_count = cellMax
         
-    def loadSlide(self, slide_scene, file_name):
+    def loadSlide(self, slide_scene):
         """open pickle file, builds slide"""
-        with open(file_name, "rb") as f:
-            slide = pickle.load(f)
+
+        file_fullpath = QtGui.QFileDialog.getOpenFileName(self,
+                                                          "Load Slide",
+                                                          str(path.join(path.curdir, 'slide', 'last.slz')), #default dir / filename
+                                                          filter = "Slide (*.slz)")
+
+        dir_name, file_name = path.split(str(file_fullpath))
+        dir_name = path.normpath(dir_name)
         
-        #reset scene
+        if(not file_name):
+            return
+        
+        zf = zipfile.ZipFile(path.join(dir_name, file_name), 'r')
+        slides = zf.namelist()
+        
+        for f in slides:
+            try:
+                data = zf.read(f)
+            except:
+                print "error"
+            else:
+                myslide = pickle.loads(data)
+#        
+#        #reset scene
         slide_scene.resetSlide()        
-        for cell in slide:
+        for cell in myslide:
             #create cell
             slide_scene.placeCell(cell[0], cell[1], cell[2], cell[3], cell[4])
             
