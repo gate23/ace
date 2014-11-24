@@ -16,6 +16,7 @@ import os.path
 
 class Trainer(QtGui.QWidget):
     SLIDE_WIDTH,SLIDE_HEIGHT = 540,540
+    LOW_POW2, HIGH_POW2 = 3,10 #defines upper and lower ranges 
     
     def __init__(self, parent, stats):
         super(Trainer,self).__init__(parent)
@@ -95,24 +96,22 @@ class Trainer(QtGui.QWidget):
     def initEstimateLayout(self):
         widget = QtGui.QWidget(self)
         self.guess_group = QtGui.QButtonGroup(widget)
-        self.r0 = QtGui.QRadioButton("8-15")
-        self.guess_group.addButton(self.r0)
-        self.r1 = QtGui.QRadioButton("16-31")
-        self.guess_group.addButton(self.r1)
-        self.r2 = QtGui.QRadioButton("32-63")
-        self.guess_group.addButton(self.r2)
-        self.r3 = QtGui.QRadioButton("64-127")
-        self.guess_group.addButton(self.r3)
-        self.r4 = QtGui.QRadioButton("128-255")
-        self.guess_group.addButton(self.r4)
-        self.r5 = QtGui.QRadioButton("256-511")
-        self.guess_group.addButton(self.r5)
-        self.r6 = QtGui.QRadioButton("512-1023")
-        self.guess_group.addButton(self.r6)
-        self.r7 = QtGui.QRadioButton("1024-2047")
-        self.guess_group.addButton(self.r7)
 
-        
+        #create range selector buttons        
+        for _range in range(Trainer.LOW_POW2, Trainer.HIGH_POW2+1):
+            low = 2**_range
+            high = 2*low -1
+            btn_str = str(low)+"-"+str(high) 
+            temp_btn = QtGui.QRadioButton(btn_str)
+            
+            #add the button as a member of the class so it persists
+            member_name = "r"+str(_range)
+            setattr(self, member_name, temp_btn);
+            btn = getattr(self, member_name)
+            self.guess_group.addButton( btn)
+            self.guess_group.setId(btn, _range)
+            
+
         #button to submit estimate
         button = QtGui.QPushButton("Estimate Algae Count")
         button.connect( button, QtCore.SIGNAL("pressed()"),
@@ -127,39 +126,19 @@ class Trainer(QtGui.QWidget):
         estimate_layout = QtGui.QVBoxLayout()
         estimate_layout.addWidget(self.estimate_label)
         estimate_layout.addWidget(self.estimate_display)
-        estimate_layout.addWidget(self.r0)
-        estimate_layout.addWidget(self.r1)
-        estimate_layout.addWidget(self.r2)
-        estimate_layout.addWidget(self.r3)
-        estimate_layout.addWidget(self.r4)
-        estimate_layout.addWidget(self.r5)
-        estimate_layout.addWidget(self.r6)
-        estimate_layout.addWidget(self.r7)
+        buttons = self.guess_group.buttons()
+        for btn in buttons:
+            estimate_layout.addWidget(btn)
         estimate_layout.addWidget(button)
         
         return estimate_layout
         
     def submitEstimate(self):
-        estimate = 0
+        pow2_range = self.guess_group.checkedId() 
         
-        if self.r0.isChecked():
-            estimate = 8
-        elif self.r1.isChecked():
-            estimate = 16
-        elif self.r2.isChecked():
-            estimate = 32
-        elif self.r3.isChecked():
-            estimate = 64
-        elif self.r4.isChecked():
-            estimate = 128
-        elif self.r5.isChecked():
-            estimate = 256
-        elif self.r6.isChecked():
-            estimate = 512
-        elif self.r7.isChecked():
-            estimate = 1024
-        
-        if (estimate == 0):
+        if (pow2_range):
+            estimate = 2**pow2_range
+        else:
             return False
             
         estimate_range = str(estimate) + '-' + str(estimate * 2 - 1)
