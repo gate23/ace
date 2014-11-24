@@ -81,8 +81,8 @@ class Trainer(QtGui.QWidget):
 
         #add controls
         focus_layout.addWidget(focus_text)
-        focus_layout.addWidget(focus_plus_btn)
         focus_layout.addWidget(focus_minus_btn)
+        focus_layout.addWidget(focus_plus_btn)
         focus_layout.addWidget(self.focus_slider)
         
         layout = QtGui.QVBoxLayout()
