@@ -26,22 +26,25 @@ class Trainer(QtGui.QWidget):
         self.has_active_session = False
         self.stats_ref = stats #stats instance
 
-        self.slide_gen = SlideGen(self, 2, 2048)
+        max_count = 2**(Trainer.HIGH_POW2+1) -1        
+        self.slide_gen = SlideGen(self, 2, max_count)
+        
         self.initUI()
         
     def initUI(self):
-        layout = QtGui.QHBoxLayout()
-
         slide_layout = self.initSlideLayout()
+        estimate_layout = self.initEstimateLayout()
         
-        
-        estimate_layout = self.initEstimateLayout()        
+        layout = QtGui.QHBoxLayout()        
         layout.addLayout(slide_layout)
         layout.addLayout(estimate_layout)
-        
         self.setLayout(layout)
-        
-        
+    
+    """
+    QVBoxLayout self.initSlideLayout():
+        Called by self.initUI() during initialization to build the scene, view,
+        and focus controls for the slide.
+    """
     def initSlideLayout(self):
         self.slide_scene = SlideScene(QtCore.QRectF(0,
                                                     0,
@@ -52,7 +55,7 @@ class Trainer(QtGui.QWidget):
         #build the view
         self.view = QtGui.QGraphicsView(self.slide_scene,
                                         self) #trainer is parent
-
+        #disable scroll bars
         self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         
@@ -61,7 +64,7 @@ class Trainer(QtGui.QWidget):
     
         focus_layout = QtGui.QHBoxLayout()
 
-        #Controls
+        #build focus controls
         focus_text = QtGui.QLabel("Focus: ")
         self.focus_slider = QtGui.QSlider(QtCore.Qt.Horizontal)
         self.focus_slider.setTickInterval(25)
@@ -92,7 +95,11 @@ class Trainer(QtGui.QWidget):
         layout.addLayout(focus_layout)
         
         return layout
-
+    """
+    QVBoxLayout self.initEstimateLayout():
+        Called by self.initUI() to build the range buttons, submission button,
+        and feedback display for estimates.
+    """
     def initEstimateLayout(self):
         widget = QtGui.QWidget(self)
         self.guess_group = QtGui.QButtonGroup(widget)
@@ -132,7 +139,10 @@ class Trainer(QtGui.QWidget):
         estimate_layout.addWidget(button)
         
         return estimate_layout
-        
+    
+    """
+    blah blah test test
+    """    
     def submitEstimate(self):
         pow2_range = self.guess_group.checkedId() 
         
