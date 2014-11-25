@@ -118,7 +118,7 @@ class Trainer(QtGui.QWidget):
             self.guess_group.addButton( btn)
             self.guess_group.setId(btn, _range)
             
-
+        getattr(self,"r"+str(Trainer.LOW_POW2)).setChecked(True)
         #button to submit estimate
         button = QtGui.QPushButton("Estimate Algae Count")
         button.connect( button, QtCore.SIGNAL("pressed()"),
