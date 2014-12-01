@@ -12,7 +12,7 @@ import math
 class SlideScene(QtGui.QGraphicsScene):
     #sprite
     SPRITE_PATH = "./img/sprites/"
-    CELL_SCALE_SIZE = 20
+    CELL_SCALE_SIZE = 17
     
     #slide
     SLIDE_PADDING = CELL_SCALE_SIZE / 3
