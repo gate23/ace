@@ -155,7 +155,10 @@ class Statistics(QtGui.QWidget):
         session_layout.addWidget(self.session_box)
         
         for i in range(0,self.session_count):
-            self.session_box.addItem("Session "+str(self.session_count-i))
+            s_time = self.session_list[i].time
+            self.session_box.addItem("Session "+str(self.session_count-i)+" - "+
+                                        time.strftime("%a, %b %d %I:%M%p",
+                                                  time.localtime(s_time)))
         
         self.connect( self.session_box, QtCore.SIGNAL("currentIndexChanged(int)"),
                         self.updateSessionTable)
@@ -206,14 +209,15 @@ class Statistics(QtGui.QWidget):
         self.session_count += 1
        
         self.error_sum += session.error_sum
-        completed_time = time.time() 
-        session.time = completed_time
+        session.time = time.time()
         self.total_estimates += session.total_estimates
         for i in range(15):
             self.log_err_list[i] += session.log_err_list[i]
         
         self.session_list.insert(0,session)
-        self.session_box.insertItem(1,"Session "+ str(self.session_count))
+        self.session_box.insertItem(1,"Session "+ str(self.session_count)+" - "+
+                                    time.strftime("%a, %b %d %I:%M%p",
+                                                  time.localtime(session.time)))
         self.histogram.dataChanged()
 
         
