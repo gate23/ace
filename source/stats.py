@@ -1,30 +1,24 @@
 """
 stats.py
 
-Display training statistics
+Displays training statistics
 """
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtGui import *  
-from PyQt4.QtCore import *  
-
 import pickle
 import time
 import os.path
-
-from enum import FileEnum,SessionCol
-from session import Session
+from enum import FileEnum, SessionCol
 from math import log, fabs
 
-
-class HistogramView(QListView):
+class HistogramView(QtGui.QListView):
     def __init__(self, parent, splitter):
         super(HistogramView, self).__init__()
         self.parent = parent
 
-    def paintEvent(self, QPaintEvent):
-        painter = QPainter(self.viewport())
-        painter.setPen(Qt.black)
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self.viewport())
+        painter.setPen(QtCore.Qt.black)
 
         x0 = 40
         y0 = 250
@@ -68,7 +62,7 @@ class HistogramView(QListView):
                 color.setRgb(r,g,b)
                 painter.setBrush(color)
                 height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
-                painter.drawRect(QRect(pos,y0 - height,width,height))
+                painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
                 pos += 20 
             
             i=7
@@ -77,7 +71,7 @@ class HistogramView(QListView):
             color.setRgb(r,g,b)
             painter.setBrush(color)
             height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
-            painter.drawRect(QRect(pos,y0 - height,width,height))
+            painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
             pos += 20            
             
             r=255
@@ -86,7 +80,7 @@ class HistogramView(QListView):
                 color.setRgb(r,g,b)
                 painter.setBrush(color)
                 height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
-                painter.drawRect(QRect(pos,y0 - height,width,height))
+                painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
                 pos += 20 
 
                 
@@ -167,12 +161,12 @@ class Statistics(QtGui.QWidget):
         self.label_estimate = QtGui.QLabel()
         self.label_sum = QtGui.QLabel()
 
-        self.splitter = QSplitter(Qt.Horizontal)
+        self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
 
         self.session_table = QtGui.QTableWidget()
         self.session_table.setRowCount(0)
         self.session_table.setColumnCount(6)
-        self.session_table.setIconSize(QSize(100, 100))
+        self.session_table.setIconSize(QtCore.QSize(100, 100))
         self.session_table.verticalHeader().resizeMode(QtGui.QHeaderView.Fixed)
         self.session_table.verticalHeader().setDefaultSectionSize(100)        
         header_labels = QtCore.QStringList()
@@ -285,7 +279,7 @@ class Statistics(QtGui.QWidget):
                 if (imagePath):
                     icon.addPixmap(QtGui.QPixmap(os.path.join(os.path.curdir, imagePath)))
                     image_item = QtGui.QTableWidgetItem(icon, "")
-                    image_item.setSizeHint(QSize(100, 100))
+                    image_item.setSizeHint(QtCore.QSize(100, 100))
                     self.session_table.setItem(est_idx,SessionCol.IMAGE,image_item)
                 
                 est_idx +=1

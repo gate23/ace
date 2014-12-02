@@ -1,28 +1,33 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Oct 10 23:05:52 2014
+sprites.py 
 
-This is the sprite factory
+This is the sprite factory, it builds a list of avalible img files that can be 
+used in the slide scene.
 
-@author: younga25
 """
 
-from PyQt4 import QtGui, QtCore
 from sets import Set
 import math
 import os
 
+"""
+The possible depths that img files can simulate
+"""
 class SpriteDepth:
-    TOP = "0"    
-    NEAR = "1"
-    CENTER = "2"
-    FAR = "3"
-    BACK = "4"
-    
+    BACK    = "0"
+    FAR     = "1"
+    CENTER  = "2"
+    NEAR    = "3"
+    TOP     = "4"
+
+"""
+The grouping and ratio of sprites that are avalible
+"""   
 class SpriteType:
     APHANOTHECE_OUTLINE = [0, 0, 0, 2, 3]
     APHANOTHECE_RENDER1 = [1]
-    COUNT = 4
+    COUNT = 4 #total number of differnt types
     
 class BackgroundType:
     CYAN_SOLID = "0"

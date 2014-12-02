@@ -9,7 +9,7 @@ from PyQt4 import QtGui, QtCore
 from slide_gen import SlideGen
 from slide_scene import SlideScene
 from enum import ModeEnum
-from session import Session,Estimate
+from session import Session, Estimate
 from math import log, fabs
 import time
 import os.path
@@ -97,7 +97,7 @@ class Trainer(QtGui.QWidget):
         return layout
     """
     QVBoxLayout self.initEstimateLayout():
-        Called by self.initUI() to build the range buttons, submission button,
+        Called by self.initEstimateLayout() to build the range buttons, submission button,
         and feedback display for estimates.
     """
     def initEstimateLayout(self):
@@ -215,14 +215,15 @@ class Trainer(QtGui.QWidget):
                 self.has_active_session = False
                 self.parent.changeMode(ModeEnum.MENU)
 
-    #when session is complete, reset stuff
+    """
+    Starts a new session
+    """
     def startNewSession(self):
         self.estimate_sum = 0
         self.actual_sum = 0
         self.estimate_number = 1
-        
-        session_length_input = QtGui.QInputDialog(self)     
-        
+
+        #find out how many slides in session        
         self.num_slides, ok = QtGui.QInputDialog.getInt(self, 'Trainer', 
             'How many algae slides would you like to generate?',
             10, 1, self.max_session_length)
@@ -242,6 +243,3 @@ class Trainer(QtGui.QWidget):
         else:
             self.has_active_session = False
             return False
-
-    def mousePressEvent(self, event):
-        self.slide_gen.saveSlide(self.slide_scene)

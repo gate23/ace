@@ -1,3 +1,9 @@
+"""
+enum.py
+
+Enum types for the ACE program
+"""
+
 class ModeEnum():
     MENU = 0
     STATS = 1

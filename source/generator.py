@@ -99,12 +99,22 @@ class Generator(QtGui.QWidget):
             btn = getattr(self, member_name)
             self.guess_group.addButton( btn)
             self.guess_group.setId(btn, _range)
+            
+        loadsave_layout = QtGui.QHBoxLayout()
         
-        #button to submit estimate
+        
         buttonLoad = QtGui.QPushButton("Load Slide")
         buttonLoad.connect( buttonLoad, QtCore.SIGNAL("pressed()"),
                         self.loadSlide)
+
+        buttonSave = QtGui.QPushButton("Save Slide")
+        buttonSave.connect( buttonSave, QtCore.SIGNAL("pressed()"),
+                        self.saveSlide)
+                        
+        loadsave_layout.addWidget(buttonSave)
+        loadsave_layout.addWidget(buttonLoad)
         
+        #button to submit estimate
         buttonGen = QtGui.QPushButton("Generate New Slide")
         buttonGen.connect( buttonGen, QtCore.SIGNAL("pressed()"),
                         self.genNewSlide)
@@ -113,7 +123,7 @@ class Generator(QtGui.QWidget):
         self.exact_display.setReadOnly(True)
         
         num_cells_layout = QtGui.QVBoxLayout()
-        num_cells_layout.addWidget(buttonLoad)
+        num_cells_layout.addLayout(loadsave_layout)
         num_cells_layout.addWidget(self.exact_display)
         buttons = self.guess_group.buttons()
         for btn in buttons:
@@ -125,6 +135,9 @@ class Generator(QtGui.QWidget):
     def loadSlide(self):
         self.slide_gen.loadSlide(self.slide_scene)
         self.exact_display.append('Exact Count: ' + str(self.slide_scene.cell_count))
+        
+    def saveSlide(self):
+        self.slide_gen.saveSlide(self.slide_scene)
 
     def genNewSlide(self):
         pow2_range = self.guess_group.checkedId()
@@ -137,4 +150,3 @@ class Generator(QtGui.QWidget):
         
         self.slide_gen.genSlide(self.slide_scene, self.num_cells)
         self.exact_display.append('Exact Count: ' + str(self.num_cells))
-

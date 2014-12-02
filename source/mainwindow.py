@@ -5,6 +5,7 @@ Holds the MainWindow class, top level widget of the application.
 MainWindow has instances of each page in a stacked widget, and 
 is responsible for switching between them.
 """
+
 from PyQt4 import QtCore, QtGui
 from mainmenu import MainMenu
 from trainer import Trainer

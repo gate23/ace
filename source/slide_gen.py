@@ -1,3 +1,10 @@
+"""
+slide_gen.py
+
+The Slide Generate populates QtGraphicScene with cell elements
+
+"""
+
 from PyQt4 import QtGui
 from random import randint, uniform, triangular, sample, choice
 from math import sqrt, pi
@@ -35,7 +42,7 @@ class SlideGen(QtGui.QWidget):
             try:
                 data = zf.read(f)
             except:
-                print "error"
+                print "Error loading file"
             else:
                 myslide = pickle.loads(data)
 #        
@@ -85,9 +92,6 @@ class SlideGen(QtGui.QWidget):
         
         #remove temp
         os.remove(temp_file)
-            
-        print "slide saved" 
-
     
     def genSlide(self, slide_scene, num_cells = 0):
         slide_width = slide_scene.width()        
