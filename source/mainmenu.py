@@ -1,12 +1,17 @@
 """
 mainmenu.py
 
-MainMenu: switch between modes!
+This mode contains menu buttons that allow the user to switch between
+the modes of the application. It also acts as the home screen.
 """
 
 from PyQt4 import QtCore, QtGui
 from enum import ModeEnum
 
+"""
+MainMenu:
+Contains the title text and mode selection buttons.
+"""
 class MainMenu(QtGui.QWidget):
     def __init__(self, parent):
         super(MainMenu, self).__init__(parent)
@@ -29,9 +34,9 @@ class MainMenu(QtGui.QWidget):
         title.setAlignment( QtCore.Qt.AlignHCenter)
         
         #Create selection buttons
-        trainer_button = TitleButton("Estimation Trainer")
-        stats_button = TitleButton("Estimation Statistics")
-        generator_button = TitleButton("Slide Generator")
+        trainer_button = MenuButton("Estimation Trainer")
+        stats_button = MenuButton("Estimation Statistics")
+        generator_button = MenuButton("Slide Generator")
         
         #Set connections for the buttons
         trainer_button.connect(
@@ -60,13 +65,17 @@ class MainMenu(QtGui.QWidget):
         
         self.setLayout(layout)
 
-class TitleButton(QtGui.QPushButton):
+"""
+MenuButton:
+Simple class that extends QPushButton so that
+menu buttons can be created easily.
+"""        
+class MenuButton(QtGui.QPushButton):
     font = QtGui.QFont()
     font.setPointSize(28)
     
-
     def __init__(self, name):
-        super(TitleButton, self).__init__()
+        super(MenuButton, self).__init__()
         
         self.setText(name)
-        self.setFont(TitleButton.font)
+        self.setFont(MenuButton.font)
