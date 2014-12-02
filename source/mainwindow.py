@@ -30,8 +30,11 @@ class MainWindow(QtGui.QMainWindow):
         
         self.show()
     
-    #creates QStackedWidget to contain the different modes (pages)
-    #populates the stacked widget with instances of the modes
+    """
+    initPages():
+        Creates and populates a QStackedWidget that contains the different
+        modes (i.e. pages) of the application.
+    """
     def initPages(self):
         self.mode_stack = QtGui.QStackedWidget()
 
@@ -46,11 +49,18 @@ class MainWindow(QtGui.QMainWindow):
         self.mode_stack.addWidget(self.generator)
         
         self.setCentralWidget(self.mode_stack)
-                
+    
+    """
+    initMenuBar():
+        Creates a menu bar that is visible from any mode of the application.
+        The options under the menus are called "actions".
+    """
     def initMenuBar(self):
         menu_bar = self.menuBar()
         
+        #Create File menu and actions.
         file_menu = menu_bar.addMenu('&File')
+        
         to_menu_action = QtGui.QAction('Main Menu', self)
         to_menu_action.triggered.connect(lambda: self.changeMode(ModeEnum.MENU))
         
@@ -60,35 +70,53 @@ class MainWindow(QtGui.QMainWindow):
         file_menu.addAction(to_menu_action)
         file_menu.addAction(exit_action)
         
-        
+        #Create Help menu and actions.
         help_menu = menu_bar.addMenu('&Help')
-        
+
         about_action = QtGui.QAction('About', self)
         
         help_menu.addAction(about_action)
         
+    """
+    changeMode(page_num):
+        Changes the view of the user to the mode associated with page_num.
+        page_num is an integer defined by ModeEnum. (see enum module).
         
+        Special conditions that need to be met before switching to a mode
+        may be addressed here.
+    """
     def changeMode(self, page_num):
-        if   page_num == ModeEnum.GENERATOR:
-            pass
-        
-        elif page_num == ModeEnum.STATS:
+        #Perform any work that needs to be done before switching modes.
+        if page_num == ModeEnum.STATS:
+            #Update the stats page before switching the view.
             self.stats.updateStatsUI()
 
         elif page_num == ModeEnum.TRAINER:
+            #Attempt to start a new Trainer session if there is not
+            #an active session.
             if (not self.trainer.has_active_session):
                 if (not self.trainer.startNewSession()):
                     return
 
+        #Switch the mode.
         self.mode_stack.setCurrentIndex(page_num)
-        
-    #for closing via File->Exit
+
+    """
+    exitProgram():
+    This exit routine is called when the user exits via File->Exit.
+    Writes the stats to disk and closes the application.
+    """
     def exitProgram(self):
         self.mode_stack.widget(ModeEnum.STATS).writeStatsToFile()
         QtGui.qApp.quit()
     
         
-    #for closing via 'X' window button
+    """
+    closeEvent(event):
+    This exit routine is an overloaded version of Qt's closeEvent,
+    and normally occurs when the user exits by clicking the 'X'.
+    Before accepting the close event, stats are written to disk.
+    """
     def closeEvent(self, event):
         self.mode_stack.widget(ModeEnum.STATS).writeStatsToFile()
         event.accept()
