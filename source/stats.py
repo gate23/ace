@@ -11,81 +11,6 @@ import os.path
 from enum import FileEnum, SessionCol
 from math import log, fabs
 
-class HistogramView(QtGui.QListView):
-    def __init__(self, parent, splitter):
-        super(HistogramView, self).__init__()
-        self.parent = parent
-
-    def paintEvent(self, event):
-        painter = QtGui.QPainter(self.viewport())
-        painter.setPen(QtCore.Qt.black)
-
-        x0 = 40
-        y0 = 250
-
-        #y-axis
-        painter.drawLine(x0,y0,40,30)
-        #arrow at end of axis  
-        painter.drawLine(38,32,40,30)  
-        painter.drawLine(40,30,42,32)  
-          
-        #x-axis
-        painter.drawLine(x0,y0,520,250)
-        #arrow at end of x-axis  
-        painter.drawLine(518,248,520,250)  
-        painter.drawLine(520,250,518,252)
-        #x-axis label  
-        painter.drawText(530,250,"Log Error")
-
-        #label each block
-        posL = x0 + 25
-        for i in xrange(-7,8):
-            painter.drawText(posL,y0+20,str(i))
-            posL += 20
-
-        #fill in data
-        pos = x0 + 20
-        max_val = 200
-
-        width = 20
-        
-        max_in_list = max(self.parent.log_err_list)
-        
-        #color starts at red shifts to green and back while painting bars
-        r,g,b = 255,0,0
-        color = QtGui.QColor(r,g,b)
-        painter.setBrush(color)
-        if (max_in_list != 0):
-            for i in range(7):
-                g += 30
-                
-                color.setRgb(r,g,b)
-                painter.setBrush(color)
-                height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
-                painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
-                pos += 20 
-            
-            i=7
-            #middle bar
-            r,g = 10,230
-            color.setRgb(r,g,b)
-            painter.setBrush(color)
-            height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
-            painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
-            pos += 20            
-            
-            r=255
-            for i in range(8,15):
-                g -= 30
-                color.setRgb(r,g,b)
-                painter.setBrush(color)
-                height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
-                painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
-                pos += 20 
-
-                
-    def dataChanged(self):
-        self.viewport().update()
         
 
 class Statistics(QtGui.QWidget):
@@ -157,7 +82,6 @@ class Statistics(QtGui.QWidget):
         self.connect( self.session_box, QtCore.SIGNAL("currentIndexChanged(int)"),
                         self.updateSessionTable)
 
-        #move this around
         self.label_estimate = QtGui.QLabel()
         self.label_sum = QtGui.QLabel()
 
@@ -289,3 +213,86 @@ class Statistics(QtGui.QWidget):
                                               str(session_log_err/session.length) +
                                               '\tSession Average Absolute Log Error: ' + 
                                               "{:.2f}".format(session_abs_log_err/session.length))
+"""
+HistogramView
+
+Implements a histogram to show trends in estimates.
+
+*Warning: this class relies on there being 8 ranges to choose from
+          will require modification once additional ranges are added.         
+"""
+class HistogramView(QtGui.QListView):
+    def __init__(self, parent, splitter):
+        super(HistogramView, self).__init__()
+        self.parent = parent
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self.viewport())
+        painter.setPen(QtCore.Qt.black)
+
+        x0 = 40
+        y0 = 250
+
+        #y-axis
+        painter.drawLine(x0,y0,40,30)
+        #arrow at end of axis  
+        painter.drawLine(38,32,40,30)  
+        painter.drawLine(40,30,42,32)  
+          
+        #x-axis
+        painter.drawLine(x0,y0,520,250)
+        #arrow at end of x-axis  
+        painter.drawLine(518,248,520,250)  
+        painter.drawLine(520,250,518,252)
+        #x-axis label  
+        painter.drawText(530,250,"Log Error")
+
+        #label each block
+        posL = x0 + 25
+        for i in xrange(-7,8):
+            painter.drawText(posL,y0+20,str(i))
+            posL += 20
+
+        #fill in data
+        pos = x0 + 20
+        max_val = 200
+
+        width = 20
+        
+        max_in_list = max(self.parent.log_err_list)
+        
+        #color starts at red shifts to green and back while painting bars
+        r,g,b = 255,0,0
+        color = QtGui.QColor(r,g,b)
+        painter.setBrush(color)
+        if (max_in_list != 0):
+            for i in range(7):
+                g += 30
+                
+                color.setRgb(r,g,b)
+                painter.setBrush(color)
+                height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
+                painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
+                pos += 20 
+            
+            i=7
+            #middle bar
+            r,g = 10,230
+            color.setRgb(r,g,b)
+            painter.setBrush(color)
+            height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
+            painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
+            pos += 20            
+            
+            r=255
+            for i in range(8,15):
+                g -= 30
+                color.setRgb(r,g,b)
+                painter.setBrush(color)
+                height = int((float(self.parent.log_err_list[i]) / max_in_list) * max_val)
+                painter.drawRect(QtCore.QRect(pos,y0 - height,width,height))
+                pos += 20 
+
+                
+    def dataChanged(self):
+        self.viewport().update()
