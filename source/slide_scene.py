@@ -183,30 +183,48 @@ class SlideScene(QtGui.QGraphicsScene):
         return filename
             
     def count(self):
-        return self.cell_count
+        return self.cell_count   
         
-    def wheelEvent(self, event):
-        self.changeFocus(event.delta()/120.0)
-        
-    def setFocus(self, focus):
-        self.current_focus = focus
-        self.updateSlide()
-        
-    def changeFocus(self, delta):
-        """Changes focus setting and calls update can be called when scrolling or clicking the buttons """
+    """
+    moveSlider():
+        Moves the focus slider in either direction - used with buttons or scrolling
+    """
+    def moveSlider(self, delta):
         check = self.current_focus + (delta * self.SLIDE_FOCUS_STEP)
         if(check > -1.2 and check < 5.8):
             self.current_focus = check
+            #move to position determined by converting focus value to 0-100 position
             self.parent.focus_slider.setSliderPosition(math.ceil((check+1.0)*15))
-
-    def focusDown(self):
-        self.changeFocus(-1)
-
-    def focusUp(self):
-        self.changeFocus(1)
         
+    """
+    sliderFocus():
+        Sets the focus value based on the position of the focus slider
+    """
     def sliderFocus(self,value):
+        #Ensures image isn't regenerated without changing focus
         if (math.fabs(value - self.prev_value) >= 3):
             self.prev_value = value
-            """Called when the slider is moved - value between 0 and 100"""
-            self.setFocus((((value)/3) * self.SLIDE_FOCUS_STEP) - 1)
+            #convert 0-100 slider position to -1 - 5.8 focus value
+            self.current_focus = ((value/3) * self.SLIDE_FOCUS_STEP) - 1
+            self.updateSlide()        
+
+    """
+    wheelEvent():
+        Called when scrolling, calls moveSlider with -1 or 1
+    """
+    def wheelEvent(self, event):
+        self.moveSlider(event.delta()/120.0)
+
+    """
+    focusDown():
+        Called when (-) button is clicked, calls moveSlider
+    """
+    def focusDown(self):
+        self.moveSlider(-1)
+
+    """
+    focusUp():
+        Called when (+) button is clicked, calls moveSlider
+    """
+    def focusUp(self):
+        self.moveSlider(1)
