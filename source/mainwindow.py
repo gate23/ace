@@ -74,7 +74,7 @@ class MainWindow(QtGui.QMainWindow):
         help_menu = menu_bar.addMenu('&Help')
 
         about_action = QtGui.QAction('About', self)
-        
+        about_action.triggered.connect(self.aboutMenu)
         help_menu.addAction(about_action)
         
     """
@@ -120,3 +120,10 @@ class MainWindow(QtGui.QMainWindow):
     def closeEvent(self, event):
         self.mode_stack.widget(ModeEnum.STATS).writeStatsToFile()
         event.accept()
+        
+        
+    def aboutMenu(self):
+        QtGui.QMessageBox.about(self, 'About',
+            '''About Box.<br />
+                This accepts HTML formatting <b> bold</b>''')
+        
