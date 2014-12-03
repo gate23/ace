@@ -66,6 +66,10 @@ class Statistics(QtGui.QWidget):
         layout.addWidget(stats_tabs)
         self.setLayout(layout)
 
+    """
+    initSessionTab():
+        Builds UI elements for the session tab of the statistics
+    """
     def initSessionTab(self):
         session_layout = QtGui.QVBoxLayout()
 
@@ -110,6 +114,10 @@ class Statistics(QtGui.QWidget):
         
         return session_layout
 
+    """
+    initLifetimeTab():
+        Builds UI elements (histogram) for the lifetime tab of the statistics
+    """
     def initLifetimeTab(self):
         lifetime_layout = QtGui.QVBoxLayout()
         
@@ -138,7 +146,10 @@ class Statistics(QtGui.QWidget):
                                                   time.localtime(session.time)))
         self.histogram.dataChanged()
 
-        
+    """
+    updateStatsUI():
+        Updates lifetime statistics whenever new sessions are logged
+    """
     def updateStatsUI(self):
         if self.session_count>0:
             
@@ -150,7 +161,12 @@ class Statistics(QtGui.QWidget):
                                     (str(self.total_estimates)))
         self.label_sum.setText("Lifetime Average Absolute Log Error: " +
                                 "{:.2f}".format(avg_error))
-            
+    
+    """
+    updateSessionTable():
+        Updates the table for each session with new statistics
+    """
+
     def updateSessionTable(self, sess_idx):
         if (sess_idx == 0):
             self.session_table.setRowCount(0)
