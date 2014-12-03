@@ -10,6 +10,9 @@ import py2exe
 setup(name="Algae Count Estimator",
       author="Ralphs, Minor, Dunlap, Young",
       license="MIT License",
-      windows=['ace.py'],
+      windows=[{
+                "script":"ace.py",
+                "icon_resources": [(1, "ace.ico")]
+              }],
       options={"py2exe":  {"includes":["sip", "PyQt4.QtGui", "PyQt4.QtCore"]}}
       )
