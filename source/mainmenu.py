@@ -27,7 +27,7 @@ class MainMenu(QtGui.QWidget):
         layout.setContentsMargins(100,150,100,75) #left,right,top,btm
         
         #Create title label
-        title = QtGui.QLabel("Algae Counting Tool")
+        title = QtGui.QLabel("Algae Count Estimator")
         title_font = QtGui.QFont()
         title_font.setPointSize(36)
         title.setFont(title_font)
