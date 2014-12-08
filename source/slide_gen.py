@@ -147,7 +147,7 @@ class SlideGen(QtGui.QWidget):
 
             #plot point around the center
             else:
-                r = uniform(0, R)
+                r = triangular(0, R)
                 x = uniform(-r, r)
                 select = sample(pos_or_neg, 1)
                 y = sqrt(r**2 - x**2)
