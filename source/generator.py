@@ -10,6 +10,7 @@ from PyQt4 import QtGui, QtCore
 from slide_gen import SlideGen
 from slide_scene import SlideScene
 from random import triangular
+from enum import ModeEnum
 
 class Generator(QtGui.QWidget):
     SLIDE_WIDTH,SLIDE_HEIGHT = 540,540
@@ -99,18 +100,25 @@ class Generator(QtGui.QWidget):
             btn = getattr(self, member_name)
             self.guess_group.addButton( btn)
             self.guess_group.setId(btn, _range)
-            
-        loadsave_layout = QtGui.QHBoxLayout()
         
         
+        #Main Menu button
+        menu_button = QtGui.QPushButton("Main Menu")
+        menu_button.connect(menu_button, QtCore.SIGNAL("pressed()"),
+                        lambda: self.parent.changeMode(ModeEnum.MENU))
+
+        #Load slide button
         buttonLoad = QtGui.QPushButton("Load Slide")
         buttonLoad.connect( buttonLoad, QtCore.SIGNAL("pressed()"),
                         self.loadSlide)
 
+        #Save slide button
         buttonSave = QtGui.QPushButton("Save Slide")
         buttonSave.connect( buttonSave, QtCore.SIGNAL("pressed()"),
                         self.saveSlide)
-                        
+        
+        #Add save/load buttons to smaller sub-layout
+        loadsave_layout = QtGui.QHBoxLayout()
         loadsave_layout.addWidget(buttonSave)
         loadsave_layout.addWidget(buttonLoad)
         
@@ -122,7 +130,9 @@ class Generator(QtGui.QWidget):
         self.exact_display = QtGui.QTextEdit('Exact Count: ' + str(0))
         self.exact_display.setReadOnly(True)
         
+        #Add each element to single layout
         num_cells_layout = QtGui.QVBoxLayout()
+        num_cells_layout.addWidget(menu_button)
         num_cells_layout.addLayout(loadsave_layout)
         num_cells_layout.addWidget(self.exact_display)
         buttons = self.guess_group.buttons()

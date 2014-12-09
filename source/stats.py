@@ -8,7 +8,7 @@ from PyQt4 import QtGui, QtCore
 import pickle
 import time
 import os.path
-from enum import FileEnum, SessionCol
+from enum import FileEnum, SessionCol, ModeEnum
 from math import log, fabs
 
         
@@ -16,6 +16,7 @@ from math import log, fabs
 class Statistics(QtGui.QWidget):
     def __init__(self, parent):
         super (Statistics, self).__init__(parent)
+        self.parent = parent
         self.loadStatsFromFile()
         self.initUI()
         
@@ -50,7 +51,16 @@ class Statistics(QtGui.QWidget):
 
             
     def initUI(self):
-        layout = QtGui.QHBoxLayout()
+        layout = QtGui.QVBoxLayout()
+
+        menu_layout = QtGui.QHBoxLayout()
+        menu_button = QtGui.QPushButton("Main Menu")
+        menu_button.connect(menu_button, QtCore.SIGNAL("pressed()"),
+                        lambda: self.parent.changeMode(ModeEnum.MENU))
+        menu_button.setFixedWidth(100)
+
+        menu_layout.setAlignment(QtCore.Qt.AlignRight)
+        menu_layout.addWidget(menu_button)
 
         stats_tabs = QtGui.QTabWidget()
         session_tab = QtGui.QWidget()
@@ -63,6 +73,7 @@ class Statistics(QtGui.QWidget):
         lifetime_layout = self.initLifetimeTab()
         lifetime_tab.setLayout(lifetime_layout)
 
+        layout.addLayout(menu_layout)
         layout.addWidget(stats_tabs)
         self.setLayout(layout)
 
@@ -161,6 +172,11 @@ class Statistics(QtGui.QWidget):
                                     (str(self.total_estimates)))
         self.label_sum.setText("Lifetime Average Absolute Log Error: " +
                                 "{:.2f}".format(avg_error))
+
+        #open most recent session every time on stats
+        if len(self.session_list) > 0:
+            self.session_box.setCurrentIndex(1)
+            self.updateSessionTable(1)
     
     """
     updateSessionTable():

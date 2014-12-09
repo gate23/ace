@@ -47,6 +47,7 @@ class Trainer(QtGui.QWidget):
         layout and returned to the initUI function.
     """
     def initSlideLayout(self):
+
         self.slide_scene = SlideScene(QtCore.QRectF(0,
                                                     0,
                                                     self.SLIDE_WIDTH,
@@ -136,13 +137,22 @@ class Trainer(QtGui.QWidget):
         self.estimate_display = QtGui.QTextEdit()
         self.estimate_display.setReadOnly(True)
 
-        #Create display to show user what slide in the session
-        #they are currently on.
+        #Create Main Menu button
+        menu_button  = QtGui.QPushButton("Main Menu")
+        menu_button.connect(menu_button, QtCore.SIGNAL("pressed()"),
+                        lambda: self.parent.changeMode(ModeEnum.MENU))
+
+        #Create estimate number label
         self.estimate_label = QtGui.QLabel()      
+
+        #Sub-layout that contains current slide number and main menu button
+        estimate_top_layout = QtGui.QHBoxLayout()
+        estimate_top_layout.addWidget(self.estimate_label)
+        estimate_top_layout.addWidget(menu_button)
         
         #Organize the above elements into a single layout.
         estimate_layout = QtGui.QVBoxLayout()
-        estimate_layout.addWidget(self.estimate_label)
+        estimate_layout.addLayout(estimate_top_layout)
         estimate_layout.addWidget(self.estimate_display)
         buttons = self.guess_group.buttons()
         for btn in buttons:
