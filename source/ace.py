@@ -7,8 +7,19 @@ Entry point of the application.
 import sys
 from PyQt4 import QtGui, QtCore
 from mainwindow import MainWindow
+import os
 
 def main():
+    
+    
+    
+    #build required directories
+    if not os.path.exists(os.path.join(os.curdir, 'session')):
+        os.makedirs(os.path.join(os.curdir, 'session'))
+        
+    if not os.path.exists(os.path.join(os.curdir, 'slide')):
+        os.makedirs(os.path.join(os.curdir, 'slide'))
+    
 
     app = QtGui.QApplication(sys.argv) 
 
