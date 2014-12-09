@@ -111,10 +111,10 @@ class SlideGen(QtGui.QWidget):
         pos_or_neg = [1,-1]
         try_again = []
 
-        if (this_count < 20):
+        if (this_count < 15):
             max_blobs = this_count
         else:
-            max_blobs = 20
+            max_blobs = 15
 
         num_blobs = int(triangular(1, max_blobs))
         shape_ends = sample(range(1, this_count-1), num_blobs-1)
@@ -147,7 +147,7 @@ class SlideGen(QtGui.QWidget):
 
             #plot point around the center
             else:
-                r = uniform(0, R)
+                r = triangular(0, R)
                 x = uniform(-r, r)
                 select = sample(pos_or_neg, 1)
                 y = sqrt(r**2 - x**2)
