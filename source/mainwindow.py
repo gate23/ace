@@ -123,13 +123,14 @@ class MainWindow(QtGui.QMainWindow):
         
         
     def aboutMenu(self):
-        QtGui.QMessageBox.about(self, 'About',
-            '''<p>For those who require assistance in the counting of blue-green algae,
-                the Algae Count Estimator (ACE) is a tool that graphically generates algae 
+        QtGui.QMessageBox.about(self, 'About ACE',
+            '''<p><strong>ACE 1.0.0</strong><br/>The Algae Count Estimator</p><p>Copyright &copy; 2014 Samuel Dunlap, Josh Minor, Matt Ralphs, Andrew Young<br/>Licensed under the terms of the MIT License</p>
+                <p>Build for those who require assistance in the counting of blue-green algae,
+                ACE is a tool that graphically generates algae 
                 colonies with known counts. Users may test their ability to count these
                 colonies with this program and be provided statistics regarding how they've done.</p>
                 <p>For more info, see the User's Manual located in the Docs folder.</p>
-                <p>This program was originally commissioned for the Institute for Watershed Studies
+                <p>This project was originally commissioned for the Institute for Watershed Studies
                 of Western Washington University.</p>
-                <p>Authors: Samuel Dunlap, Josh Minor, Matt Ralphs, Andrew Young</p>''')
+                ''')
         
