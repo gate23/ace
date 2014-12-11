@@ -97,8 +97,12 @@ class SlideGen(QtGui.QWidget):
         slide_width = slide_scene.width()        
         slide_height = slide_scene.height()
         
+
         if(num_cells < self.cell_max_count and num_cells >= self.cell_min_count):
             this_count = num_cells
+        #if there is not a valid input in the num_cells parameter, pick a range between
+        #two sequential powers of two, and select the number of cells in a triangular
+        #distribution between the two.
         else:
             rangenum = randint(3,10)
             low = 2**rangenum
@@ -112,12 +116,13 @@ class SlideGen(QtGui.QWidget):
         try_again = []
 
         if (this_count < 15):
-            max_blobs = this_count
+            max_colonies = this_count
         else:
-            max_blobs = 15
+            max_colonies = 15
 
-        num_blobs = int(triangular(1, max_blobs))
-        shape_ends = sample(range(1, this_count-1), num_blobs-1)
+        num_colonies = int(triangular(1, max_colonies))
+        #selects the first cell of each colony besides the first
+        shape_beginnings = sample(range(1, this_count-1), num_colonies-1)
         
         for i in range (this_count):
             #update cell depth, type, rotation
@@ -125,16 +130,17 @@ class SlideGen(QtGui.QWidget):
             sprite_type = choice(SpriteType.APHANOTHECE_RENDER1)
             deg_rotation = uniform(0.0,359.9)
 
-            #chooses the center point of the blob
-            if ((i == 0) or (i in shape_ends)):
+            #the first cell in each colony is the center point of the circle
+            if ((i == 0) or (i in shape_beginnings)):
                 if (i != 0):
-                    shape_ends.remove(i)
-                if (len(shape_ends) > 0):
-                    next = min(shape_ends)
+                    shape_beginnings.remove(i)
+                if (len(shape_beginnings) > 0):
+                    next = min(shape_beginnings)
                     size = next - i
                 else:
                     size = this_count - i
                 
+                #place in a random point on the screen
                 x_offset = uniform(slide_scene.SLIDE_PADDING, slide_width - slide_scene.SLIDE_PADDING) 
                 y_offset = uniform(slide_scene.SLIDE_PADDING, slide_height - slide_scene.SLIDE_PADDING)
 
@@ -145,7 +151,10 @@ class SlideGen(QtGui.QWidget):
                 #create cell
                 slide_scene.placeCell(x_offset, y_offset, depth, deg_rotation, sprite_type)
 
-            #plot point around the center
+            #the first point is the center of the circle
+            #the x_offset from the center (denoted new_x) is chosen between x_offset + or - r
+            #the y_offset is then calculated using the function of a circle (x^2 + y^2 = r^2)
+            #and select determines whether to use the positive or negative square root
             else:
                 r = triangular(0, R)
                 x = uniform(-r, r)
@@ -166,6 +175,7 @@ class SlideGen(QtGui.QWidget):
                 else:
                     try_again.append(i)
             
+        #spray the cells in try_again uniformly across the screen
         for val in try_again:
             x_offset = uniform(slide_scene.SLIDE_PADDING, slide_width - slide_scene.SLIDE_PADDING) 
             y_offset = uniform(slide_scene.SLIDE_PADDING, slide_height - slide_scene.SLIDE_PADDING)
